@@ -1,7 +1,7 @@
 export const API_BASE_URL =
     window.location.hostname === "localhost"
-        ? "https://localhost:7229"
-        : "https://seu-app.up.railway.app";
+        ? "https://localhost:7229/api"
+        : "https://pdf-ocr-api-s4p9.onrender.com/api";
 
 export async function http<T>(
     input: RequestInfo,

@@ -1,11 +1,11 @@
 import { API_BASE_URL } from "./api";
 import { ProcessResponse } from "../models/process-response";
 
-export async function processPdfSync(file: File): Promise<Blob> {
+export async function processPdfDemo(file: File): Promise<Blob> {
     const form = new FormData();
     form.append("File", file);
 
-    const res = await fetch(`${API_BASE_URL}/api/Pdf/process-sync`, {
+    const res = await fetch(`${API_BASE_URL}/Pdf/demo`, {
         method: "POST",
         body: form,
     });
@@ -14,14 +14,14 @@ export async function processPdfSync(file: File): Promise<Blob> {
         throw await res.json();
     }
 
-    return res.blob();
+    return res.json();
 }
 
 export async function processPdfAsync(file: File): Promise<ProcessResponse> {
     const form = new FormData();
     form.append("File", file);
 
-    const res = await fetch(`${API_BASE_URL}/api/Pdf/process`, {
+    const res = await fetch(`${API_BASE_URL}/Pdf/process`, {
         method: "POST",
         body: form,
     });
