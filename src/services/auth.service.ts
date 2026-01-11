@@ -17,35 +17,37 @@ export interface User {
 
 // Determine environment and set appropriate redirect URLs
 const getAuthRedirectUrl = (): string => {
-  const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-  
-  if (isDev) {
-    // Local development: redirect to frontend on localhost:54336
-    return 'http://localhost:54336/auth/callback';
-  } else {
-    // Production: redirect to frontend on Render
-    return 'https://pdf-ocr-frontend.onrender.com/auth/callback';
-  }
+    const apiUrl = (import.meta as any).env.VITE_API_URL || 'http://localhost:5000';
+    return `${apiUrl}/api/auth/callback`;
 };
 
-const getSupabaseBackendRedirectUrl = (): string => {
-  // Always redirect to backend API, which will then redirect to frontend
-  const apiUrl = (import.meta as any).env.VITE_API_URL || 'http://localhost:5000';
-  return `${apiUrl}/api/auth/callback`;
-};
 
 class AuthService {
+
+  async synchAuthWithBackend() {
+    try {
+      const session = await this.getSession();
+      if (!session) return;
+        const apiUrl = (import.meta as any).env.VITE_API_URL;
+        await fetch(`${apiUrl}/api/auth/sync`, {
+            method: 'POST',
+            body: JSON.stringify({ accessToken: session.access_token }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+    } catch (error) {
+      console.error('Sync auth error:', error);
+    }
+  }
   /**
    * Sign in with Google OAuth
    */
   async signInWithGoogle() {
     try {
-      const redirectUrl = getSupabaseBackendRedirectUrl();
+      const redirectUrl = getAuthRedirectUrl();
       const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: redirectUrl,
-        },
+          provider: 'google',
       });
       if (error) throw error;
       return data;
@@ -60,12 +62,9 @@ class AuthService {
    */
   async signInWithGithub() {
     try {
-      const redirectUrl = getSupabaseBackendRedirectUrl();
+      const redirectUrl = getAuthRedirectUrl();
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
-        options: {
-          redirectTo: redirectUrl,
-        },
       });
       debugger;
       console.log(data);
@@ -181,13 +180,6 @@ class AuthService {
    */
   getRedirectUrl(): string {
     return getAuthRedirectUrl();
-  }
-
-  /**
-   * Get the backend callback URL for current environment
-   */
-  getBackendCallbackUrl(): string {
-    return getSupabaseBackendRedirectUrl();
   }
 
   /**
