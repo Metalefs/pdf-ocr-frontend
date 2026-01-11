@@ -40,6 +40,8 @@ export default function UploadZone({ file, onSelect }) {
             onDragOver={onDragOver}
             onDragLeave={onDragLeave}
         >
+            {/* Local styles for buoyancy animation */}
+            <style>{`\n              @keyframes buoyancy {\n                0% { transform: translateY(0px) rotate(-0.5deg); }\n                25% { transform: translateY(-6px) rotate(0.5deg); }\n                50% { transform: translateY(0px) rotate(-0.25deg); }\n                75% { transform: translateY(-3px) rotate(0.25deg); }\n                100% { transform: translateY(0px) rotate(-0.5deg); }\n              }\n              .buoy {\n                animation: buoyancy 4s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;\n                transform-origin: center;\n                will-change: transform;\n              }\n              /* Slight subtle shadow motion */\n              .buoy-shadow {\n                transition: box-shadow 0.25s ease-in-out, transform 0.25s ease-in-out;\n              }\n            `}</style>
             <input
                 id="fileInput"
                 type="file"
@@ -52,7 +54,7 @@ export default function UploadZone({ file, onSelect }) {
             {!file && (
                 <div id="uploadPrompt">
                     <svg
-                        className="mx-auto h-20 w-20 text-rose-500 mb-4 accent-emoji"
+                        className="mx-auto h-20 w-20 text-violet-500 mb-4 accent-emoji buoy-shadow"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"

@@ -1,7 +1,8 @@
 // src/contexts/AuthContext.tsx
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { authService, User } from '../services/auth.service';
+import { authService, User, supabase } from '../services/auth.service';
 import { userService, UserProfile, UserCredits } from '../services/user.service';
+import { Session } from '@supabase/auth-js';
 
 interface AuthContextType {
   user: User | null;
@@ -24,35 +25,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is already logged in
-    const checkAuth = async () => {
-      try {
-        const isAuthenticated = await authService.isAuthenticated();
-        if (isAuthenticated) {
-          await loadUserData();
+    const doShit = async (session: Session | null) => {
+        const user = await authService.getUser(session);
+        if(user){
+            await loadUserData();
         }
-      } catch (error) {
-        console.error('Error checking auth:', error);
-      } finally {
-        setLoading(false);
-      }
+        else {
+            setUser(null);
+            setUserProfile(null);
+            setCredits(null);
+        }
     };
-
-    checkAuth();
-
+    doShit(null);
     // Listen for auth changes
-    const subscription = authService.onAuthStateChange(
-      async (userData) => {
-        if (userData) {
-          setUser(userData);
-          await loadUserData();
-        } else {
-          setUser(null);
-          setUserProfile(null);
-          setCredits(null);
+    const subscription = supabase.auth.onAuthStateChange(async (event, session) => {
+        if (event === 'SIGNED_IN' && session) {
+            // Sincroniza com backend
+            await authService.syncWithBackend(session.access_token);
+            doShit(session);
         }
-      }
-    );
+        setLoading(false);
+    });
 
     return () => {
       // Properly unsubscribe

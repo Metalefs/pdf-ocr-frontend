@@ -8,21 +8,33 @@ import ErrorBox from "./components/ErrorBox";
 import SidebarPreview from "./components/SidebarPreview";
 import PlansPage from "./pages/PlansPage";
 import AccountPage from "./pages/AccountPage";
+import AuthCallbackPage from "./pages/AuthCallbackPage";
 
-import { processPdfAsync,processPdfDemo } from "./services/pdf.service";
+import { processPdfAsync } from "./services/pdf.service";
 import { getJobStatus, getJobDownloadUrl } from "./services/jobs.service";
 import { I18nProvider, useI18n } from "./i18n";
 import { AuthProvider } from "./contexts/AuthContext";
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 function MainApp() {
     const [file, setFile] = useState(null);
-    // processing is asynchronous only
     const [loading, setLoading] = useState(false);
     const [progressText, setProgressText] = useState("");
     const [logs, setLogs] = useState([]);
     const [resultUrl, setResultUrl] = useState(null);
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState("home");
+
+    // Detectar rota de callback no carregamento
+    useEffect(() => {
+        const hash = window.location.hash;
+        const params = new URLSearchParams(window.location.search);
+        
+        // Verifica se é callback do OAuth
+        if (hash.includes('access_token') || params.get('code')) {
+            setCurrentPage("auth-callback");
+        }
+    }, []);
 
     function resetAll() {
         setFile(null);
@@ -45,7 +57,7 @@ function MainApp() {
 
             try {
                 setProgressText(t("process.uploading") || "Uploading file...");
-                const job = await processPdfDemo(file);
+                const job = await processPdfAsync(file);
                 pollJob(job.jobId);
             } catch (err) {
                 setError(err.message);
@@ -92,8 +104,14 @@ function MainApp() {
             }, 1000);
         }
 
+        // Renderizar página apropriada
+        if (currentPage === "auth-callback") {
+            return <AuthCallbackPage onNavigate={setCurrentPage} />;
+        }
+
         return (
             <>
+                
                 {currentPage === "home" && (
                     <main className="max-w-7xl mx-auto h-full px-4 pb-16">
                         <section className="max-w-6xl mx-auto py-8 pb-2">
@@ -130,18 +148,30 @@ function MainApp() {
                         </div>
                     </main>
                 )}
+                
                 {currentPage === "plans" && <PlansPage onNavigate={setCurrentPage} />}
                 {currentPage === "account" && <AccountPage onNavigate={setCurrentPage} />}
+                
+                
             </>
         );
     }
 
     return (
-        <I18nProvider defaultLocale={"en"}>
+        <I18nProvider defaultLocale="en">
             <AuthProvider>
-                <Header currentPage={currentPage} onNavigate={setCurrentPage} />
-                <MainContent />
-                <Footer />
+            <Header currentPage={currentPage} onNavigate={setCurrentPage} />
+            <Routes>
+                <Route path="/auth/callback" element={<AuthCallbackPage />} />
+                <Route path="/plans" element={<PlansPage />} />
+                <Route path="/account" element={<AccountPage />} />
+                <Route path="/" element={<MainContent />} />
+                <Route path="/home" element={<MainContent />} />
+
+                {/* fallback */}
+                <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+            <Footer />
             </AuthProvider>
         </I18nProvider>
     );

@@ -68,7 +68,7 @@ const translations = {
     },
     result: { completed: "Processamento concluído" },
     sidebar: {
-      title: "Pré‑via do Documento",
+      title: "Prévia do Documento",
       preserve: "Preserva formulários",
       none: "Nenhum documento processado ainda",
       sendPdf: "Envie um PDF para ver a pré‑visualização aqui",

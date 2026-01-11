@@ -1,8 +1,8 @@
-// src/services/auth.service.ts
-import { createClient } from '@supabase/supabase-js';
+import { createClient, Session } from '@supabase/supabase-js';
 
 const supabaseUrl = (import.meta as any).env.VITE_SUPABASE_URL;
 const supabaseAnonKey = (import.meta as any).env.VITE_SUPABASE_ANON_KEY;
+const apiUrl = (import.meta as any).env.VITE_API_URL || 'http://localhost:5000';
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
@@ -21,197 +21,214 @@ const getAuthRedirectUrl = (): string => {
     return `${apiUrl}/api/auth/callback`;
 };
 
-
 class AuthService {
-
-  async synchAuthWithBackend() {
+  /**
+   * Sincroniza usuário com backend após login
+   */
+  public async syncWithBackend(accessToken: string): Promise<void> {
     try {
-      const session = await this.getSession();
-      if (!session) return;
-        const apiUrl = (import.meta as any).env.VITE_API_URL;
-        await fetch(`${apiUrl}/api/auth/sync`, {
-            method: 'POST',
-            body: JSON.stringify({ accessToken: session.access_token }),
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+      const response = await fetch(`${apiUrl}/api/auth/sync`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ accessToken }),
+      });
+      const responseData = await response.json();
+      localStorage.setItem('user', JSON.stringify(responseData.user));
+      if (!response.ok) {
+        console.error('Falha ao sincronizar com backend');
+      }
     } catch (error) {
-      console.error('Sync auth error:', error);
+      console.error('Erro na sincronização:', error);
     }
   }
+
   /**
-   * Sign in with Google OAuth
+   * Login com Google OAuth
    */
   async signInWithGoogle() {
     try {
-      const redirectUrl = getAuthRedirectUrl();
-      const { data, error } = await supabase.auth.signInWithOAuth({
-          provider: 'google',
+        const redirectUrl = getAuthRedirectUrl();
+        const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
       });
+
       if (error) throw error;
       return data;
     } catch (error) {
-      console.error('Google sign-in error:', error);
+      console.error('Erro no login Google:', error);
       throw error;
     }
   }
 
   /**
-   * Sign in with GitHub OAuth
+   * Login com GitHub OAuth
    */
   async signInWithGithub() {
     try {
-      const redirectUrl = getAuthRedirectUrl();
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'github',
-      });
-      debugger;
-      console.log(data);
-      navigator.clipboard.writeText(JSON.stringify(data));
+        const redirectUrl = getAuthRedirectUrl();
+        const { data, error } = await supabase.auth.signInWithOAuth({
+            provider: 'github',
+            options: {
+                redirectTo: `${window.location.origin}/auth/callback`,
+            },
+        });
+
       if (error) throw error;
       return data;
     } catch (error) {
-      console.error('GitHub sign-in error:', error);
+      console.error('Erro no login GitHub:', error);
       throw error;
     }
   }
 
   /**
-   * Sign out the current user
+   * Logout
    */
   async signOut() {
     try {
       const { error } = await supabase.auth.signOut();
+      localStorage.removeItem('user');
       if (error) throw error;
     } catch (error) {
-      console.error('Sign-out error:', error);
+      console.error('Erro no logout:', error);
       throw error;
     }
   }
 
   /**
-   * Get current session
+   * Obtém sessão atual
    */
   async getSession() {
     try {
       const { data, error } = await supabase.auth.getSession();
       if (error) throw error;
+      
+      // Sincroniza com backend se houver sessão
+      if (data.session) {
+        await this.syncWithBackend(data.session.access_token);
+      }
+      
       return data.session;
     } catch (error) {
-      console.error('Get session error:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get current authenticated user from backend
-   */
-  async getUser(): Promise<User | null> {
-    try {
-      const session = await this.getSession();
-      if (!session) return null;
-
-      const apiUrl = (import.meta as any).env.VITE_API_URL;
-      const response = await fetch(`${apiUrl}/users/me`, {
-        headers: {
-          Authorization: `Bearer ${session.access_token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          // Token expired or invalid, sign out
-          await this.signOut();
-          return null;
-        }
-        console.error('Failed to fetch user:', response.statusText);
-        return null;
-      }
-
-      return response.json();
-    } catch (error) {
-      console.error('Get user error:', error);
+      console.error('Erro ao obter sessão:', error);
       return null;
     }
   }
 
   /**
-   * Listen for auth state changes
+   * Obtém dados do usuário
    */
-  onAuthStateChange(callback: (user: User | null) => void) {
+  async getUser(session: Session | null = null): Promise<User | null> {
     try {
-      return supabase.auth.onAuthStateChange(async (event, session) => {
-        if (session && event !== 'SIGNED_OUT') {
-          const user = await this.getUser();
-          callback(user);
-        } else {
-          callback(null);
+        session = session || await this.getSession();
+        if (!session) return null;
+
+        let supabaseUser = null;
+        if(!session.user) supabaseUser = (await supabase.auth.getUser()).data.user;
+        
+        if (!supabaseUser && !session.user) return null;
+
+        // Busca dados complementares do backend
+        const response = await fetch(`${apiUrl}/api/auth/me`, {
+            headers: {
+            'Authorization': `Bearer ${session.access_token}`,
+            'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            // Fallback para dados do Supabase
+            return {
+            id: (supabaseUser || session.user).id,
+            email: (supabaseUser || session.user).email || '',
+            name: (supabaseUser || session.user).user_metadata?.full_name || 
+                    (supabaseUser || session.user).user_metadata?.name || 
+                    (supabaseUser || session.user).email?.split('@')[0] || 'Usuário',
+            avatar: (supabaseUser || session.user).user_metadata?.avatar_url || 
+                    (supabaseUser || session.user).user_metadata?.picture,
+            credits: 2,
+            plan: 'free'
+            };
         }
-      });
+        const data = await response.json();
+        data.username = data.name.name; // Mapear name para username
+        return {
+            ...data,
+            id: (supabaseUser || session.user).id,
+            email: (supabaseUser || session.user).email || '',
+            user: data.name,
+            username: data.username || (supabaseUser || session.user).user_metadata?.full_name || 
+                (supabaseUser || session.user).user_metadata?.name || 
+                (supabaseUser || session.user).email?.split('@')[0] || 'Usuário',
+            avatar: data.avatar || (supabaseUser || session.user).user_metadata?.avatar_url || 
+                    (supabaseUser || session.user).user_metadata?.picture,
+        };
     } catch (error) {
-      console.error('Auth state change listener error:', error);
-      return { data: { subscription: { unsubscribe: () => {} } } } as any;
+      console.error('Erro ao obter usuário:', error);
+      return null;
     }
   }
 
   /**
-   * Check if user is authenticated
+   * Verifica se está autenticado
    */
   async isAuthenticated(): Promise<boolean> {
-    try {
-      const session = await this.getSession();
-      return !!session;
-    } catch {
-      return false;
-    }
+    const session = await this.getSession();
+    return !!session;
   }
 
   /**
-   * Refresh user data from backend
+   * Atualiza dados do usuário
    */
   async refreshUserData(): Promise<User | null> {
     return this.getUser();
   }
 
   /**
-   * Get the appropriate redirect URL for current environment
-   */
-  getRedirectUrl(): string {
-    return getAuthRedirectUrl();
-  }
-
-  /**
-   * Exchange OAuth code for session (called from callback page)
-   * The backend has already exchanged the code with Supabase,
-   * now we verify it on the backend and get user data
+   * Exchange OAuth code for session by calling backend and set Supabase session locally
    */
   async exchangeCodeForSession(code: string): Promise<boolean> {
     try {
-      // Store the code temporarily in localStorage
-      localStorage.setItem('oauth_code', code);
-      
-      // Verify the code with the backend to get user data
-      const apiUrl = (import.meta as any).env.VITE_API_URL || 'http://localhost:5000';
-      const response = await fetch(`${apiUrl}/api/auth/verify-code`, {
+      const resp = await fetch(`${apiUrl}/api/auth/verify-code`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ code }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code })
       });
 
-      if (!response.ok) {
-        console.error('Failed to exchange code for session:', response.statusText);
+      if (!resp.ok) {
+        console.error('Backend failed to exchange code:', resp.statusText);
         return false;
       }
 
-      // Clear the code after successful exchange
-      localStorage.removeItem('oauth_code');
+      const data = await resp.json();
+
+      // Supabase token response includes access_token and refresh_token
+      const accessToken = data?.access_token;
+      const refreshToken = data?.refresh_token;
+
+      if (!accessToken) {
+        console.error('No access_token returned from backend');
+        return false;
+      }
+
+      // Set Supabase session in the client
+      const { error } = await supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken });
+      if (error) {
+        console.error('Failed to set Supabase session:', error);
+        return false;
+      }
+
+      // Sync with backend explicitly
+      await this.syncWithBackend(accessToken);
+
       return true;
-    } catch (error) {
-      console.error('Code exchange error:', error);
+    } catch (err) {
+      console.error('exchangeCodeForSession error:', err);
       return false;
     }
   }

@@ -82,7 +82,7 @@ export default function AccountPage({ onNavigate }) {
 
   if (!user) {
     return (
-      <div className="account-container">
+      <div className="account-container min-h-screen flex flex-col items-center justify-center">
         <div className="not-authenticated">
           <h2>Please log in to view your account</h2>
           <p>Sign in with your Google or GitHub account to access your account settings and usage statistics.</p>
@@ -131,7 +131,7 @@ export default function AccountPage({ onNavigate }) {
             <div className="profile-display">
               {user.avatar && (
                 <div className="avatar">
-                  <img src={user.avatar} alt={user.name} />
+                  <img src={user.avatar} alt={user.username} />
                 </div>
               )}
               
