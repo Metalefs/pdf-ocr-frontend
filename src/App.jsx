@@ -110,8 +110,6 @@ export default function App() {
                         <div className="lg:col-span-2 bg-white rounded-2xl shadow-2xl p-4 md:p-8">
                             <UploadZone file={file} onSelect={setFile} />
 
-                            {/* processing is async by default; removed mode selector */}
-
                             <button
                                 onClick={handleProcess}
                                 disabled={!file || loading}
