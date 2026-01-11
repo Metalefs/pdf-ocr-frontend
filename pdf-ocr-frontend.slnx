@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="pdf-ocr-frontend.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+</Solution>
