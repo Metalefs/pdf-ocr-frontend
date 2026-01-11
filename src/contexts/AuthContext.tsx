@@ -25,26 +25,49 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const doShit = async (session: Session | null) => {
-        const user = await authService.getUser(session);
-        if(user){
-            await loadUserData();
-        }
-        else {
-            setUser(null);
-            setUserProfile(null);
-            setCredits(null);
-        }
+    const initialize = async (session: Session | null) => {
+      const fetchedUser = await authService.getUser(session);
+      if (fetchedUser) {
+        // authService.getUser already calls /api/auth/me; avoid duplicate calls to loadUserData
+        setUser(fetchedUser);
+        setUserProfile({
+          id: fetchedUser.id,
+          email: fetchedUser.email,
+          name: fetchedUser.name,
+          avatar: fetchedUser.avatar || null,
+          credits: fetchedUser.credits || 0,
+          plan: fetchedUser.plan || 'free'
+        } as UserProfile);
+        setCredits({ credits: fetchedUser.credits } as UserCredits);
+      } else {
+        setUser(null);
+        setUserProfile(null);
+        setCredits(null);
+      }
     };
-    doShit(null);
+    initialize(null);
     // Listen for auth changes
     const subscription = supabase.auth.onAuthStateChange(async (event, session) => {
-        if (event === 'SIGNED_IN' && session) {
-            // Sincroniza com backend
-            await authService.syncWithBackend(session.access_token);
-            doShit(session);
+      if (event === 'SIGNED_IN' && session) {
+        // syncWithBackend is guarded against duplicates (cached token)
+        await authService.syncWithBackend(session.access_token);
+
+        // Fetch user but reuse data returned to avoid calling /me twice
+        const fetchedUser = await authService.getUser(session);
+        if (fetchedUser) {
+          setUser(fetchedUser);
+          setUserProfile({
+            id: fetchedUser.id,
+            email: fetchedUser.email,
+            name: fetchedUser.name,
+            avatar: fetchedUser.avatar || null,
+            credits: fetchedUser.credits || 0,
+            plan: fetchedUser.plan || 'free'
+          } as UserProfile);
+          setCredits({ credits: fetchedUser.credits } as UserCredits);
         }
-        setLoading(false);
+      }
+      setLoading(false);
     });
 
     return () => {

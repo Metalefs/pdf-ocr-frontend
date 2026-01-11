@@ -25,8 +25,20 @@ class AuthService {
   /**
    * Sincroniza usuário com backend após login
    */
+  // Cache last synced access token to avoid duplicate /sync requests
+  private lastSyncedToken: string | null = null;
+  private lastSyncedAt: number = 0;
+
   public async syncWithBackend(accessToken: string): Promise<void> {
     try {
+      if (!accessToken) return;
+
+      // If we've recently synced with the same token, skip the call
+      const now = Date.now();
+      if (this.lastSyncedToken === accessToken && (now - this.lastSyncedAt) < 30_000) {
+        return;
+      }
+
       const response = await fetch(`${apiUrl}/api/auth/sync`, {
         method: 'POST',
         headers: {
@@ -34,10 +46,17 @@ class AuthService {
         },
         body: JSON.stringify({ accessToken }),
       });
-      const responseData = await response.json();
-      localStorage.setItem('user', JSON.stringify(responseData.user));
+
+      const responseData = await response.json().catch(() => null);
+      if (responseData && responseData.user) {
+        localStorage.setItem('user', JSON.stringify(responseData.user));
+      }
+
       if (!response.ok) {
         console.error('Falha ao sincronizar com backend');
+      } else {
+        this.lastSyncedToken = accessToken;
+        this.lastSyncedAt = now;
       }
     } catch (error) {
       console.error('Erro na sincronização:', error);
