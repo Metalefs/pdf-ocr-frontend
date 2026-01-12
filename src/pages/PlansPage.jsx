@@ -68,14 +68,14 @@ export default function PlansPage({ onNavigate }) {
 
   if (loading) {
     return (
-      <div className="plans-container bg-gradient-to-br  min-h-screen">
+      <div className="plans-container min-h-screen">
         <div className="loading-spinner">Loading plans...</div>
       </div>
     );
   }
 
   return (
-    <div className="plans-page bg-gradient-to-br  min-h-scree">
+    <div className="plans-page min-h-scree">
       <div className="plans-header">
         <h1 className='text-2xl font-semibold mb-4'>Pricing Plans</h1>
         <p>Choose the plan that best suits your needs</p>
