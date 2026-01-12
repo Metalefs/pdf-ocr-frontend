@@ -6,7 +6,7 @@ export async function processPdfDemo(file: File): Promise<Blob> {
     const form = new FormData();
     form.append("File", file);
 
-    const res = await fetch(`${API_BASE_URL}/Pdf/demo`, {
+    const res = await fetch(`${API_BASE_URL}/api/Pdf/demo`, {
         method: "POST",
         body: form,
     });
@@ -30,7 +30,7 @@ export async function processPdfAsync(file: File): Promise<ProcessResponse> {
     const session = await supabase.auth.getSession();
     if (!session.data.session) throw new Error('Not authenticated');
 
-    const res = await fetch(`${API_BASE_URL}/Pdf/process`, {
+    const res = await fetch(`${API_BASE_URL}/api/Pdf/process`, {
         method: "POST",
         body: form, 
         headers: {
