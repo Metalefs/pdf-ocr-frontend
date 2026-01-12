@@ -70,6 +70,9 @@ const translations = {
         jsExample: "fetch('{base}/api/Pdf/process', { method: 'POST', headers: { 'X-API-Key': 'sk_live_abc123...', 'Content-Type': 'multipart/form-data' } })",
       },
     },
+    contact: {
+      partnerText: "For partnership or enterprise inquiries, email {email} with the subject 'Partnership Inquiry' and we'll reply within 2 business days.",
+    },
     plans: {
       header: 'Pricing Plans',
       subtitle: 'Choose the plan that best suits your needs',
@@ -171,6 +174,9 @@ const translations = {
         curlExample: "curl -X POST {base}/api/Pdf/process -H \"X-API-Key: sk_live_abc123...\" -H \"Content-Type: multipart/form-data\" -F \"File=@document.pdf\"",
         jsExample: "fetch('{base}/api/Pdf/process', { method: 'POST', headers: { 'X-API-Key': 'sk_live_abc123...', 'Content-Type': 'multipart/form-data' } })",
       },
+    },
+    contact: {
+      partnerText: "Para parcerias ou soluções empresariais, envie um email para {email} com o assunto 'Parceria' e responderemos em até 2 dias úteis.",
     },
     plans: {
       header: 'Planos',
