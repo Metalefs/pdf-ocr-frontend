@@ -1,6 +1,6 @@
-import { API_BASE_URL } from "./api";
 import { ProcessResponse } from "../models/process-response";
 import { authService, supabase } from "./auth.service";
+const API_BASE_URL = (import.meta as any).env.VITE_API_URL || 'http://localhost:5000';
 
 export async function processPdfDemo(file: File): Promise<Blob> {
     const form = new FormData();
