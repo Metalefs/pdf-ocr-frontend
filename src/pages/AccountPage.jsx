@@ -1,10 +1,12 @@
 // src/pages/AccountPage.jsx
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { userService } from '../services/user.service';
 import '../styles/account.css';
 
 export default function AccountPage({ onNavigate }) {
+  const navigate = useNavigate();
   const { user, userProfile, credits, signOut, refreshUser, updateProfile } = useAuth();
   const [usage, setUsage] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -235,9 +237,12 @@ export default function AccountPage({ onNavigate }) {
             </div>
 
             <div className="form-actions">
-              <button 
-                className="btn-primary" 
-                onClick={() => onNavigate && onNavigate("plans")}
+              <button
+                className="btn-primary"
+                onClick={() => {
+                  if (onNavigate) onNavigate('plans');
+                  else navigate('/plans');
+                }}
                 style={{ cursor: 'pointer' }}
               >
                 Upgrade or Change Plan

@@ -25,6 +25,7 @@ const translations = {
       promptTitle: "Drop or click to upload your PDF",
       promptSubtitle: "Max 10MB — we preserve fields and layout",
       chooseAnother: "Choose another file",
+      multilangNote: "Supports multiple languages in the same file | detects languages automatically and supports multi-language OCR (PT, EN, AR, ZH, JP, KO, CHI).",
     },
     process: {
       button: "Process PDF",
@@ -54,7 +55,7 @@ const translations = {
       nav: { features: "Recursos", docs: "Docs", cta: "Começar" },
     },
     hero: {
-      title: "OCR de PDF Pro com Preservação de Formulários",
+      title: "OCR de PDF com Preservação de Formulários",
       subtitle: "Converta PDFs escaneados em documentos editáveis mantendo widgets e layout.",
       uniqueClaim:
         "Corrija mapas ausentes, fontes malformadas e mantenha todos os widgets do PDF.",
@@ -70,6 +71,32 @@ const translations = {
       promptTitle: "Clique ou arraste seu PDF",
       promptSubtitle: "Máx 10MB — preservamos campos e layout",
       chooseAnother: "Escolher outro arquivo",
+      multilangNote: "Aceita múltiplos idiomas no mesmo arquivo | detecta idiomas automaticamente e suporta OCR multilíngue (PT, EN, AR, ZH, JP, KO, CHI)",
+    },
+    ar: {
+      upload: {
+        multilangNote: "يدعم عدة لغات في نفس الملف — يكتشف اللغات تلقائيًا ويدعم OCR متعدد اللغات (PT, EN, AR, ZH, JP, KO, CHI).",
+      },
+    },
+    zh: {
+      upload: {
+        multilangNote: "支持在同一文件中包含多种语言 — 自动检测语言并支持多语言 OCR（PT、EN、AR、ZH、JP、KO、CHI）。",
+      },
+    },
+    ja: {
+      upload: {
+        multilangNote: "同一ファイル内の複数言語に対応 — 言語を自動検出し、多言語 OCR をサポートします（PT、EN、AR、ZH、JP、KO、CHI）。",
+      },
+    },
+    ko: {
+      upload: {
+        multilangNote: "하나의 파일에 여러 언어 허용 — 언어를 자동으로 감지하며 다국어 OCR을 지원합니다 (PT, EN, AR, ZH, JP, KO, CHI).",
+      },
+    },
+    chi: {
+      upload: {
+        multilangNote: "支持在同一文件中包含多种语言 — 自动检测语言并支持多语言 OCR（PT、EN、AR、ZH、JP、KO、CHI）。",
+      },
     },
     process: {
       button: "Processar",

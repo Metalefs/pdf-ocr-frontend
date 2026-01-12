@@ -113,6 +113,11 @@ export default function UploadZone({ file, onSelect }) {
                     </button>
                 </div>
             )}
+
+            {/* Multilanguage OCR note */}
+            <div className="upload-multilang-note mt-6 text-sm text-slate-500">
+                {t("upload.multilangNote")}
+            </div>
         </div>
     );
 }

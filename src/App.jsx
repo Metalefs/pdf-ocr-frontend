@@ -137,7 +137,7 @@ function MainApp() {
                                     <ul className="mt-6 grid gap-4 sm:grid-cols-1 md:grid-cols-3">
                                         {heroClaims.map((c, i) => (
                                             <li key={i} className="flex items-start gap-3 bg-white border border-slate-100 p-4 rounded-lg shadow-sm">
-                                                <div className="flex-shrink-0 mt-0.5 text-sky-600 text-2xl">✓</div>
+                                                <div className="flex-shrink-0 mt-0.5 text-sky-600 text-2x">✓✓</div>
                                                 <div className="text-sm text-slate-700">{c}</div>
                                             </li>
                                         ))}
