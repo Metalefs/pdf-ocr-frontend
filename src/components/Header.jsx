@@ -73,8 +73,8 @@ export default function Header({ currentPage = "home", onNavigate }) {
                   : "text-slate-600 hover:text-slate-800"
               }`}
             >
-              Plans
-            </button>
+              {t('header.nav.features') === 'Features' ? 'Plans' : t('plans.header')}
+            </button>           
 
             {user && (
               <button
@@ -88,6 +88,19 @@ export default function Header({ currentPage = "home", onNavigate }) {
                 Account
               </button>
             )}
+
+             {user && (
+              <button
+                onClick={() => { if (onNavigate) onNavigate('api-keys'); navigate('/api-keys'); setMobileOpen(false); }}
+                className={`text-sm font-medium transition ${
+                  currentPath === '/api-keys'
+                    ? "text-sky-600"
+                    : "text-slate-600 hover:text-slate-800"
+                }`}
+              >
+                {t('header.nav.apiKeys') || t('apiKeys.title')}
+              </button>
+            )}
           </div>
 
           {/* Mobile menu (small screens) */}
@@ -96,7 +109,10 @@ export default function Header({ currentPage = "home", onNavigate }) {
               <div className="flex flex-col items-start px-6 gap-3">
                 <button onClick={() => { if (onNavigate) onNavigate('home'); navigate('/'); setMobileOpen(false); }} className="w-full text-left">Home</button>
                 <button onClick={() => { if (onNavigate) onNavigate('plans'); navigate('/plans'); setMobileOpen(false); }} className="w-full text-left">Plans</button>
-                {user && <button onClick={() => { if (onNavigate) onNavigate('account'); navigate('/account'); setMobileOpen(false); }} className="w-full text-left">Account</button>}
+                {user && <>
+                  <button onClick={() => { if (onNavigate) onNavigate('account'); navigate('/account'); setMobileOpen(false); }} className="w-full text-left">Account</button>
+                  <button onClick={() => { if (onNavigate) onNavigate('api-keys'); navigate('/api-keys'); setMobileOpen(false); }} className="w-full text-left">{t('header.nav.apiKeys') || t('apiKeys.title')}</button>
+                </>}
               </div>
             </div>
           )}
@@ -204,6 +220,20 @@ export default function Header({ currentPage = "home", onNavigate }) {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                           </svg>
                           My Account
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            setShowUserMenu(false);
+                            navigate('/api-keys');
+                            if (onNavigate) onNavigate("api-keys");
+                          }}
+                          className="w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 transition flex items-center gap-2"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 11c0 1.657-1.343 3-3 3s-3-1.343-3-3 1.343-3 3-3 3 1.343 3 3zM21 11v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6" />
+                          </svg>
+                          {t('header.nav.apiKeys') || t('apiKeys.title')}
                         </button>
 
                         <button

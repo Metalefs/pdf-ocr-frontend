@@ -31,6 +31,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         // authService.getUser already calls /api/auth/me; avoid duplicate calls to loadUserData
         setUser(fetchedUser);
         setUserProfile({
+          ...fetchedUser,
           id: fetchedUser.id,
           email: fetchedUser.email,
           name: fetchedUser.name,
@@ -57,6 +58,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (fetchedUser) {
           setUser(fetchedUser);
           setUserProfile({
+            ...fetchedUser,
             id: fetchedUser.id,
             email: fetchedUser.email,
             name: fetchedUser.name,
@@ -96,13 +98,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       // Set user with merged data
       const userData: User = {
-        id: profile.id,
-        email: profile.email,
-        name: profile.name,
-        avatar: profile.avatar,
-        credits: profile.credits,
-        plan: profile.plan,
+        ...profile,
       };
+
       setUser(userData);
     } catch (error) {
       console.error('Error loading user data:', error);

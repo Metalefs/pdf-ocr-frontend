@@ -33,7 +33,7 @@ const Footer = () => {
                       <p>{t("footer.privacy") === "Privacidade" ? "Arquivos processados de forma segura e removidos conforme política de retenção." : "Files are processed securely and removed according to retention policy."}</p>
                       <div className="mt-2">
                           <Link to="/privacy" className="text-slate-600 hover:underline mr-3">{t("footer.privacy")}</Link>
-                          <Link to="/contact" className="text-slate-600 hover:underline">Contact</Link>
+                          <Link to="/contact" className="text-slate-600 hover:underline mr-3">Contact</Link>
                       </div>
                   </div>
               </div>

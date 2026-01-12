@@ -11,6 +11,7 @@ import AccountPage from "./pages/AccountPage";
 import AuthCallbackPage from "./pages/AuthCallbackPage";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import ContactPage from "./pages/ContactPage";
+import ApiKeysPage from "./pages/ApiKeysPage";
 
 import { processPdfAsync } from "./services/pdf.service";
 import { getJobStatus, getJobDownloadUrl } from "./services/jobs.service";
@@ -137,7 +138,7 @@ function MainApp() {
                                     <ul className="mt-6 grid gap-4 sm:grid-cols-1 md:grid-cols-3">
                                         {heroClaims.map((c, i) => (
                                             <li key={i} className="flex items-start gap-3 bg-white border border-slate-100 p-4 rounded-lg shadow-sm">
-                                                <div className="flex-shrink-0 mt-0.5 text-sky-600 text-2x">✓✓</div>
+                                                <div className="flex-shrink-0 mt-0.5 text-blue-500 text-xl">✓</div>
                                                 <div className="text-sm text-slate-700">{c}</div>
                                             </li>
                                         ))}
@@ -190,6 +191,7 @@ function MainApp() {
                 <Route path="/auth/callback" element={<AuthCallbackPage />} />
                 <Route path="/plans" element={<PlansPage />} />
                 <Route path="/account" element={<AccountPage />} />
+                <Route path="/api-keys" element={<ApiKeysPage />} />
                 <Route path="/privacy" element={<PrivacyPolicy />} />
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="/" element={<MainContent />} />

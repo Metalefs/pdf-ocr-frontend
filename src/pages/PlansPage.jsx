@@ -1,12 +1,16 @@
 // src/pages/PlansPage.jsx
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { paymentService } from '../services/payment.service';
 import { stripePromise } from '../config/stripe';
 import '../styles/plans.css';
+import { useI18n } from '../i18n';
 
 export default function PlansPage({ onNavigate }) {
   const { user, credits } = useAuth();
+  const { t } = useI18n();
+  const navigate = useNavigate();
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
   const [checkoutLoading, setCheckoutLoading] = useState({});
@@ -77,8 +81,8 @@ export default function PlansPage({ onNavigate }) {
   return (
     <div className="plans-page min-h-scree">
       <div className="plans-header">
-        <h1 className='text-2xl font-semibold mb-4'>Pricing Plans</h1>
-        <p>Choose the plan that best suits your needs</p>
+        <h1 className='text-2xl font-semibold mb-4'>{t('plans.header')}</h1>
+        <p>{t('plans.subtitle')}</p>
         {user && (
           <div className="current-plan-badge">
             Current Plan: <strong>{user.plan.charAt(0).toUpperCase() + user.plan.slice(1)}</strong>
@@ -119,6 +123,11 @@ export default function PlansPage({ onNavigate }) {
                   </li>
                 ))}
               </ul>
+            </div>
+
+            <div className="plan-api p-4 text-sm text-slate-600">
+              <strong>{t('plans.apiAccess')}:</strong>{' '}
+              {plan.price && plan.price > 0 ? t('plans.apiIncludedYes') : t('plans.apiIncludedNo')}
             </div>
 
             <button

@@ -1,6 +1,7 @@
 // src/pages/AccountPage.jsx
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useI18n } from '../i18n';
 import { useAuth } from '../contexts/AuthContext';
 import { userService } from '../services/user.service';
 import '../styles/account.css';
@@ -8,6 +9,7 @@ import '../styles/account.css';
 export default function AccountPage({ onNavigate }) {
   const navigate = useNavigate();
   const { user, userProfile, credits, signOut, refreshUser, updateProfile } = useAuth();
+  const { t } = useI18n();
   const [usage, setUsage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
@@ -226,11 +228,11 @@ export default function AccountPage({ onNavigate }) {
                 <span className="value">{user.plan}</span>
               </div>
 
-              {userProfile?.subscriptionEndsAt && (
+              {user?.subscriptionEndsAt && (
                 <div className="detail-item">
                   <span className="label">Renews On</span>
                   <span className="value">
-                    {new Date(userProfile.subscriptionEndsAt).toLocaleDateString()}
+                    {new Date(user.subscriptionEndsAt).toLocaleDateString()}
                   </span>
                 </div>
               )}
@@ -247,6 +249,14 @@ export default function AccountPage({ onNavigate }) {
               >
                 Upgrade or Change Plan
               </button>
+              {user && (
+                <button
+                  className="btn-secondary ml-3"
+                  onClick={() => navigate('/api-keys')}
+                >
+                  {t('header.nav.apiKeys') || t('apiKeys.title')}
+                </button>
+              )}
             </div>
           </div>
         </section>
