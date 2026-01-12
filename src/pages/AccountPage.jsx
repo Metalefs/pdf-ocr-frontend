@@ -146,7 +146,7 @@ export default function AccountPage({ onNavigate }) {
                 </div>
                 <div className="info-item">
                   <label>Member Since</label>
-                  <p>{new Date(userProfile?.createdAt || '').toLocaleDateString()}</p>
+                  <p>{new Date(user?.createdAt || '').toLocaleDateString()}</p>
                 </div>
               </div>
 

@@ -9,11 +9,14 @@ import SidebarPreview from "./components/SidebarPreview";
 import PlansPage from "./pages/PlansPage";
 import AccountPage from "./pages/AccountPage";
 import AuthCallbackPage from "./pages/AuthCallbackPage";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import ContactPage from "./pages/ContactPage";
 
 import { processPdfAsync } from "./services/pdf.service";
 import { getJobStatus, getJobDownloadUrl } from "./services/jobs.service";
 import { I18nProvider, useI18n } from "./i18n";
 import { AuthProvider } from "./contexts/AuthContext";
+import { useAuth } from "./contexts/AuthContext";
 import { Routes, Route, Navigate } from 'react-router-dom';
 
 function MainApp() {
@@ -45,7 +48,9 @@ function MainApp() {
     }
 
     function MainContent() {
-        const { t } = useI18n();
+    const { t } = useI18n();
+    const { refreshUser } = useAuth();
+    const heroClaims = t("hero.claims");
 
         async function handleProcess() {
             if (!file) return;
@@ -60,7 +65,7 @@ function MainApp() {
                 const job = await processPdfAsync(file);
                 pollJob(job.jobId);
             } catch (err) {
-                setError(err.message);
+                setError(err && err.message ? { message: err.message, details: err.details, upgradeUrl: err.upgradeUrl } : err);
                 setLoading(false);
             }
         }
@@ -85,8 +90,14 @@ function MainApp() {
                             const blob = await res.blob();
                             const blobUrl = URL.createObjectURL(blob);
                             setResultUrl(blobUrl);
+                            // Refresh authenticated user data (credits/profile) after processing completes
+                            try {
+                                await refreshUser();
+                            } catch (e) {
+                                console.warn('Failed to refresh user after job completion', e);
+                            }
                         } catch (e) {
-                            setError(e.message || t("errors.generic"));
+                            setError(e && e.message ? { message: e.message, details: e.details, upgradeUrl: e.upgradeUrl } : (e.message || t("errors.generic")));
                         } finally {
                             setLoading(false);
                         }
@@ -98,7 +109,7 @@ function MainApp() {
                     }
                 } catch (err) {
                     clearInterval(interval);
-                    setError(err.message);
+                    setError(err && err.message ? { message: err.message, details: err.details, upgradeUrl: err.upgradeUrl } : err);
                     setLoading(false);
                 }
             }, 1000);
@@ -113,20 +124,32 @@ function MainApp() {
             <>
                 
                 {currentPage === "home" && (
-                    <main className="max-w-7xl mx-auto h-full px-4 pb-16">
+                    <main className="max-w-7xl mx-auto  px-4 pb-10">
                         <section className="max-w-6xl mx-auto py-8 pb-2">
                             <div className="text-center mb-10">
-                                <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-8">
+                                <h2 className="text-4xl md:text-5xl font-extrabold mb-8">
                                     {t("hero.title")}
                                 </h2>
                                 <p className="text-lg text-slate-600 max-w-2xl mx-auto">
                                     {t("hero.subtitle")}
                                 </p>
+                                {Array.isArray(heroClaims) ? (
+                                    <ul className="mt-6 grid gap-4 sm:grid-cols-1 md:grid-cols-3">
+                                        {heroClaims.map((c, i) => (
+                                            <li key={i} className="flex items-start gap-3 bg-white border border-slate-100 p-4 rounded-lg shadow-sm">
+                                                <div className="flex-shrink-0 mt-0.5 text-sky-600 text-2xl">✓</div>
+                                                <div className="text-sm text-slate-700">{c}</div>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <p className="mt-4 text-lg font-bold">{t("hero.uniqueClaim")}</p>
+                                )}
                             </div>
                         </section>
 
                         <div className="grid gap-8 lg:grid-cols-3">
-                            <div className="lg:col-span-2 bg-white rounded-2xl shadow-2xl p-4 md:p-8">
+                            <div className={resultUrl ? "lg:col-span-2 bg-white rounded-2xl shadow-2xl p-4 md:p-8" : "lg:col-span-3 bg-white rounded-2xl shadow-2xl p-4 md:p-8"}>
                                 <UploadZone file={file} onSelect={setFile} />
 
                                 <button
@@ -137,14 +160,16 @@ function MainApp() {
                                     <span id="btnText">{t("process.button")}</span>
                                 </button>
 
-                                {loading && <Progress text={progressText} logs={logs} />}
+                                {loading && <Progress text={progressText} logs={logs} showLogs={false} />}
                                 {resultUrl && <Result url={resultUrl} fileName={file?.name} onReset={resetAll} />}
-                                {error && <ErrorBox message={error} />}
+                                {error && <ErrorBox message={error?.message || error} details={error?.details} upgradeUrl={error?.upgradeUrl} />}
                             </div>
 
-                            <aside className="hidden lg:block">
-                                <SidebarPreview url={resultUrl} fileName={file?.name} />
-                            </aside>
+                            {resultUrl && (
+                                <aside className="hidden lg:block">
+                                    <SidebarPreview url={resultUrl} fileName={file?.name} />
+                                </aside>
+                            )}
                         </div>
                     </main>
                 )}
@@ -165,6 +190,8 @@ function MainApp() {
                 <Route path="/auth/callback" element={<AuthCallbackPage />} />
                 <Route path="/plans" element={<PlansPage />} />
                 <Route path="/account" element={<AccountPage />} />
+                <Route path="/privacy" element={<PrivacyPolicy />} />
+                <Route path="/contact" element={<ContactPage />} />
                 <Route path="/" element={<MainContent />} />
                 <Route path="/home" element={<MainContent />} />
 

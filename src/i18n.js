@@ -8,9 +8,16 @@ const translations = {
       nav: { features: "Features", docs: "Docs", cta: "Get Started" },
     },
     hero: {
-      title: "Accurate PDF OCR with Form Preservation",
+      title: "OCR - With structure & widgets preserved",
       subtitle:
-        "Convert scanned PDFs into editable documents while keeping form fields and layout intact.",
+        "Convert scanned PDFs into editable documents while fixing resources, keeping widgets and layout intact.",
+      uniqueClaim:
+        "* Unicode maps and font fixing capabilities, preserving all widgets.",
+        claims: [
+          "Fixes missing 'toUnicode' maps in legacy PDF files.",
+          "Fixes clipboard data in PDFs so copied text is correct.",
+          "Fixes malformed characters rendered in pdf.js and other viewers.",
+        ],
       feature1: { title: "Reliable Accuracy", desc: "High-fidelity OCR tuned for documents and form fields." },
       feature2: { title: "Enterprise Ready", desc: "Secure uploads, retention policies, and scalable processing." },
     },
@@ -20,7 +27,7 @@ const translations = {
       chooseAnother: "Choose another file",
     },
     process: {
-      button: "Process PDF — OCR & Preserve Forms",
+      button: "Process PDF",
       another: "Process another file",
       asyncLabel: "Asynchronous Mode (Recommended)",
       asyncDesc: "Process in background and follow real-time progress",
@@ -47,8 +54,15 @@ const translations = {
       nav: { features: "Recursos", docs: "Docs", cta: "Começar" },
     },
     hero: {
-      title: "OCR de PDF preciso com preservação de formulário",
-      subtitle: "Converta PDFs escaneados em documentos editáveis mantendo campos de formulário e layout.",
+      title: "OCR de PDF Pro com Preservação de Formulários",
+      subtitle: "Converta PDFs escaneados em documentos editáveis mantendo widgets e layout.",
+      uniqueClaim:
+        "Corrija mapas ausentes, fontes malformadas e mantenha todos os widgets do PDF.",
+        claims: [
+          "Corrige mapas 'toUnicode' ausentes em arquivos PDF legados.",
+          "Corrige dados da área de transferência em PDFs para que o texto copiado fique correto.",
+          "Corrige caracteres malformados exibidos no pdf.js e outros visualizadores.",
+        ],
       feature1: { title: "Precisão confiável", desc: "OCR de alta fidelidade ajustado para documentos e formulários." },
       feature2: { title: "Pronto para empresas", desc: "Uploads seguros, políticas de retenção e processamento escalável." },
     },
@@ -58,7 +72,7 @@ const translations = {
       chooseAnother: "Escolher outro arquivo",
     },
     process: {
-      button: "Processar PDF — OCR & Preservar Formulário",
+      button: "Processar",
       another: "Processar outro arquivo",
       asyncLabel: "Modo Assíncrono (Recomendado)",
       asyncDesc: "Processar em background e acompanhar progresso em tempo real",

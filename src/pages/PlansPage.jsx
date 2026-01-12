@@ -68,16 +68,16 @@ export default function PlansPage({ onNavigate }) {
 
   if (loading) {
     return (
-      <div className="plans-container">
+      <div className="plans-container bg-gradient-to-br  min-h-screen">
         <div className="loading-spinner">Loading plans...</div>
       </div>
     );
   }
 
   return (
-    <div className="plans-page">
+    <div className="plans-page bg-gradient-to-br  min-h-scree">
       <div className="plans-header">
-        <h1>Pricing Plans</h1>
+        <h1 className='text-2xl font-semibold mb-4'>Pricing Plans</h1>
         <p>Choose the plan that best suits your needs</p>
         {user && (
           <div className="current-plan-badge">
@@ -148,22 +148,22 @@ export default function PlansPage({ onNavigate }) {
       </div>
 
       <div className="plans-faq">
-        <h2>Frequently Asked Questions</h2>
+        <h2 className="text-2xl font-semibold mb-4">Frequently Asked Questions</h2>
         <div className="faq-grid">
           <div className="faq-item">
-            <h4>What are credits?</h4>
+            <h4 className="italic">What are credits?</h4>
             <p>Credits are used to process PDFs through our OCR system. Each PDF processing costs credits based on the number of pages.</p>
           </div>
           <div className="faq-item">
-            <h4>Can I cancel anytime?</h4>
+            <h4 className="italic">Can I cancel anytime?</h4>
             <p>Yes! You can cancel your subscription at any time. Your access will continue until the end of your billing period.</p>
           </div>
           <div className="faq-item">
-            <h4>Do unused credits roll over?</h4>
+            <h4 className="italic">Do unused credits roll over?</h4>
             <p>Credits reset every month. Unused credits from the previous month do not carry over.</p>
           </div>
           <div className="faq-item">
-            <h4>What payment methods do you accept?</h4>
+            <h4 className="italic">What payment methods do you accept?</h4>
             <p>We accept all major credit and debit cards through our secure Stripe payment processor.</p>
           </div>
         </div>

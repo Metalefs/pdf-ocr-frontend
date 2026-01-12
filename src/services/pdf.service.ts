@@ -1,6 +1,6 @@
 import { API_BASE_URL } from "./api";
 import { ProcessResponse } from "../models/process-response";
-import { supabase } from "./auth.service";
+import { authService, supabase } from "./auth.service";
 
 export async function processPdfDemo(file: File): Promise<Blob> {
     const form = new FormData();
@@ -12,7 +12,13 @@ export async function processPdfDemo(file: File): Promise<Blob> {
     });
 
     if (!res.ok) {
-        throw await res.json();
+        let payload: any = null;
+        try { payload = await res.json(); } catch (e) { /* ignore */ }
+        const err: any = new Error((payload && payload.error) || res.statusText || 'Request failed');
+        err.status = res.status;
+        if (payload && payload.details) err.details = payload.details;
+        if (payload && payload.upgradeUrl) err.upgradeUrl = payload.upgradeUrl;
+        throw err;
     }
 
     return res.json();
@@ -33,8 +39,16 @@ export async function processPdfAsync(file: File): Promise<ProcessResponse> {
     });
 
     if (!res.ok) {
-        throw await res.json();
+        let payload: any = null;
+        try { payload = await res.json(); } catch (e) { /* ignore */ }
+        const err: any = new Error((payload && payload.error) || res.statusText || 'Request failed');
+        err.status = res.status;
+        if (payload && payload.details) err.details = payload.details;
+        if (payload && payload.upgradeUrl) err.upgradeUrl = payload.upgradeUrl;
+        throw err;
     }
+
+    authService.refreshUserData();
 
     return res.json();
 }

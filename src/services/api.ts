@@ -10,7 +10,17 @@ export async function http<T>(
     const res = await fetch(input, init);
 
     if (!res.ok) {
-        const err = await res.json();
+        let payload: any = null;
+        try {
+            payload = await res.json();
+        } catch (e) {
+            // ignore json parse errors
+        }
+
+        const err: any = new Error((payload && payload.error) || res.statusText || "Request failed");
+        err.status = res.status;
+        if (payload && payload.details) err.details = payload.details;
+        if (payload && payload.upgradeUrl) err.upgradeUrl = payload.upgradeUrl;
         throw err;
     }
 

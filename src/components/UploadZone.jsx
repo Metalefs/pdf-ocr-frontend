@@ -54,7 +54,7 @@ export default function UploadZone({ file, onSelect }) {
             {!file && (
                 <div id="uploadPrompt">
                     <svg
-                        className="mx-auto h-20 w-20 text-violet-500 mb-4 accent-emoji buoy-shadow"
+                        className="mx-auto h-20 w-20 text-blue-500 mb-4 accent-emoji buoy-shadow"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -80,7 +80,7 @@ export default function UploadZone({ file, onSelect }) {
             {file && (
                 <div id="fileInfo">
                     <svg
-                        className="mx-auto h-16 w-16 text-rose-500 mb-4"
+                        className="mx-auto h-16 w-16 text-blue-500 mb-4"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
