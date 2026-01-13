@@ -15,8 +15,27 @@ export interface CheckoutRequest {
 export interface PlanDto {
   id: string;
   name: string;
-  price: number;
-  credits: number;
+  description?: string;
   priceId?: string;
-  features: string[];
+  price: number;
+  currency?: string;
+  interval?: string;
+  credits: number;
+  features?: PlanFeatures | string[];
+  popular?: boolean;
+  order?: number;
+}
+
+export interface PlanFeatures {
+  basicProcessing?: boolean;
+  priorityProcessing?: boolean;
+  maxProcessing?: boolean;
+  emailSupport?: boolean;
+  prioritySupport?: boolean;
+  support24x7?: boolean;
+  apiAccess?: boolean;
+  unlimitedApi?: boolean;
+  webhooks?: boolean;
+  advancedDashboard?: boolean;
+  customReports?: boolean;
 }

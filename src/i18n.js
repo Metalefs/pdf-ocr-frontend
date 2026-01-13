@@ -90,6 +90,22 @@ const translations = {
       apiAccess: 'API Access',
       apiIncludedYes: 'Included (API keys enabled)',
       apiIncludedNo: 'Not included',
+      "features": {
+        "basicProcessing": "Basic processing",
+        "priorityProcessing": "Priority processing",
+        "maxProcessing": "Maximum processing speed",
+        "emailSupport": "Email support",
+        "prioritySupport": "Priority support",
+        "support24x7": "24/7 support",
+        "apiAccess": "API access",
+        "unlimitedApi": "Unlimited API",
+        "webhooks": "Custom webhooks",
+        "advancedDashboard": "Advanced dashboard",
+        "customReports": "Custom reports"
+      },
+      "credits": {
+        "label": "{{count}} credits/month"
+      }
     },
     errors: { generic: "An error occurred" },
   },
@@ -206,6 +222,22 @@ const translations = {
       apiAccess: 'Acesso à API',
       apiIncludedYes: 'Incluído (chaves de API habilitadas)',
       apiIncludedNo: 'Não incluído',
+      "features": {
+        "basicProcessing": "Processamento básico",
+        "priorityProcessing": "Processamento prioritário",
+        "maxProcessing": "Processamento máximo",
+        "emailSupport": "Suporte por email",
+        "prioritySupport": "Suporte prioritário",
+        "support24x7": "Suporte 24/7",
+        "apiAccess": "Acesso à API",
+        "unlimitedApi": "API ilimitado",
+        "webhooks": "Webhooks personalizados",
+        "advancedDashboard": "Dashboard avançado",
+        "customReports": "Relatórios customizados"
+      },
+      "credits": {
+        "label": "{count} créditos/mês"
+      }
     },
     errors: { generic: "Ocorreu um erro" },
   },
@@ -224,7 +256,12 @@ export function I18nProvider({ children, defaultLocale = "en" }) {
       if (cur === undefined) return path;
     }
     if (vars) {
-      return Object.keys(vars).reduce((s, k) => s.replace(`{${k}}`, vars[k]), cur);
+      return Object.keys(vars).reduce((s, k) => {
+        const value = String(vars[k]);
+        return String(s)
+          .split(`{{${k}}}`).join(value)
+          .split(`{${k}}`).join(value);
+      }, cur);
     }
     return cur;
   }

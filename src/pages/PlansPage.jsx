@@ -57,6 +57,33 @@ export default function PlansPage({ onNavigate }) {
     fetchPlans();
   }, []);
 
+  const formatPrice = (amount, currency) => {
+    const numericAmount = Number(amount);
+    const safeCurrency = (currency || 'USD').toUpperCase();
+    if (!Number.isFinite(numericAmount)) return '';
+    try {
+      return new Intl.NumberFormat(locale === 'pt' ? 'pt-BR' : 'en-US', {
+        style: 'currency',
+        currency: safeCurrency,
+        minimumFractionDigits: numericAmount % 1 === 0 ? 0 : 2,
+      }).format(numericAmount);
+    } catch {
+      return `${safeCurrency} ${numericAmount}`;
+    }
+  };
+
+  const getFeatureLabels = (features) => {
+    if (Array.isArray(features)) return features.filter(Boolean);
+    if (!features || typeof features !== 'object') return [];
+
+    return Object.entries(features)
+      .filter(([, v]) => v === true)
+      .map(([k]) => {
+        const label = t(`plans.features.${k}`);
+        return label && label !== `plans.features.${k}` ? label : k;
+      });
+  };
+
   const handleUpgrade = async (plan) => {
     if (!user) {
       alert('Please log in to upgrade your plan');
@@ -144,26 +171,38 @@ export default function PlansPage({ onNavigate }) {
 
         <Grid container spacing={2}>
           {plans.map((plan) => {
-            const isCurrent = user?.plan === plan.id;
-            const isFree = plan.id === 'free';
-            const numericPrice = Number(plan.price);
-            const isPaid = Number.isFinite(numericPrice) ? numericPrice > 0 : Boolean(plan.price && plan.price !== '0');
+            const planId = plan?.id ?? plan?.Id ?? '';
+            const planName = plan?.name ?? plan?.Name ?? '';
+            const planDescription = plan?.description ?? plan?.Description ?? '';
+            const priceId = plan?.priceId ?? plan?.PriceId;
+            const planCurrency = plan?.currency ?? plan?.Currency ?? 'USD';
+            const planInterval = plan?.interval ?? plan?.Interval ?? 'month';
+            const planCredits = Number(plan?.credits ?? plan?.Credits ?? 0);
+            const planPopular = Boolean(plan?.popular ?? plan?.Popular);
+            const planFeatures = plan?.features ?? plan?.Features;
+            const featureLabels = getFeatureLabels(planFeatures);
+
+            const slug = (planName || planId).toString().toLowerCase();
+            const isCurrent = (user?.plan || '').toLowerCase() === slug;
+            const isFree = slug === 'free' || (planName || '').toLowerCase() === 'free';
+            const numericPrice = Number(plan?.price ?? plan?.Price ?? 0);
+            const isPaid = Number.isFinite(numericPrice) && numericPrice > 0;
             const ctaDisabled = Boolean(
-              checkoutLoading[plan.id] ||
+              checkoutLoading[planId] ||
               isCurrent ||
-              (isFree && user?.plan === 'free')
+              !priceId
             );
 
-            const ctaLabel = checkoutLoading[plan.id]
+            const ctaLabel = checkoutLoading[planId]
               ? 'Processing…'
               : isCurrent
                 ? 'Current Plan'
                 : isFree
-                  ? 'Downgrade to Free'
+                  ? 'Free Plan'
                   : 'Upgrade Now';
 
             return (
-              <Grid key={plan.id} item xs={12} md={6} lg={4}>
+              <Grid key={planId || planName} item xs={12} md={6} lg={4}>
                 <Card
                   variant="outlined"
                   sx={(theme) => ({
@@ -178,18 +217,26 @@ export default function PlansPage({ onNavigate }) {
                       <Box>
                         <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between">
                           <Typography variant="h6" sx={{ fontWeight: 800 }}>
-                            {plan.name}
+                            {planName}
                           </Typography>
-                          {isCurrent ? <Chip size="small" color="primary" label="Active" /> : null}
+                          <Stack direction="row" spacing={1} alignItems="center">
+                            {planPopular ? <Chip size="small" color="secondary" label="Popular" /> : null}
+                            {isCurrent ? <Chip size="small" color="primary" label="Active" /> : null}
+                          </Stack>
                         </Stack>
                         <Stack direction="row" spacing={1} alignItems="baseline" sx={{ mt: 1 }}>
                           <Typography variant="h4" sx={{ fontWeight: 900 }}>
-                            {isPaid ? `$${plan.price}` : '$0'}
+                            {isPaid ? formatPrice(numericPrice, planCurrency) : formatPrice(0, planCurrency)}
                           </Typography>
                           <Typography variant="body2" color="text.secondary">
-                            /month
+                            /{planInterval || 'month'}
                           </Typography>
                         </Stack>
+                        {planDescription ? (
+                          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75 }}>
+                            {planDescription}
+                          </Typography>
+                        ) : null}
                       </Box>
 
                       <Box>
@@ -197,12 +244,10 @@ export default function PlansPage({ onNavigate }) {
                           Credits
                         </Typography>
                         <Typography variant="h5" sx={{ fontWeight: 800, lineHeight: 1.1 }}>
-                          {isFree ? 3 : plan.credits}
+                          {Number.isFinite(planCredits) ? planCredits : 0}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
-                          {isFree
-                            ? (locale === 'pt' ? '3 créditos por dia' : '3 credits per day')
-                            : 'Credits per month'}
+                          {t('plans.credits.label', { count: Number.isFinite(planCredits) ? planCredits : 0 })}
                         </Typography>
                       </Box>
 
@@ -213,14 +258,14 @@ export default function PlansPage({ onNavigate }) {
                           Features
                         </Typography>
                         <List dense disablePadding>
-                          {Array.isArray(plan.features) ? plan.features.map((feature, idx) => (
+                          {featureLabels.map((feature, idx) => (
                             <ListItem key={idx} disableGutters sx={{ py: 0.25 }}>
                               <ListItemIcon sx={{ minWidth: 34 }}>
                                 <CheckCircleOutlineIcon fontSize="small" color="success" />
                               </ListItemIcon>
                               <ListItemText primaryTypographyProps={{ variant: 'body2' }} primary={feature} />
                             </ListItem>
-                          )) : null}
+                          ))}
                         </List>
                       </Box>
 
@@ -236,9 +281,12 @@ export default function PlansPage({ onNavigate }) {
                       fullWidth
                       variant={isCurrent ? 'outlined' : 'contained'}
                       color={isCurrent ? 'inherit' : 'primary'}
-                      onClick={() => handleUpgrade(plan)}
+                      onClick={() => handleUpgrade({
+                        id: planId || slug,
+                        priceId,
+                      })}
                       disabled={ctaDisabled}
-                      startIcon={checkoutLoading[plan.id] ? <CircularProgress size={16} color="inherit" /> : null}
+                      startIcon={checkoutLoading[planId] ? <CircularProgress size={16} color="inherit" /> : null}
                       sx={{ textTransform: 'none' }}
                     >
                       {ctaLabel}

@@ -1,43 +1,90 @@
-import { useState, useEffect } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../services/auth.service';
 import { useI18n } from '../i18n';
+
+import Alert from '@mui/material/Alert';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CircularProgress from '@mui/material/CircularProgress';
+import Container from '@mui/material/Container';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import ListItemText from '@mui/material/ListItemText';
+import Snackbar from '@mui/material/Snackbar';
+import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export default function ApiKeysPage() {
   const { user } = useAuth();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [keys, setKeys] = useState([]);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
   const [newKeyName, setNewKeyName] = useState('');
   const [newKey, setNewKey] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    if (user) loadKeys();
-  }, [user]);
+  const [revokeDialog, setRevokeDialog] = useState({ open: false, keyId: null, keyName: '' });
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
 
-  const loadKeys = async () => {
+  const dateFormatter = useMemo(() => {
     try {
+      return new Intl.DateTimeFormat(locale || undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+    } catch {
+      return new Intl.DateTimeFormat(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+  }, [locale]);
+
+  const loadKeys = useCallback(async ({ silent = false } = {}) => {
+    if (!silent) setLoading(true);
+    try {
+      setError(null);
       const session = await supabase.auth.getSession();
       const res = await fetch(`${API_BASE}/api/ApiKeys`, {
         headers: {
           Authorization: `Bearer ${session.data.session.access_token}`
         }
       });
-      
+
       if (res.ok) {
         const data = await res.json();
         setKeys(data);
+      } else {
+        setError(t('errors.generic'));
       }
     } catch (err) {
       console.error('Erro ao carregar chaves:', err);
+      setError(err?.message || t('errors.generic'));
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
-  };
+  }, [t]);
+
+  useEffect(() => {
+    if (user) {
+      void loadKeys();
+    }
+  }, [user, loadKeys]);
 
   const createKey = async (e) => {
     e.preventDefault();
@@ -45,6 +92,7 @@ export default function ApiKeysPage() {
 
     setCreating(true);
     try {
+      setError(null);
       const session = await supabase.auth.getSession();
       const res = await fetch(`${API_BASE}/api/ApiKeys`, {
         method: 'POST',
@@ -62,19 +110,22 @@ export default function ApiKeysPage() {
         const data = await res.json();
         setNewKey(data.plainKey); // Mostrar APENAS uma vez
         setNewKeyName('');
-        await loadKeys();
+        await loadKeys({ silent: true });
+      } else {
+        const details = await res.text().catch(() => '');
+        setError(details || t('errors.generic'));
       }
     } catch (err) {
       console.error('Erro ao criar chave:', err);
+      setError(err?.message || t('errors.generic'));
     } finally {
       setCreating(false);
     }
   };
 
-  const revokeKey = async (keyId, keyName) => {
-    if (!confirm(`Revogar chave "${keyName}"?`)) return;
-
+  const revokeKey = async (keyId) => {
     try {
+      setError(null);
       const session = await supabase.auth.getSession();
       const res = await fetch(`${API_BASE}/api/ApiKeys/${keyId}`, {
         method: 'DELETE',
@@ -84,124 +135,319 @@ export default function ApiKeysPage() {
       });
 
       if (res.ok) {
-        await loadKeys();
+        await loadKeys({ silent: true });
+        setSnackbar({ open: true, message: 'Key revoked', severity: 'success' });
+      } else {
+        const details = await res.text().catch(() => '');
+        setError(details || t('errors.generic'));
       }
     } catch (err) {
       console.error('Erro ao revogar:', err);
+      setError(err?.message || t('errors.generic'));
     }
   };
 
-  const copyKey = () => {
-    navigator.clipboard.writeText(newKey);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const copyKey = async () => {
+    try {
+      await navigator.clipboard.writeText(newKey);
+      setCopied(true);
+      setSnackbar({ open: true, message: t('apiKeys.copied'), severity: 'success' });
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.warn('Clipboard copy failed', err);
+      setSnackbar({ open: true, message: 'Copy failed', severity: 'error' });
+    }
+  };
+
+  const formatDate = (value) => {
+    if (!value) return '';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return '';
+    return dateFormatter.format(date);
   };
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>{t('apiKeys.loginRequired')}</p>
-      </div>
+      <Box sx={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', p: 2 }}>
+        <Alert severity="info">{t('apiKeys.loginRequired')}</Alert>
+      </Box>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-2">{t('apiKeys.title')}</h1>
-        <p className="text-slate-600 mb-8">{t('apiKeys.description')}</p>
+    <Box sx={{ bgcolor: 'background.default', py: { xs: 3, md: 4 } }}>
+      <Container maxWidth="md">
+        <Stack spacing={2.5}>
+          <Box>
+            <Typography variant="h4" sx={{ fontWeight: 900 }}>
+              {t('apiKeys.title')}
+            </Typography>
+            <Typography variant="body1" color="text.secondary" sx={{ mt: 0.5 }}>
+              {t('apiKeys.description')}
+            </Typography>
+          </Box>
 
-        {/* Alerta de nova chave criada */}
-        {newKey && (
-          <div className="bg-amber-50 border-2 border-amber-500 rounded-lg p-6 mb-8">
-            <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
-              ⚠️ {t('apiKeys.alertTitle')}
-            </h3>
-            <p className="text-sm text-slate-700 mb-4">{t('apiKeys.alertDescription')}</p>
-            
-            <div className="bg-white p-4 rounded border border-slate-200 font-mono text-sm break-all mb-4">
-              {newKey}
-            </div>
+          {error ? <Alert severity="error">{error}</Alert> : null}
 
-            <div className="flex gap-3">
-              <button
-                onClick={copyKey}
-                className="bg-amber-600 text-white px-4 py-2 rounded font-semibold"
-              >
-                {copied ? t('apiKeys.copied') : `📋 ${t('apiKeys.copy')}`}
-              </button>
-              <button
-                onClick={() => setNewKey(null)}
-                className="border border-slate-300 px-4 py-2 rounded"
-              >
-                {t('apiKeys.okSaved')}
-              </button>
-            </div>
-          </div>
-        )}
+          {newKey ? (
+            <Card variant="outlined" sx={{ borderRadius: 3, borderColor: 'warning.main' }}>
+              <CardContent>
+                <Stack spacing={1.25}>
+                  <Alert severity="warning" sx={{ alignItems: 'center' }}>
+                    <strong>{t('apiKeys.alertTitle')}</strong> — {t('apiKeys.alertDescription')}
+                  </Alert>
 
-        {/* Formulário de criação */}
-        <div className="bg-white rounded-lg shadow p-6 mb-8">
-          <h2 className="font-semibold text-lg mb-4">{t('apiKeys.createTitle')}</h2>
-          <form onSubmit={createKey} className="flex gap-3">
-            <input
-              type="text"
-              value={newKeyName}
-              onChange={(e) => setNewKeyName(e.target.value)}
-              placeholder={t('apiKeys.createPlaceholder')}
-              className="flex-1 border border-slate-300 rounded px-4 py-2"
-            />
-            <button
-              type="submit"
-              disabled={creating || !newKeyName.trim()}
-              className="bg-sky-500 hover:bg-sky-600 text-white px-6 py-2 rounded font-semibold disabled:opacity-50"
-            >
-              {creating ? t('apiKeys.creating') : t('apiKeys.createButton')}
-            </button>
-          </form>
-        </div>
-
-        {/* Lista de chaves */}
-        <div className="bg-white rounded-lg shadow">
-          <div className="p-6 border-b border-slate-200">
-            <h2 className="font-semibold text-lg">{t('apiKeys.activeKeys')}</h2>
-          </div>
-
-          {loading ? (
-            <div className="p-8 text-center text-slate-500">{t('apiKeys.loading')}</div>
-          ) : keys.length === 0 ? (
-            <div className="p-8 text-center text-slate-500">{t('apiKeys.noKeys')}</div>
-          ) : (
-            <div className="divide-y divide-slate-200">
-              {keys.map((key) => (
-                <div key={key.id} className="p-6 flex justify-between items-center">
-                  <div>
-                    <h3 className="font-semibold">{key.name}</h3>
-                    <p className="text-sm text-slate-500">
-                      Criada em {new Date(key.createdAt).toLocaleDateString()}
-                      {key.lastUsedAt && ` • Último uso: ${new Date(key.lastUsedAt).toLocaleDateString()}`}
-                    </p>
-                    <p className="text-xs text-slate-400 mt-1">sk_live_••••••••{key.id.toString().slice(-8)}</p>
-                  </div>
-                  <button
-                    onClick={() => revokeKey(key.id, key.name)}
-                    className="text-red-600 hover:text-red-800 font-medium text-sm"
+                  <Box
+                    component="pre"
+                    sx={(theme) => ({
+                      m: 0,
+                      p: 2,
+                      borderRadius: 2,
+                      bgcolor: theme.palette.background.paper,
+                      border: `1px solid ${theme.palette.divider}`,
+                      fontFamily:
+                        'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                      fontSize: '0.875rem',
+                      overflowX: 'auto',
+                      whiteSpace: 'pre-wrap',
+                      wordBreak: 'break-all',
+                    })}
                   >
-                    {t('apiKeys.revoke')}
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+                    {newKey}
+                  </Box>
+                </Stack>
+              </CardContent>
+              <CardActions sx={{ px: 2, pb: 2, pt: 0 }}>
+                <Button
+                  variant="contained"
+                  color="warning"
+                  onClick={copyKey}
+                  startIcon={<ContentCopyIcon />}
+                  sx={{ textTransform: 'none' }}
+                >
+                  {copied ? t('apiKeys.copied') : t('apiKeys.copy')}
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={() => setNewKey(null)}
+                  sx={{ textTransform: 'none' }}
+                >
+                  {t('apiKeys.okSaved')}
+                </Button>
+              </CardActions>
+            </Card>
+          ) : null}
 
-      <div className="mt-8 bg-slate-100 rounded-lg p-6">
-        <h3 className="font-semibold mb-2">{t('apiKeys.howTo.title')}</h3>
-        <p className="text-sm text-slate-600 mb-3">{t('apiKeys.howTo.authHeader')}</p>
-        <pre className="bg-white p-4 rounded text-sm overflow-x-auto mb-3">{t('apiKeys.howTo.curlExample', { base: API_BASE })}</pre>
-        <pre className="bg-white p-4 rounded text-sm overflow-x-auto">{t('apiKeys.howTo.jsExample', { base: API_BASE })}</pre>
-      </div>
-    </div>
-  </div>
+          <Card variant="outlined" sx={{ borderRadius: 3 }}>
+            <CardContent>
+              <Stack spacing={2}>
+                <Typography variant="h6" sx={{ fontWeight: 800 }}>
+                  {t('apiKeys.createTitle')}
+                </Typography>
+                <Box component="form" onSubmit={createKey} sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
+                  <TextField
+                    value={newKeyName}
+                    onChange={(e) => setNewKeyName(e.target.value)}
+                    placeholder={t('apiKeys.createPlaceholder')}
+                    label={t('apiKeys.createTitle')}
+                    size="small"
+                    fullWidth
+                    sx={{ flex: '1 1 320px' }}
+                  />
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    disabled={creating || !newKeyName.trim()}
+                    startIcon={creating ? <CircularProgress size={16} color="inherit" /> : null}
+                    sx={{ textTransform: 'none', minWidth: 140 }}
+                  >
+                    {creating ? t('apiKeys.creating') : t('apiKeys.createButton')}
+                  </Button>
+                </Box>
+              </Stack>
+            </CardContent>
+          </Card>
+
+          <Card variant="outlined" sx={{ borderRadius: 3 }}>
+            <CardContent>
+              <Stack spacing={1.5}>
+                <Typography variant="h6" sx={{ fontWeight: 800 }}>
+                  {t('apiKeys.activeKeys')}
+                </Typography>
+                <Divider />
+
+                {loading ? (
+                  <Stack spacing={1} alignItems="center" sx={{ py: 3 }}>
+                    <CircularProgress size={22} />
+                    <Typography variant="body2" color="text.secondary">{t('apiKeys.loading')}</Typography>
+                  </Stack>
+                ) : keys.length === 0 ? (
+                  <Typography variant="body2" color="text.secondary" sx={{ py: 2 }}>
+                    {t('apiKeys.noKeys')}
+                  </Typography>
+                ) : (
+                  <List disablePadding>
+                    {keys.map((key, idx) => {
+                      const createdText = formatDate(key.createdAt);
+                      const lastUsedText = formatDate(key.lastUsedAt);
+                      const masked = `sk_live_••••••••${key.id?.toString?.().slice(-8)}`;
+
+                      const secondaryLines = [
+                        createdText ? `Created ${createdText}` : null,
+                        lastUsedText ? `Last used ${lastUsedText}` : null,
+                        masked,
+                      ].filter(Boolean);
+
+                      return (
+                        <ListItem
+                          key={key.id}
+                          divider={idx !== keys.length - 1}
+                          sx={{ py: 1.25, pr: 9 }}
+                        >
+                          <ListItemText
+                            primary={
+                              <Typography sx={{ fontWeight: 700 }}>
+                                {key.name}
+                              </Typography>
+                            }
+                            secondary={
+                              <Stack spacing={0.25} sx={{ mt: 0.25 }}>
+                                {secondaryLines.map((line, lineIdx) => (
+                                  <Typography
+                                    key={lineIdx}
+                                    variant={lineIdx === secondaryLines.length - 1 ? 'caption' : 'body2'}
+                                    color={lineIdx === secondaryLines.length - 1 ? 'text.disabled' : 'text.secondary'}
+                                    sx={{
+                                      fontFamily:
+                                        lineIdx === secondaryLines.length - 1
+                                          ? 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace'
+                                          : undefined,
+                                    }}
+                                  >
+                                    {line}
+                                  </Typography>
+                                ))}
+                              </Stack>
+                            }
+                          />
+
+                          <ListItemSecondaryAction>
+                            <Tooltip title={t('apiKeys.revoke')}>
+                              <IconButton
+                                edge="end"
+                                color="error"
+                                onClick={() => setRevokeDialog({ open: true, keyId: key.id, keyName: key.name })}
+                                aria-label={t('apiKeys.revoke')}
+                              >
+                                <DeleteOutlineIcon />
+                              </IconButton>
+                            </Tooltip>
+                          </ListItemSecondaryAction>
+                        </ListItem>
+                      );
+                    })}
+                  </List>
+                )}
+              </Stack>
+            </CardContent>
+          </Card>
+
+          <Card variant="outlined" sx={{ borderRadius: 3 }}>
+            <CardContent>
+              <Stack spacing={1.25}>
+                <Typography variant="h6" sx={{ fontWeight: 800 }}>
+                  {t('apiKeys.howTo.title')}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {t('apiKeys.howTo.authHeader')}
+                </Typography>
+
+                <Box
+                  component="pre"
+                  sx={(theme) => ({
+                    m: 0,
+                    p: 2,
+                    borderRadius: 2,
+                    bgcolor: theme.palette.background.paper,
+                    border: `1px solid ${theme.palette.divider}`,
+                    fontFamily:
+                      'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                    fontSize: '0.875rem',
+                    overflowX: 'auto',
+                  })}
+                >
+                  {t('apiKeys.howTo.curlExample', { base: API_BASE })}
+                </Box>
+                <Box
+                  component="pre"
+                  sx={(theme) => ({
+                    m: 0,
+                    p: 2,
+                    borderRadius: 2,
+                    bgcolor: theme.palette.background.paper,
+                    border: `1px solid ${theme.palette.divider}`,
+                    fontFamily:
+                      'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                    fontSize: '0.875rem',
+                    overflowX: 'auto',
+                  })}
+                >
+                  {t('apiKeys.howTo.jsExample', { base: API_BASE })}
+                </Box>
+              </Stack>
+            </CardContent>
+          </Card>
+        </Stack>
+
+        <Dialog
+          open={revokeDialog.open}
+          onClose={() => setRevokeDialog({ open: false, keyId: null, keyName: '' })}
+          aria-labelledby="revoke-key-title"
+        >
+          <DialogTitle id="revoke-key-title">{t('apiKeys.revoke')}</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              {`Revoke key "${revokeDialog.keyName}"?`}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => setRevokeDialog({ open: false, keyId: null, keyName: '' })}
+              sx={{ textTransform: 'none' }}
+            >
+              Cancel
+            </Button>
+            <Button
+              color="error"
+              variant="contained"
+              onClick={async () => {
+                const keyId = revokeDialog.keyId;
+                setRevokeDialog({ open: false, keyId: null, keyName: '' });
+                if (keyId != null) await revokeKey(keyId);
+              }}
+              sx={{ textTransform: 'none' }}
+            >
+              {t('apiKeys.revoke')}
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={3000}
+          onClose={() => setSnackbar((s) => ({ ...s, open: false }))}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        >
+          <Alert
+            onClose={() => setSnackbar((s) => ({ ...s, open: false }))}
+            severity={snackbar.severity}
+            variant="filled"
+            sx={{ width: '100%' }}
+          >
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
+      </Container>
+    </Box>
   );
 }
