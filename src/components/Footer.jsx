@@ -36,8 +36,10 @@ const Footer = () => {
                             {t("footer.technology")}
                         </Typography>
                         <Stack spacing={0.5}>
-                            <Typography variant="body2" color="text.secondary">Tesseract OCR</Typography>
+                            <Typography variant="body2" color="text.secondary">Tesseract</Typography>
                             <Typography variant="body2" color="text.secondary">iText PDF</Typography>
+                            <Typography variant="body2" color="text.secondary">SkiaSharp</Typography>
+                            <Typography variant="body2" color="text.secondary">PDFium</Typography>
                             <Typography variant="body2" color="text.secondary">Scalable Processing</Typography>
                         </Stack>
                     </Grid>

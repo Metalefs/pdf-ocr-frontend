@@ -110,7 +110,7 @@ export default function Header({ currentPage = "home", onNavigate }) {
             navigate("/");
             setMobileOpen(false);
           }}
-          sx={{ display: "flex", alignItems: "center", gap: 1.5, cursor: "pointer", minWidth: 0 }}
+          sx={{ display: { xs: "none", lg: "flex" }, alignItems: "center", gap: 1.5, cursor: "pointer", minWidth: 0 }}
         >
           <Box component="img" src={brandLogo} alt={t("header.brand")} sx={{ width: 32, height: 32 }} />
           <Typography variant="h6" noWrap sx={{ fontWeight: 500 }}>

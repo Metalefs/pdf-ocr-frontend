@@ -32,7 +32,9 @@ import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import { alpha } from "@mui/material/styles";
 
@@ -108,6 +110,31 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
     ];
 
     const featureAccents = ["primary", "secondary", "success", "info", "warning", "error"];
+
+    const isAuthGated = !auth.user && requireAuthForNext;
+    // Disable only for missing file or while processing; auth-gated should remain clickable (to prompt sign-in).
+    const isProcessDisabled = !file || loading;
+
+    const processButtonLabel = loading
+        ? (
+            typeof progressPercent === "number" && Number.isFinite(progressPercent)
+                ? `${t("process.syncing") || "Processing PDF..."} (${Math.round(progressPercent)}%)`
+                : (t("process.syncing") || "Processing PDF...")
+        )
+        : (isAuthGated ? "Sign in to continue" : (t("process.button") || "Process PDF"));
+
+    const processButtonHint = isAuthGated
+        ? (t('authDialog.message') || 'Demo limit reached. Sign in to continue.')
+        : (!file ? 'Select a PDF to enable processing.' : '');
+
+    function handlePrimaryAction() {
+        if (isAuthGated) {
+            onRequireAuth?.(t('authDialog.message') || 'You have reached the demo limit. Create a free account to continue processing PDFs.');
+            return;
+        }
+
+        void handleProcess();
+    }
 
     async function handleProcess() {
             if (!file) return;
@@ -225,8 +252,8 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
     }
 
     return (
-        <Box component="main" sx={{ py: { xs: 3, md: 4 } }}>
-            <Container maxWidth="lg">
+        <Box component="main" sx={{ py: { xs: 0, md: 4 } }}>
+            <Container maxWidth="lg" sx={{ px: 0 }}>
                 <Paper elevation={0} sx={{ p: { xs: 2, md: 4 }, border: 1, borderColor: "divider" }}>
                     <Box sx={{ mb: 3 }}>
                         <Typography variant="h3" sx={{ fontWeight: 700, fontSize: { xs: "2rem", md: "2.75rem" } }}>
@@ -296,16 +323,34 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                     {loading && <Progress text={progressText} percent={progressPercent} logs={logs} showLogs={false} />}
                     {resultUrl && <Result url={resultUrl} fileName={file?.name} onReset={resetAll} />}
 
-                    <Button
-                        onClick={handleProcess}
-                        disabled={!file || loading}
-                        variant="contained"
-                        size="large"
-                        fullWidth
-                        sx={{ mt: 2 }}
+                    <Tooltip
+                        title={processButtonHint}
+                        arrow
+                        disableHoverListener={!processButtonHint}
+                        disableFocusListener={!processButtonHint}
+                        disableTouchListener={!processButtonHint}
                     >
-                        <span id="btnText">{t("process.button")}</span>
-                    </Button>
+                        <span>
+                            <Button
+                                onClick={handlePrimaryAction}
+                                disabled={isProcessDisabled}
+                                variant={isAuthGated ? "outlined" : "contained"}
+                                size="large"
+                                fullWidth
+                                sx={{ mt: 2 }}
+                                aria-busy={loading ? "true" : undefined}
+                                startIcon={loading ? <CircularProgress size={18} color="inherit" /> : undefined}
+                            >
+                                <span id="btnText">{processButtonLabel}</span>
+                            </Button>
+                        </span>
+                    </Tooltip>
+
+                    {processButtonHint ? (
+                        <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: "block" }}>
+                            {processButtonHint}
+                        </Typography>
+                    ) : null}
 
                     {Array.isArray(heroClaims) && heroClaims.length > 0 ? (
                         <Box sx={{ mt: 3 }}>
