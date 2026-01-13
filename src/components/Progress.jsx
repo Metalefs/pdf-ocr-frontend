@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 
 export default function Progress({
     text,
+    percent,
     logs,
     showLogs = true,
     variant = "loading",
@@ -47,7 +48,13 @@ export default function Progress({
         >
             <Paper variant="outlined" sx={{ p: 2, borderLeft: `4px solid ${tone}` }}>
                 <Stack spacing={1}>
-                    {variant === "loading" ? <LinearProgress /> : null}
+                    {variant === "loading" ? (
+                        typeof percent === "number" && Number.isFinite(percent) ? (
+                            <LinearProgress variant="determinate" value={Math.max(0, Math.min(100, percent))} />
+                        ) : (
+                            <LinearProgress />
+                        )
+                    ) : null}
 
                     {title ? (
                         <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>

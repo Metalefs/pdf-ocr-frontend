@@ -5,4 +5,9 @@ export interface JobStatusResponse {
     error?: string;
     progress?: number;
     downloadUrl?: string;
+    message?: string;
+    stage?: string;
+    totalPages?: number;
+    processedPages?: number;
+    activePages?: number[];
 }

@@ -128,8 +128,8 @@ export default function PlansPage({ onNavigate }) {
               {typeof credits?.credits === 'number' ? (
                 <Chip
                   color="primary"
+                  variant="filled"
                   label={`${credits.credits} credits`}
-                  sx={{ bgcolor: 'background.paper' }}
                 />
               ) : null}
             </Stack>

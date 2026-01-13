@@ -51,6 +51,7 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
     const [file, setFile] = useState(null);
     const [loading, setLoading] = useState(false);
     const [progressText, setProgressText] = useState("");
+    const [progressPercent, setProgressPercent] = useState(null);
     const [logs, setLogs] = useState([]);
     const [resultUrl, setResultUrl] = useState(null);
     const [inputPreviewUrl, setInputPreviewUrl] = useState(null);
@@ -92,6 +93,7 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
         setLogs([]);
         setError(null);
         setLoading(false);
+        setProgressPercent(null);
     }
 
     const heroClaims = t("hero.claims");
@@ -148,11 +150,39 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                 try {
                     const status = await getJobStatus(jobId);
 
-                    if (status.logs?.length) {
-                        setLogs((prev) => [...prev, status.logs.at(-1)]);
+                    // Keep logs in sync (avoid duplicates caused by appending the last line repeatedly)
+                    setLogs(Array.isArray(status.logs) ? status.logs : []);
+
+                    const activePages = Array.isArray(status.activePages) ? status.activePages.filter((n) => typeof n === "number") : [];
+                    const totalPages = typeof status.totalPages === "number" ? status.totalPages : null;
+                    const processedPages = typeof status.processedPages === "number" ? status.processedPages : null;
+
+                    function formatPages() {
+                        if (!totalPages && !activePages.length && processedPages == null) return "";
+
+                        if (activePages.length) {
+                            const sorted = [...activePages].sort((a, b) => a - b);
+                            const display = sorted.length <= 4 ? sorted.join(", ") : `${sorted.slice(0, 4).join(", ")}…`;
+                            return totalPages ? ` (pages ${display} of ${totalPages})` : ` (pages ${display})`;
+                        }
+
+                        if (processedPages != null && totalPages) {
+                            return ` (${processedPages}/${totalPages} pages)`;
+                        }
+
+                        return "";
                     }
 
-                    setProgressText(`${t("process.status")} ${status.status}`);
+                    const baseMessage =
+                        (typeof status.message === "string" && status.message.trim())
+                            ? status.message.trim()
+                            : `${t("process.status")} ${status.status}`;
+
+                    setProgressText(`${baseMessage}${formatPages()}`);
+
+                    if (typeof status.progress === "number" && Number.isFinite(status.progress)) {
+                        setProgressPercent(status.progress);
+                    }
 
                     if (status.status === "completed") {
                         clearInterval(interval);
@@ -263,7 +293,7 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                         <UploadZone file={file} onSelect={setFile} />
                     )}
 
-                    {loading && <Progress text={progressText} logs={logs} showLogs={false} />}
+                    {loading && <Progress text={progressText} percent={progressPercent} logs={logs} showLogs={false} />}
                     {resultUrl && <Result url={resultUrl} fileName={file?.name} onReset={resetAll} />}
 
                     <Button
