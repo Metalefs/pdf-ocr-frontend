@@ -1,4 +1,4 @@
-Este arquivo documenta todas as mudanças e adições no projeto PDF OCR Frontend.
+Este arquivo documenta todas as mudanças e adições no projeto TextLayer OCR Frontend.
 
 ## [1.0.0] - 11 de Janeiro de 2026
 

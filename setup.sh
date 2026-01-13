@@ -1,7 +1,7 @@
 #!/bin/bash
-# Setup script for PDF OCR Frontend with Supabase & Stripe
+# Setup script for TextLayer OCR Frontend with Supabase & Stripe
 
-echo "🚀 Setting up PDF OCR Frontend..."
+echo "🚀 Setting up TextLayer OCR Frontend..."
 echo ""
 
 # Check if .env.local exists

@@ -1,4 +1,4 @@
-/* Configura��o do cliente de API para o frontend PDF-OCR.
+/* Configura��o do cliente de API para o frontend TextLayer OCR.
    Mantido simples e tipado para uso em todo o aplicativo. */
 
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';

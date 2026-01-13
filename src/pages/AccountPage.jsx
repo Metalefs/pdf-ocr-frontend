@@ -107,7 +107,7 @@ export default function AccountPage({ onNavigate }) {
   const planLabel = user.plan.charAt(0).toUpperCase() + user.plan.slice(1);
 
   return (
-    <div className="account-page">
+    <div className="account-page bg-slate-50">
       {paymentSuccess && (
         <div className="success-banner">
           <p>✓ Your plan has been upgraded successfully! Thank you for your purchase.</p>
@@ -215,7 +215,9 @@ export default function AccountPage({ onNavigate }) {
         <section className="account-section plan-section">
           <h2>Current Plan</h2>
           <div className="plan-info">
-            <div className="plan-badge">{planLabel}</div>
+            <div className="flex w-full">
+              <div className="plan-badge">{planLabel}</div>
+            </div>
             
             <div className="plan-details">
               <div className="detail-item">
@@ -305,7 +307,7 @@ export default function AccountPage({ onNavigate }) {
             <p>Your password is managed by your authentication provider (Google/GitHub).</p>
             <p>To change your password or security settings, visit your provider's account settings.</p>
             
-            <button className="btn-danger" onClick={handleSignOut}>
+            <button className="border border-red-600 text-red-600 hover:text-red-800 font-semibold btn-danger" onClick={handleSignOut}>
               Sign Out
             </button>
           </div>

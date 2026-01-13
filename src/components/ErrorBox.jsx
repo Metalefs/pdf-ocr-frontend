@@ -1,18 +1,24 @@
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+
 export default function ErrorBox({ message, details, upgradeUrl }) {
     return (
-        <div className="mt-8 bg-red-50 border border-red-300 p-4 rounded-xl text-red-700">
-            <div className="font-semibold">{message}</div>
-            {details && <div className="mt-1 text-sm text-red-700">{details}</div>}
-            {upgradeUrl && (
-                <div className="mt-4">
-                    <a
-                        href={upgradeUrl}
-                        className="inline-block bg-white text-red-700 border border-red-300 px-4 py-2 rounded-lg font-semibold hover:bg-red-50"
-                    >
-                        Upgrade plan
-                    </a>
-                </div>
-            )}
-        </div>
+        <Stack sx={{ mt: 3 }} spacing={1.5}>
+            <Alert
+                severity="error"
+                action={
+                    upgradeUrl ? (
+                        <Button color="inherit" size="small" component="a" href={upgradeUrl}>
+                            Upgrade plan
+                        </Button>
+                    ) : null
+                }
+            >
+                <AlertTitle>{message}</AlertTitle>
+                {details ? details : null}
+            </Alert>
+        </Stack>
     );
 }

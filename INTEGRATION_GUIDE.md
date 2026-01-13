@@ -1,8 +1,8 @@
-# PDF OCR Frontend - Supabase & Stripe Integration
+# TextLayer OCR Frontend - Supabase & Stripe Integration
 
 ## Overview
 
-This document describes the complete implementation of Supabase authentication and Stripe payment integration for the PDF OCR frontend, including new Plans and Account pages.
+This document describes the complete implementation of Supabase authentication and Stripe payment integration for the TextLayer OCR frontend, including new Plans and Account pages.
 
 ## Features Implemented
 

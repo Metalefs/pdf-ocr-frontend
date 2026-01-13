@@ -1,4 +1,4 @@
-# 📖 Quick Reference - PDF OCR Frontend
+# 📖 Quick Reference - TextLayer OCR Frontend
 
 ## Environment Variables
 

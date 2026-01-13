@@ -3,27 +3,30 @@ import React, { createContext, useContext, useState } from "react";
 const translations = {
   en: {
     header: {
-      brand: "PDF OCR Pro",
-      subtitle: "Preserve forms • Accurate OCR • Secure",
+      brand: "TextLayer OCR",
+      subtitle: "Preserve forms • Accurate • Secure",
       nav: { features: "Features", docs: "Docs", apiKeys: "API Keys", cta: "Get Started" },
     },
     hero: {
-      title: "OCR - With structure & widgets preserved",
+      title: "OCR with structure and widgets preserved.",
       subtitle:
         "Convert scanned PDFs into editable documents while fixing resources, keeping widgets and layout intact.",
       uniqueClaim:
         "* Unicode maps and font fixing capabilities, preserving all widgets.",
         claims: [
+          "Preserves digital signatures.",
+          "High-performance for multi-page documents.",
           "Fixes missing 'toUnicode' maps in legacy PDF files.",
           "Fixes clipboard data in PDFs so copied text is correct.",
           "Fixes malformed characters rendered in pdf.js and other viewers.",
+          "Small file size",
         ],
       feature1: { title: "Reliable Accuracy", desc: "High-fidelity OCR tuned for documents and form fields." },
       feature2: { title: "Enterprise Ready", desc: "Secure uploads, retention policies, and scalable processing." },
     },
     upload: {
       promptTitle: "Drop or click to upload your PDF",
-      promptSubtitle: "Max 10MB — we preserve fields and layout",
+      promptSubtitle: "Max 10MB — we preserve fields, layout, and digital signatures",
       chooseAnother: "Choose another file",
       multilangNote: "Supports multiple languages in the same file | detects languages automatically and supports multi-language OCR (PT, EN, AR, ZH, JP, KO, CHI).",
     },
@@ -73,6 +76,14 @@ const translations = {
     contact: {
       partnerText: "For partnership or enterprise inquiries, email {email} with the subject 'Partnership Inquiry' and we'll reply within 2 business days.",
     },
+    authDialog: {
+      title: 'Sign In Required',
+      message: 'You have reached the demo limit. Create a free account to continue processing PDFs or upgrade to a paid plan for unlimited access.',
+      signIn: 'Sign In / Create Account',
+      viewPlans: 'View Plans & Pricing',
+      cancel: 'Cancel',
+      benefits: 'Free account includes 10 credits per month',
+    },
     plans: {
       header: 'Pricing Plans',
       subtitle: 'Choose the plan that best suits your needs',
@@ -84,26 +95,29 @@ const translations = {
   },
   pt: {
     header: {
-      brand: "PDF OCR Pro",
+      brand: "TextLayer OCR",
       subtitle: "Preserva formulários • OCR preciso • Seguro",
       nav: { features: "Recursos", docs: "Docs", apiKeys: "Chaves de API", cta: "Começar" },
     },
     hero: {
-      title: "OCR de PDF com Preservação de Formulários",
+      title: "OCR de PDF com Preservação de Formulários.",
       subtitle: "Converta PDFs escaneados em documentos editáveis mantendo widgets e layout.",
       uniqueClaim:
         "Corrija mapas ausentes, fontes malformadas e mantenha todos os widgets do PDF.",
         claims: [
+          "Preserva assinaturas digitais.",
+          "Processamento paralelo de alta performance para documentos com múltiplas páginas.",
           "Corrige mapas 'toUnicode' ausentes em arquivos PDF legados.",
           "Corrige dados da área de transferência em PDFs para que o texto copiado fique correto.",
           "Corrige caracteres malformados exibidos no pdf.js e outros visualizadores.",
+          "Tamanho de arquivo pequeno",
         ],
       feature1: { title: "Precisão confiável", desc: "OCR de alta fidelidade ajustado para documentos e formulários." },
       feature2: { title: "Pronto para empresas", desc: "Uploads seguros, políticas de retenção e processamento escalável." },
     },
     upload: {
       promptTitle: "Clique ou arraste seu PDF",
-      promptSubtitle: "Máx 10MB — preservamos campos e layout",
+      promptSubtitle: "Máx 10MB — preservamos campos, layout e assinaturas digitais",
       chooseAnother: "Escolher outro arquivo",
       multilangNote: "Aceita múltiplos idiomas no mesmo arquivo | detecta idiomas automaticamente e suporta OCR multilíngue (PT, EN, AR, ZH, JP, KO, CHI)",
     },
@@ -177,6 +191,14 @@ const translations = {
     },
     contact: {
       partnerText: "Para parcerias ou soluções empresariais, envie um email para {email} com o assunto 'Parceria' e responderemos em até 2 dias úteis.",
+    },
+    authDialog: {
+      title: 'Login Necessário',
+      message: 'Você atingiu o limite de demonstração. Crie uma conta gratuita para continuar processando PDFs ou faça upgrade para um plano pago com acesso ilimitado.',
+      signIn: 'Entrar / Criar Conta',
+      viewPlans: 'Ver Planos e Preços',
+      cancel: 'Cancelar',
+      benefits: 'Conta gratuita inclui 10 créditos por mês',
     },
     plans: {
       header: 'Planos',

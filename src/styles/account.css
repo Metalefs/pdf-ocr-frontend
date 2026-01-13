@@ -2,7 +2,6 @@
 .account-page {
   min-height: 100vh;
   padding: 2rem;
-  background: #f8f9fa;
 }
 
 .account-container {
@@ -13,9 +12,10 @@
 .not-authenticated {
   text-align: center;
   padding: 4rem 2rem;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  background: var(--metro-surface);
+  border-radius: 0;
+  box-shadow: none;
+  border: 1px solid var(--metro-border);
 }
 
 .not-authenticated h2 {
@@ -34,7 +34,7 @@
   max-width: 1200px;
   margin: 0 auto 2rem;
   padding: 1rem;
-  border-radius: 8px;
+  border-radius: 0;
   text-align: center;
   font-weight: 500;
 }
@@ -73,19 +73,26 @@
 }
 
 .account-section {
-  background: white;
-  border-radius: 12px;
+  background: var(--metro-surface);
+  border-radius: 0.5rem;
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
   padding: 2rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e9ecef;
+  transition: border-color 140ms ease, background-color 140ms ease, transform 140ms ease;
+}
+
+.account-section:hover {
+  border-color: var(--metro-accent);
+  background: #f9fafb;
+  transform: translateY(-2px);
 }
 
 .account-section h2 {
   font-size: 1.5rem;
   margin-bottom: 1.5rem;
-  color: #333;
+  color: var(--metro-text);
+  font-weight: 300;
   padding-bottom: 1rem;
-  border-bottom: 2px solid #f0f0f0;
+  border-bottom: 1px solid var(--metro-border);
 }
 
 /* Profile Section */
@@ -98,7 +105,7 @@
 .avatar {
   width: 120px;
   height: 120px;
-  border-radius: 50%;
+  border-radius: 0;
   overflow: hidden;
   background: #e9ecef;
   display: flex;
@@ -153,22 +160,22 @@
 
 .form-group input {
   padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  border: 1px solid var(--metro-border);
+  border-radius: 0;
   font-size: 1rem;
   transition: border-color 0.3s;
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--metro-accent);
+  box-shadow: none;
 }
 
 .avatar-preview {
   width: 100px;
   height: 100px;
-  border-radius: 6px;
+  border-radius: 0;
   overflow: hidden;
   background: #e9ecef;
   display: flex;
@@ -197,10 +204,10 @@
 
 .plan-badge {
   display: inline-block;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--metro-accent);
   color: white;
   padding: 0.5rem 1.5rem;
-  border-radius: 50px;
+  border-radius: 0;
   font-weight: 600;
   width: fit-content;
 }
@@ -216,8 +223,15 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background: #f5f5f5;
-  border-radius: 6px;
+  background: #f3f4f6;
+  border-radius: 0;
+  border: 1px solid var(--metro-border);
+  transition: border-color 140ms ease, background-color 140ms ease;
+}
+
+.detail-item:hover {
+  border-color: var(--metro-accent);
+  background: #eef2ff;
 }
 
 .detail-item .label {
@@ -239,9 +253,26 @@
 }
 
 .usage-item {
-  background: #f5f5f5;
+  background: #f3f4f6;
   padding: 1.5rem;
-  border-radius: 8px;
+  border-radius: 0;
+  border: 1px solid var(--metro-border);
+  transition: border-color 140ms ease, background-color 140ms ease;
+}
+
+.usage-item:hover {
+  border-color: var(--metro-accent);
+  background: #f9fafb;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .account-section {
+    transition: none;
+  }
+
+  .account-section:hover {
+    transform: none;
+  }
 }
 
 .usage-header {
@@ -257,7 +288,7 @@
 }
 
 .usage-value {
-  color: #667eea;
+  color: var(--metro-accent);
   font-weight: 700;
   font-size: 1.1rem;
 }
@@ -266,13 +297,13 @@
   width: 100%;
   height: 8px;
   background: #ddd;
-  border-radius: 4px;
+  border-radius: 0;
   overflow: hidden;
 }
 
 .usage-fill {
   height: 100%;
-  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  background: var(--metro-accent);
   transition: width 0.3s ease;
 }
 
@@ -300,7 +331,7 @@
 .btn-danger {
   padding: 0.75rem 1.5rem;
   border: none;
-  border-radius: 6px;
+  border-radius: 0;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -313,24 +344,25 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--metro-accent);
   color: white;
 }
 
 .btn-primary:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+  transform: none;
+  box-shadow: none;
+  background: var(--metro-accent-hover);
 }
 
 .btn-secondary {
   background: #e9ecef;
-  color: #333;
-  border: 1px solid #ddd;
+  color: var(--metro-text);
+  border: 1px solid var(--metro-border);
 }
 
 .btn-secondary:hover:not(:disabled) {
   background: #e0e0e0;
-  border-color: #ccc;
+  border-color: var(--metro-border);
 }
 
 .btn-danger {

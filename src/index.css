@@ -2,34 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
-.upload-zone {
-    border: 3px dashed #cbd5e0;
-    transition: all 0.3s ease;
+/*
+  Compatibility variables used by existing page-level CSS (e.g. plans/account).
+  These map to the Material theme colors so legacy styles don't render
+  white text on a transparent background.
+*/
+:root {
+  --metro-bg: #f5f5f5;
+  --metro-surface: #ffffff;
+  --metro-border: #e0e0e0;
+  --metro-text: #111827;
+  --metro-muted: #6b7280;
+  --metro-accent: #1976d2;
+  --metro-accent-hover: #1565c0;
 }
 
-    .upload-zone.dragover {
-        border-color: #3b82f6;
-        background-color: #dbeafe;
-        transform: scale(1.02);
-    }
-
-.spinner {
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid #3b82f6;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
+html,
+body {
+  height: 100%;
 }
 
 .log-container {

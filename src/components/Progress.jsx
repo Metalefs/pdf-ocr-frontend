@@ -1,14 +1,93 @@
-export default function Progress({ text, logs, showLogs = true }) {
+import React, { useMemo, useState } from "react";
+
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Collapse from "@mui/material/Collapse";
+import LinearProgress from "@mui/material/LinearProgress";
+import Paper from "@mui/material/Paper";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
+export default function Progress({
+    text,
+    logs,
+    showLogs = true,
+    variant = "loading",
+    title,
+    compact = false,
+}) {
+    const hasLogs = Array.isArray(logs) && logs.length > 0;
+    const [logsOpen, setLogsOpen] = useState(false);
+
+    const tone = useMemo(() => {
+        switch (variant) {
+            case "success":
+                return "#107c10";
+            case "error":
+                return "#c50f1f";
+            case "warning":
+                return "#ffb900";
+            case "info":
+            case "loading":
+            default:
+                return "var(--metro-accent)";
+        }
+    }, [variant]);
+
+    const role = variant === "error" ? "alert" : "status";
+    const ariaLive = variant === "error" ? "assertive" : "polite";
+
     return (
-        <div className="mt-8">
-            <p className="text-center font-semibold text-rose-700">{text}</p>
-            {showLogs && logs?.length > 0 && (
-                <div className="mt-4 bg-rose-900 text-rose-100 p-4 rounded max-h-48 overflow-y-auto font-mono text-sm">
-                    {logs.map((l, i) => (
-                        <div key={i}>{l}</div>
+        <Box
+            component="section"
+            sx={{ mt: compact ? 2 : 3 }}
+            role={role}
+            aria-live={ariaLive}
+            aria-busy={variant === "loading" ? "true" : "false"}
+        >
+            <Paper variant="outlined" sx={{ p: 2, borderLeft: `4px solid ${tone}` }}>
+                <Stack spacing={1}>
+                    {variant === "loading" ? <LinearProgress /> : null}
+
+                    {title ? (
+                        <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+                            {title}
+                        </Typography>
+                    ) : null}
+
+                    <Typography variant="body2" color="text.secondary" sx={{ wordBreak: "break-word" }}>
+                        {text}
+                    </Typography>
+
+                    {showLogs && hasLogs ? (
+                        <Box>
+                            <Button
+                                size="small"
+                                variant="outlined"
+                                onClick={() => setLogsOpen((v) => !v)}
+                                aria-expanded={logsOpen ? "true" : "false"}
+                                sx={{ textTransform: "none" }}
+                            >
+                                {logsOpen ? "Hide logs" : `Show logs (${logs.length})`}
+                            </Button>
+                        </Box>
+                    ) : null}
+                </Stack>
+            </Paper>
+
+            <Collapse in={Boolean(showLogs && hasLogs && logsOpen)}>
+                <Paper
+                    variant="outlined"
+                    className="log-container"
+                    sx={{ mt: 2, p: 2, maxHeight: 224, overflowY: "auto" }}
+                >
+                    {logs.map((line, index) => (
+                        <Typography key={index} variant="body2" sx={{ fontFamily: '"Courier New", monospace' }}>
+                            {line}
+                        </Typography>
                     ))}
-                </div>
-            )}
-        </div>
+                </Paper>
+            </Collapse>
+        </Box>
     );
 }

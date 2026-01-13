@@ -1,6 +1,6 @@
 # 📚 Documentation Index
 
-Complete guide to all documentation and resources for the PDF OCR Frontend.
+Complete guide to all documentation and resources for the TextLayer OCR Frontend.
 
 ## 📖 Core Documentation
 
@@ -341,7 +341,7 @@ When making changes:
 
 **Version:** 1.0  
 **Last Updated:** January 2026  
-**Maintained By:** PDF OCR Team  
+**Maintained By:** TextLayer OCR Team  
 **Status:** Complete & Current
 
 Need help? See **[README.md](./README.md)** → Support section

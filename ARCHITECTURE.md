@@ -1,6 +1,6 @@
 # 🏗️ Architecture Overview
 
-Complete architecture diagram and explanation of the PDF OCR Frontend system.
+Complete architecture diagram and explanation of the TextLayer OCR Frontend system.
 
 ## System Architecture
 

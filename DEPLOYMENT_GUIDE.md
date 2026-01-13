@@ -1,6 +1,6 @@
 # 🚀 Deployment Guide
 
-Complete guide for deploying the PDF OCR frontend to production.
+Complete guide for deploying the TextLayer OCR frontend to production.
 
 ## Pre-Deployment Checklist
 

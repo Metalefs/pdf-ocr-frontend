@@ -4,8 +4,8 @@ import { useI18n } from "../i18n";
 export default function PrivacyPolicy() {
   const { t } = useI18n();
   return (
-    <main className="max-w-5xl mx-auto p-6 bg-white rounded-2xl shadow my-8">
-      <h1 className="text-2xl font-bold mb-4">Privacy Policy</h1>
+    <main className="max-w-5xl mx-auto p-6 metro-surface my-8">
+      <h1 className="metro-title text-4xl mb-4">Privacy Policy</h1>
       <p className="mb-4">This Privacy Policy explains how {t("header.brand")} collects, uses, and discloses information when you use our website.</p>
 
       <h2 className="font-semibold mt-4">Information We Collect</h2>

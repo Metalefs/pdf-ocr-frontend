@@ -2,7 +2,7 @@
 
 ## Summary of Work Completed
 
-The PDF OCR frontend has been successfully updated with complete **Supabase authentication** and **Stripe payment integration**.
+The TextLayer OCR frontend has been successfully updated with complete **Supabase authentication** and **Stripe payment integration**.
 
 ### What Was Built
 
@@ -285,7 +285,7 @@ Status:              ✅ Production Ready
 
 ## 🚀 Ready to Launch!
 
-All components are in place. Your PDF OCR SaaS frontend is now:
+All components are in place. Your TextLayer OCR SaaS frontend is now:
 
 - ✅ Fully authenticated
 - ✅ Payment-ready

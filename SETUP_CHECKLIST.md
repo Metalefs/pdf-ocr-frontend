@@ -1,6 +1,6 @@
 # Setup Checklist - Supabase & Stripe Integration
 
-Complete this checklist to get the PDF OCR frontend fully integrated with Supabase and Stripe.
+Complete this checklist to get the TextLayer OCR frontend fully integrated with Supabase and Stripe.
 
 ## 📋 Pre-Setup Requirements
 

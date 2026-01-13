@@ -1,23 +1,36 @@
 import { useI18n } from "../i18n";
 
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Paper from "@mui/material/Paper";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
 export default function Result({ url, fileName, onReset }) {
     const { t } = useI18n();
 
     return (
-        <div className="mt-8 bg-white border border-slate-100 p-6 rounded-xl flex justify-between items-center">
-            <div>
-                <p className="font-bold text-slate-800">{t("result.completed")}</p>
-                <p className="text-slate-600">{fileName}</p>
-            </div>
-            <div className="flex items-center gap-3">
-                <a href={url} download className="bg-sky-600 text-white px-4 py-2 rounded-lg font-bold">
-                    {t("sidebar.download")}
-                </a>
+        <Paper variant="outlined" sx={{ mt: 3, p: 2 }}>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems={{ xs: "stretch", sm: "center" }} justifyContent="space-between">
+                <Box>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+                        {t("result.completed")}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        {fileName}
+                    </Typography>
+                </Box>
 
-                <button onClick={onReset} className="text-sm text-slate-600 underline">
-                    {t("process.another")}
-                </button>
-            </div>
-        </div>
+                <Stack direction="row" spacing={1.5} justifyContent={{ xs: "flex-start", sm: "flex-end" }}>
+                    <Button component="a" href={url} download variant="contained">
+                        {t("sidebar.download")}
+                    </Button>
+
+                    <Button onClick={onReset} variant="text" color="inherit">
+                        {t("process.another")}
+                    </Button>
+                </Stack>
+            </Stack>
+        </Paper>
     );
 }

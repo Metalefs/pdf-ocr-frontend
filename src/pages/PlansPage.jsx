@@ -4,12 +4,36 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { paymentService } from '../services/payment.service';
 import { stripePromise } from '../config/stripe';
-import '../styles/plans.css';
 import { useI18n } from '../i18n';
+
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import Chip from "@mui/material/Chip";
+import CircularProgress from "@mui/material/CircularProgress";
+import Container from "@mui/material/Container";
+import Divider from "@mui/material/Divider";
+import Grid from "@mui/material/Grid";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 export default function PlansPage({ onNavigate }) {
   const { user, credits } = useAuth();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const navigate = useNavigate();
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -72,111 +96,211 @@ export default function PlansPage({ onNavigate }) {
 
   if (loading) {
     return (
-      <div className="plans-container min-h-screen">
-        <div className="loading-spinner">Loading plans...</div>
-      </div>
+      <Box sx={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Stack spacing={2} alignItems="center">
+          <CircularProgress />
+          <Typography color="text.secondary">Loading plans…</Typography>
+        </Stack>
+      </Box>
     );
   }
 
   return (
-    <div className="plans-page min-h-scree">
-      <div className="plans-header">
-        <h1 className='text-2xl font-semibold mb-4'>{t('plans.header')}</h1>
-        <p>{t('plans.subtitle')}</p>
-        {user && (
-          <div className="current-plan-badge">
-            Current Plan: <strong>{user.plan.charAt(0).toUpperCase() + user.plan.slice(1)}</strong>
-            {credits && <span className="credits-badge">{credits.credits} Credits</span>}
-          </div>
-        )}
-      </div>
+    <Box sx={{ bgcolor: 'background.default', py: { xs: 3, md: 4 } }}>
+      <Container maxWidth="lg">
+        <Stack spacing={2} sx={{ mb: 3 }}>
+          <Box>
+            <Typography variant="h4" sx={{ fontWeight: 800 }}>
+              {t('plans.header')}
+            </Typography>
+            <Typography variant="body1" color="text.secondary" sx={{ mt: 0.5 }}>
+              {t('plans.subtitle')}
+            </Typography>
+          </Box>
 
-      {error && (
-        <div className="error-message">
-          <p>{error}</p>
-        </div>
-      )}
+          {user ? (
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} alignItems={{ xs: 'flex-start', sm: 'center' }}>
+              <Chip
+                color="primary"
+                variant="outlined"
+                label={`Current plan: ${user.plan.charAt(0).toUpperCase() + user.plan.slice(1)}`}
+              />
+              {typeof credits?.credits === 'number' ? (
+                <Chip
+                  color="primary"
+                  label={`${credits.credits} credits`}
+                  sx={{ bgcolor: 'background.paper' }}
+                />
+              ) : null}
+            </Stack>
+          ) : (
+            <Alert severity="info">
+              Log in to upgrade your plan.
+            </Alert>
+          )}
 
-      <div className="plans-grid">
-        {plans.map((plan) => (
-          <div key={plan.id} className={`plan-card ${user?.plan === plan.id ? 'active' : ''}`}>
-            <div className="plan-header">
-              <h2>{plan.name}</h2>
-              <div className="plan-price">
-                <span className="price-value">${plan.price}</span>
-                <span className="price-period">/month</span>
-              </div>
-            </div>
+          {error ? <Alert severity="error">{error}</Alert> : null}
+        </Stack>
 
-            <div className="plan-credits">
-              <span className="credits-amount">{plan.credits}</span>
-              <span className="credits-label">Credits per month</span>
-            </div>
+        <Grid container spacing={2}>
+          {plans.map((plan) => {
+            const isCurrent = user?.plan === plan.id;
+            const isFree = plan.id === 'free';
+            const numericPrice = Number(plan.price);
+            const isPaid = Number.isFinite(numericPrice) ? numericPrice > 0 : Boolean(plan.price && plan.price !== '0');
+            const ctaDisabled = Boolean(
+              checkoutLoading[plan.id] ||
+              isCurrent ||
+              (isFree && user?.plan === 'free')
+            );
 
-            <div className="plan-features">
-              <h3>Features:</h3>
-              <ul>
-                {plan.features.map((feature, idx) => (
-                  <li key={idx}>
-                    <span className="feature-icon">✓</span>
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            const ctaLabel = checkoutLoading[plan.id]
+              ? 'Processing…'
+              : isCurrent
+                ? 'Current Plan'
+                : isFree
+                  ? 'Downgrade to Free'
+                  : 'Upgrade Now';
 
-            <div className="plan-api p-4 text-sm text-slate-600">
-              <strong>{t('plans.apiAccess')}:</strong>{' '}
-              {plan.price && plan.price > 0 ? t('plans.apiIncludedYes') : t('plans.apiIncludedNo')}
-            </div>
+            return (
+              <Grid key={plan.id} item xs={12} md={6} lg={4}>
+                <Card
+                  variant="outlined"
+                  sx={(theme) => ({
+                    height: '100%',
+                    borderRadius: 3,
+                    borderColor: isCurrent ? theme.palette.primary.main : theme.palette.divider,
+                    boxShadow: isCurrent ? theme.shadows[2] : 'none',
+                  })}
+                >
+                  <CardContent>
+                    <Stack spacing={2}>
+                      <Box>
+                        <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between">
+                          <Typography variant="h6" sx={{ fontWeight: 800 }}>
+                            {plan.name}
+                          </Typography>
+                          {isCurrent ? <Chip size="small" color="primary" label="Active" /> : null}
+                        </Stack>
+                        <Stack direction="row" spacing={1} alignItems="baseline" sx={{ mt: 1 }}>
+                          <Typography variant="h4" sx={{ fontWeight: 900 }}>
+                            {isPaid ? `$${plan.price}` : '$0'}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            /month
+                          </Typography>
+                        </Stack>
+                      </Box>
 
-            <button
-              className={`plan-button ${user?.plan === plan.id ? 'current' : 'upgrade'}`}
-              onClick={() => handleUpgrade(plan)}
-              disabled={
-                checkoutLoading[plan.id] || 
-                user?.plan === plan.id || 
-                (plan.id === 'free' && user?.plan === 'free')
-              }
-            >
-              {checkoutLoading[plan.id] ? (
-                <>
-                  <span className="spinner"></span>
-                  Processing...
-                </>
-              ) : user?.plan === plan.id ? (
-                'Current Plan'
-              ) : plan.id === 'free' ? (
-                'Downgrade to Free'
-              ) : (
-                'Upgrade Now'
-              )}
-            </button>
-          </div>
-        ))}
-      </div>
+                      <Box>
+                        <Typography variant="overline" color="text.secondary">
+                          Credits
+                        </Typography>
+                        <Typography variant="h5" sx={{ fontWeight: 800, lineHeight: 1.1 }}>
+                          {isFree ? 3 : plan.credits}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {isFree
+                            ? (locale === 'pt' ? '3 créditos por dia' : '3 credits per day')
+                            : 'Credits per month'}
+                        </Typography>
+                      </Box>
 
-      <div className="plans-faq">
-        <h2 className="text-2xl font-semibold mb-4">Frequently Asked Questions</h2>
-        <div className="faq-grid">
-          <div className="faq-item">
-            <h4 className="italic">What are credits?</h4>
-            <p>Credits are used to process PDFs through our OCR system. Each PDF processing costs credits based on the number of pages.</p>
-          </div>
-          <div className="faq-item">
-            <h4 className="italic">Can I cancel anytime?</h4>
-            <p>Yes! You can cancel your subscription at any time. Your access will continue until the end of your billing period.</p>
-          </div>
-          <div className="faq-item">
-            <h4 className="italic">Do unused credits roll over?</h4>
-            <p>Credits reset every month. Unused credits from the previous month do not carry over.</p>
-          </div>
-          <div className="faq-item">
-            <h4 className="italic">What payment methods do you accept?</h4>
-            <p>We accept all major credit and debit cards through our secure Stripe payment processor.</p>
-          </div>
-        </div>
-      </div>
-    </div>
+                      <Divider />
+
+                      <Box>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1 }}>
+                          Features
+                        </Typography>
+                        <List dense disablePadding>
+                          {Array.isArray(plan.features) ? plan.features.map((feature, idx) => (
+                            <ListItem key={idx} disableGutters sx={{ py: 0.25 }}>
+                              <ListItemIcon sx={{ minWidth: 34 }}>
+                                <CheckCircleOutlineIcon fontSize="small" color="success" />
+                              </ListItemIcon>
+                              <ListItemText primaryTypographyProps={{ variant: 'body2' }} primary={feature} />
+                            </ListItem>
+                          )) : null}
+                        </List>
+                      </Box>
+
+                      <Alert severity="info" sx={{ mt: 1 }}>
+                        <strong>{t('plans.apiAccess')}:</strong>{' '}
+                        {isPaid ? t('plans.apiIncludedYes') : t('plans.apiIncludedNo')}
+                      </Alert>
+                    </Stack>
+                  </CardContent>
+
+                  <CardActions sx={{ px: 2, pb: 2, pt: 0 }}>
+                    <Button
+                      fullWidth
+                      variant={isCurrent ? 'outlined' : 'contained'}
+                      color={isCurrent ? 'inherit' : 'primary'}
+                      onClick={() => handleUpgrade(plan)}
+                      disabled={ctaDisabled}
+                      startIcon={checkoutLoading[plan.id] ? <CircularProgress size={16} color="inherit" /> : null}
+                      sx={{ textTransform: 'none' }}
+                    >
+                      {ctaLabel}
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            );
+          })}
+        </Grid>
+
+        <Box sx={{ mt: 4 }}>
+          <Typography variant="h5" sx={{ fontWeight: 900, mb: 1.5 }}>
+            Frequently Asked Questions
+          </Typography>
+          <Stack spacing={1}>
+            <Accordion variant="outlined" disableGutters>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography sx={{ fontWeight: 700 }}>What are credits?</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography color="text.secondary">
+                  Credits are used to process PDFs through our OCR system. Each PDF processing costs credits based on the number of pages.
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+
+            <Accordion variant="outlined" disableGutters>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography sx={{ fontWeight: 700 }}>Can I cancel anytime?</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography color="text.secondary">
+                  Yes! You can cancel your subscription at any time. Your access will continue until the end of your billing period.
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+
+            <Accordion variant="outlined" disableGutters>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography sx={{ fontWeight: 700 }}>Do unused credits roll over?</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography color="text.secondary">
+                  Credits reset every month. Unused credits from the previous month do not carry over.
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+
+            <Accordion variant="outlined" disableGutters>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography sx={{ fontWeight: 700 }}>What payment methods do you accept?</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography color="text.secondary">
+                  We accept all major credit and debit cards through our secure Stripe payment processor.
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+          </Stack>
+        </Box>
+      </Container>
+    </Box>
   );
 }

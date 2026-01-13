@@ -331,7 +331,7 @@ Before deploying to production:
 
 ## 🎉 Congratulations!
 
-Your PDF OCR frontend is now fully integrated with:
+Your TextLayer OCR frontend is now fully integrated with:
 - **Supabase** for authentication
 - **Stripe** for payments
 - **Complete user management** with profiles and settings

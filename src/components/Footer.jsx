@@ -1,9 +1,17 @@
 ﻿import React from 'react';
 import { useI18n } from "../i18n";
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
+
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import Divider from "@mui/material/Divider";
+import Grid from "@mui/material/Grid";
+import Link from "@mui/material/Link";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 
 /**
- * Footer simples para o aplicativo PDF OCR Frontend.
+ * Footer simples para o aplicativo TextLayer OCR Frontend.
  * Mantém-se intencionalmente minimalista para facilitar adaptação ao estilo do projeto.
  */
 const Footer = () => {
@@ -11,38 +19,56 @@ const Footer = () => {
   const { t } = useI18n();
 
   return (
-      <footer className="bg-slate-50 text-slate-700 py-10">
-          <div className="max-w-7xl mx-auto px-6">
-              <div className="flex flex-col md:flex-row md:justify-between gap-6 md:items-start mb-6">
-                  <div>
-                      <h4 className="font-semibold text-lg mb-2">{t("header.brand")}</h4>
-                      <p className="text-sm text-slate-500">{t("hero.subtitle")}</p>
-                  </div>
+        <Box component="footer" sx={{ py: 6, bgcolor: "background.default" }}>
+            <Container maxWidth="lg">
+                <Grid container spacing={4}>
+                    <Grid item xs={12} md={5}>
+                        <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                            {t("header.brand")}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                            {t("hero.subtitle")}
+                        </Typography>
+                    </Grid>
 
-                  <div className="text-sm text-slate-500">
-                      <div className="font-medium mb-2">{t("footer.technology")}</div>
-                      <ul className="space-y-1">
-                          <li>Tesseract OCR</li>
-                          <li>iText PDF</li>
-                          <li>Scalable Processing</li>
-                      </ul>
-                  </div>
+                    <Grid item xs={12} sm={6} md={3}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
+                            {t("footer.technology")}
+                        </Typography>
+                        <Stack spacing={0.5}>
+                            <Typography variant="body2" color="text.secondary">Tesseract OCR</Typography>
+                            <Typography variant="body2" color="text.secondary">iText PDF</Typography>
+                            <Typography variant="body2" color="text.secondary">Scalable Processing</Typography>
+                        </Stack>
+                    </Grid>
 
-                  <div className="text-sm text-slate-500">
-                      <div className="font-medium mb-2">{t("footer.privacy")}</div>
-                      <p>{t("footer.privacy") === "Privacidade" ? "Arquivos processados de forma segura e removidos conforme política de retenção." : "Files are processed securely and removed according to retention policy."}</p>
-                      <div className="mt-2">
-                          <Link to="/privacy" className="text-slate-600 hover:underline mr-3">{t("footer.privacy")}</Link>
-                          <Link to="/contact" className="text-slate-600 hover:underline mr-3">Contact</Link>
-                      </div>
-                  </div>
-              </div>
+                    <Grid item xs={12} sm={6} md={4}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
+                            {t("footer.privacy")}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                            {t("footer.privacy") === "Privacidade"
+                                ? "Arquivos processados de forma segura e removidos conforme política de retenção."
+                                : "Files are processed securely and removed according to retention policy."}
+                        </Typography>
+                        <Stack direction="row" spacing={2} sx={{ mt: 1.5 }}>
+                            <Link component={RouterLink} to="/privacy" underline="hover">
+                                {t("footer.privacy")}
+                            </Link>
+                            <Link component={RouterLink} to="/contact" underline="hover">
+                                Contact
+                            </Link>
+                        </Stack>
+                    </Grid>
+                </Grid>
 
-              <div className="border-t border-slate-100 pt-6 text-center text-sm text-slate-500">
-                  <p>&copy; {year} {t("header.brand")}. {t("footer.copy")}</p>
-              </div>
-          </div>
-      </footer>
+                <Divider sx={{ my: 4 }} />
+
+                <Typography variant="body2" color="text.secondary" align="center">
+                    © {year} {t("header.brand")}. {t("footer.copy")}
+                </Typography>
+            </Container>
+        </Box>
   );
 };
 

@@ -1,6 +1,6 @@
-# PDF OCR Frontend
+# TextLayer OCR Frontend
 
-A React + Vite frontend for the PDF OCR SaaS application with complete Supabase authentication and Stripe payment integration.
+A React + Vite frontend for the TextLayer OCR SaaS application with complete Supabase authentication and Stripe payment integration.
 
 ## 🎯 Features
 
