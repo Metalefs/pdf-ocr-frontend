@@ -24,6 +24,47 @@ const translations = {
       feature1: { title: "Reliable Accuracy", desc: "High-fidelity OCR tuned for documents and form fields." },
       feature2: { title: "Enterprise Ready", desc: "Secure uploads, retention policies, and scalable processing." },
     },
+    why: {
+      title: "Why this exists",
+      body1:
+        "Corrupted or incomplete PDF fonts can produce unreadable characters and inconsistent rendering across viewers.",
+      body2:
+        "Most ‘fix’ approaches rebuild the PDF and end up breaking forms and metadata. This API regenerates font resources while keeping the original document properties intact — preserving interactive forms while fixing rendering issues.",
+      bullets: [
+        "Fixes missing/invalid font resources and Unicode maps (toUnicode)",
+        "Keeps form fields/widgets (AcroForm) fully functional",
+        "Normalizes rendering across viewers (pdf.js, PDFium, Adobe Reader)",
+      ],
+    },
+    useCases: {
+      title: "Use cases for the platform & API",
+      items: [
+        {
+          title: "Consistent rendering across viewers",
+          desc: "Make PDFs look the same in pdf.js (web), PDFium (Chromium), and Adobe Reader by repairing font encoding and mappings.",
+        },
+        {
+          title: "Regenerate fonts without breaking forms",
+          desc: "Repair missing/broken font resources while preserving AcroForm fields, appearances, and widget behavior.",
+        },
+        {
+          title: "Fix copy/paste and text extraction",
+          desc: "Correct malformed characters by fixing Unicode mappings so users can search, select, and copy text correctly.",
+        },
+        {
+          title: "Add selection/search to form-heavy PDFs",
+          desc: "Enable reliable text selection and indexing on PDFs where forms are essential and fonts are incomplete or missing.",
+        },
+        {
+          title: "Batch processing via API",
+          desc: "Integrate with DMS/ECM pipelines to process thousands of PDFs asynchronously and retrieve results programmatically.",
+        },
+        {
+          title: "Pre-processing before signing or archiving",
+          desc: "Normalize PDFs for long-term retention and downstream workflows while keeping signatures and document properties intact.",
+        },
+      ],
+    },
     upload: {
       promptTitle: "Drop or click to upload your PDF",
       promptSubtitle: "Max 10MB — we preserve fields, layout, and digital signatures",
@@ -130,6 +171,47 @@ const translations = {
         ],
       feature1: { title: "Precisão confiável", desc: "OCR de alta fidelidade ajustado para documentos e formulários." },
       feature2: { title: "Pronto para empresas", desc: "Uploads seguros, políticas de retenção e processamento escalável." },
+    },
+    why: {
+      title: "Por que isso existe?",
+      body1:
+        "Fontes corrompidas em PDFs causam caracteres ilegíveis e incompatibilidade entre visualizadores. Soluções tradicionais destroem formulários e metadados ao tentar corrigir o problema.",
+      body2:
+        "Esta API regenera fontes mantendo intactas todas as propriedades do documento original — a única solução que preserva formulários interativos enquanto corrige problemas de renderização.",
+      bullets: [
+        "Regenera recursos de fontes e mapeamentos Unicode (toUnicode)",
+        "Preserva formulários interativos (AcroForm), widgets e aparências",
+        "Padroniza a visualização entre pdf.js, PDFium e Adobe Reader",
+      ],
+    },
+    useCases: {
+      title: "Casos de uso da plataforma e da API",
+      items: [
+        {
+          title: "🔧 Correção de Encoding de Fontes",
+          desc: "Resolva divergências de renderização entre navegadores, visualizadores nativos e Adobe Reader.",
+        },
+        {
+          title: "📝 Formulários Sem Fontes Incorporadas",
+          desc: "Adicione suporte a seleção de texto em PDFs onde as fontes originais foram perdidas.",
+        },
+        {
+          title: "🏛️ Migração de Sistemas Legados",
+          desc: "Atualize documentos antigos com fontes obsoletas para padrões modernos.",
+        },
+        {
+          title: "♿ Acessibilidade e OCR",
+          desc: "Melhore a extração de texto e compatibilidade com leitores de tela.",
+        },
+        {
+          title: "📤 Automação de Workflows",
+          desc: "Integre na pipeline de processamento de documentos (uploads, conversões, arquivamento).",
+        },
+        {
+          title: "⚖️ Compliance Documental",
+          desc: "Garanta conformidade em arquivos que exigem fidelidade visual (contratos, certidões).",
+        },
+      ],
     },
     upload: {
       promptTitle: "Clique ou arraste seu PDF",

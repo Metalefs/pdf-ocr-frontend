@@ -12,6 +12,9 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import ContactPage from "./pages/ContactPage";
 import ApiKeysPage from "./pages/ApiKeysPage";
 import AuthRequiredDialog from "./components/AuthRequiredDialog";
+import DocsPage from "./pages/DocsPage";
+import ApiDocsPage from "./pages/ApiDocsPage";
+import PdfJsFontEncodingGuidePage from "./pages/guides/PdfJsFontEncodingGuidePage";
 
 import { processPdfAsync, processPdfDemo } from "./services/pdf.service";
 import { getJobStatus, getJobDownloadUrl } from "./services/jobs.service";
@@ -19,6 +22,7 @@ import { I18nProvider, useI18n } from "./i18n";
 import { AuthProvider } from "./contexts/AuthContext";
 import { useAuth } from "./contexts/AuthContext";
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
@@ -27,6 +31,7 @@ import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
 import Container from "@mui/material/Container";
+import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
@@ -46,7 +51,7 @@ import LockIcon from "@mui/icons-material/Lock";
 import SpeedIcon from "@mui/icons-material/Speed";
 
 function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
-    const { t } = useI18n();
+    const { t, locale } = useI18n();
     const auth = useAuth();
     const { refreshUser } = auth;
 
@@ -99,6 +104,8 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
     }
 
     const heroClaims = t("hero.claims");
+    const whyBullets = t("why.bullets");
+    const useCaseItems = t("useCases.items");
 
     const featureIcons = [
         DescriptionIcon,
@@ -444,6 +451,65 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                         </Typography>
                     )}
 
+                    <Divider sx={{ my: { xs: 3, md: 4 } }} />
+
+                    <Box component="section" aria-labelledby="why-title" sx={{ scrollMarginTop: 96 }}>
+                        <Typography id="why-title" variant="h4" sx={{ fontWeight: 900, letterSpacing: -0.25 }}>
+                            {t("why.title")}
+                        </Typography>
+                        <Typography variant="body1" color="text.secondary" sx={{ mt: 1, maxWidth: 980 }}>
+                            {t("why.body1")}
+                        </Typography>
+                        <Typography variant="body1" color="text.secondary" sx={{ mt: 1.25, maxWidth: 980 }}>
+                            {t("why.body2")}
+                        </Typography>
+
+                        {Array.isArray(whyBullets) && whyBullets.length ? (
+                            <Stack spacing={0.75} sx={{ mt: 2 }}>
+                                {whyBullets.map((line, idx) => (
+                                    <Typography key={`${idx}-${line}`} variant="body2" sx={{ display: "flex", gap: 1 }}>
+                                        <Box component="span" sx={{ color: "text.secondary" }}>•</Box>
+                                        <Box component="span" sx={{ fontWeight: 600 }}>{line}</Box>
+                                    </Typography>
+                                ))}
+                            </Stack>
+                        ) : null}
+
+                        <Stack direction={{ xs: "column", sm: "row" }} spacing={1} sx={{ mt: 2 }}>
+                            <Button component={RouterLink} to="/docs" variant="contained">
+                                {String(locale).toLowerCase().startsWith("pt") ? "Ler Docs" : "Read Docs"}
+                            </Button>
+                            <Button component={RouterLink} to="/guides/pdfjs-font-encoding" variant="outlined">
+                                {String(locale).toLowerCase().startsWith("pt") ? "Ver guia pdf.js" : "View pdf.js guide"}
+                            </Button>
+                        </Stack>
+                    </Box>
+
+                    <Box component="section" aria-labelledby="use-cases-title" sx={{ mt: { xs: 3, md: 4 }, scrollMarginTop: 96 }}>
+                        <Typography id="use-cases-title" variant="h4" sx={{ fontWeight: 900, letterSpacing: -0.25 }}>
+                            {t("useCases.title")}
+                        </Typography>
+
+                        {Array.isArray(useCaseItems) && useCaseItems.length ? (
+                            <Grid container spacing={2} sx={{ mt: 1 }}>
+                                {useCaseItems.map((item, idx) => (
+                                    <Grid item xs={12} md={6} key={`${idx}-${item?.title || "use-case"}`}>
+                                        <Card variant="outlined" sx={{ height: "100%", borderRadius: 3 }}>
+                                            <CardContent>
+                                                <Typography variant="h6" sx={{ fontWeight: 800 }}>
+                                                    {item?.title}
+                                                </Typography>
+                                                <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75 }}>
+                                                    {item?.desc}
+                                                </Typography>
+                                            </CardContent>
+                                        </Card>
+                                    </Grid>
+                                ))}
+                            </Grid>
+                        ) : null}
+                    </Box>
+
                     {error && <ErrorBox message={error?.message || error} details={error?.details} upgradeUrl={error?.upgradeUrl} />}
                 </Paper>
             </Container>
@@ -488,6 +554,10 @@ function MainApp() {
                     <Routes>
                         <Route path="/auth/callback" element={<AuthCallbackPage />} />
                         <Route path="/plans" element={<PlansPage />} />
+                        <Route path="/docs" element={<DocsPage />} />
+                        <Route path="/api" element={<Navigate to="/docs/api" replace />} />
+                        <Route path="/docs/api" element={<ApiDocsPage />} />
+                        <Route path="/guides/pdfjs-font-encoding" element={<PdfJsFontEncodingGuidePage />} />
                         <Route path="/account" element={<AccountPage />} />
                         <Route path="/api-keys" element={<ApiKeysPage />} />
                         <Route path="/privacy" element={<PrivacyPolicy />} />

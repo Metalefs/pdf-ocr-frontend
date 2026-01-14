@@ -57,6 +57,15 @@ const Footer = () => {
                             <Link component={RouterLink} to="/privacy" underline="hover">
                                 {t("footer.privacy")}
                             </Link>
+                            <Link component={RouterLink} to="/docs" underline="hover">
+                                {t("header.nav.docs") || "Docs"}
+                            </Link>
+                            <Link component={RouterLink} to="/docs/api" underline="hover">
+                                API
+                            </Link>
+                            <Link component={RouterLink} to="/guides/pdfjs-font-encoding" underline="hover">
+                                {t("footer.privacy") === "Privacidade" ? "Guia pdf.js" : "pdf.js guide"}
+                            </Link>
                             <Link component={RouterLink} to="/contact" underline="hover">
                                 Contact
                             </Link>

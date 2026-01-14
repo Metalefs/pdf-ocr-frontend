@@ -56,6 +56,24 @@ export default function Header({ currentPage = "home", onNavigate }) {
         active: currentPath === "/" || currentPath === "/home",
       },
       {
+        key: "docs",
+        label: (t('header.nav.docs') || 'Docs'),
+        path: "/docs",
+        active: currentPath === "/docs",
+      },
+      {
+        key: "api",
+        label: "API",
+        path: "/docs/api",
+        active: currentPath === "/docs/api" || currentPath === "/api",
+      },
+      {
+        key: "guide",
+        label: String(locale).toLowerCase().startsWith('pt') ? 'Guia' : 'Guide',
+        path: "/guides/pdfjs-font-encoding",
+        active: currentPath === "/guides/pdfjs-font-encoding",
+      },
+      {
         key: "plans",
         label: (t('header.nav.features') === 'Features' ? 'Plans' : t('plans.header')),
         path: "/plans",
@@ -79,7 +97,7 @@ export default function Header({ currentPage = "home", onNavigate }) {
     }
 
     return items;
-  }, [currentPath, t, user]);
+  }, [currentPath, locale, t, user]);
 
   const handleSignOut = async () => {
     try {
