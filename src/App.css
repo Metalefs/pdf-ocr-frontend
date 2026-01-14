@@ -48,3 +48,27 @@ body {
 }
 
 .accent-emoji { animation: floaty 3s ease-in-out infinite; color: #6366f1; }
+
+/* Hero mais impactante */
+.hero-section {
+  min-height: 80vh; /* mais altura */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Upload zone destacada */
+#upload-zone {
+  transform: scale(1.05); /* 5% maior */
+  box-shadow: 0 20px 60px rgba(102,126,234,0.3); /* sombra dramática */
+  transition: transform 0.3s;
+}
+
+#upload-zone:hover {
+  transform: scale(1.08);
+}
+
+/* Features com cards glassmorphism */
+.feature-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
