@@ -168,10 +168,16 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                     pollJob(job.jobId);
                 }
             } catch (err) {
-                // If demo limit exceeded (429), require auth for next calls
-                if (err && err.status === 429) {
+                // If demo limit exceeded, require auth for next calls
+                if (err && (err.status === 429 || err.code === 'DEMO_LIMIT')) {
                     setRequireAuthForNext(true);
-                    onRequireAuth?.(err.details || 'Demo limit reached. Please sign in or upgrade.');
+                    const localized = t('authDialog.message');
+                    const fallback = 'Demo limit reached. Please sign in or upgrade.';
+                    onRequireAuth?.(
+                        (localized && localized !== 'authDialog.message')
+                            ? localized
+                            : (err.details || fallback)
+                    );
                 } else {
                     setError(err && err.message ? { message: err.message, details: err.details, upgradeUrl: err.upgradeUrl } : err);
                 }
