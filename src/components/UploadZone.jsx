@@ -38,7 +38,7 @@ export default function UploadZone({ file, onSelect }) {
         setIsDragOver(true);
     }
 
-    function onDragLeave(e) {
+    function onDragLeave() {
         setIsDragOver(false);
     }
 

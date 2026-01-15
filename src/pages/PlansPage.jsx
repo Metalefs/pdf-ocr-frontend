@@ -1,6 +1,5 @@
 // src/pages/PlansPage.jsx
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { paymentService } from '../services/payment.service';
 import { stripePromise } from '../config/stripe';
@@ -31,10 +30,9 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-export default function PlansPage({ onNavigate }) {
+export default function PlansPage() {
   const { user, credits } = useAuth();
   const { t, locale } = useI18n();
-  const navigate = useNavigate();
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
   const [checkoutLoading, setCheckoutLoading] = useState({});

@@ -31,7 +31,7 @@ import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 import GoogleIcon from "@mui/icons-material/Google";
 import GitHubIcon from "@mui/icons-material/GitHub";
 
-export default function Header({ currentPage = "home", onNavigate }) {
+export default function Header({ onNavigate }) {
   const { t, locale, setLocale } = useI18n();
   const { user, credits, loading, signInWithGoogle, signInWithGithub, signOut } = useAuth();
   const navigate = useNavigate();

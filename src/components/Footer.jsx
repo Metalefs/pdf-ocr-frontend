@@ -1,14 +1,15 @@
-﻿import React from 'react';
-import { useI18n } from "../i18n";
-import { Link as RouterLink } from 'react-router-dom';
+﻿import React from "react";
+import { Link as RouterLink } from "react-router-dom";
 
 import Box from "@mui/material/Box";
+import Chip from "@mui/material/Chip";
 import Container from "@mui/material/Container";
 import Divider from "@mui/material/Divider";
-import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+
+import { useI18n } from "../i18n";
 
 /**
  * Footer simples para o aplicativo TextLayer OCR Frontend.
@@ -16,68 +17,136 @@ import Typography from "@mui/material/Typography";
  */
 const Footer = () => {
   const year = new Date().getFullYear();
-  const { t } = useI18n();
+    const { t, locale } = useI18n();
+    const isPt = String(locale).toLowerCase().startsWith("pt");
+
+    const linkSx = {
+        color: "text.secondary",
+        fontWeight: 600,
+        textDecorationColor: "divider",
+        "&:hover": { color: "text.primary" },
+    };
 
   return (
-        <Box component="footer" sx={{ py: 6, bgcolor: "background.default" }}>
-            <Container maxWidth="lg">
-                <Grid container spacing={4}>
-                    <Grid item xs={12} md={5}>
-                        <Typography variant="h6" sx={{ fontWeight: 600 }}>
+        <Box
+            component="footer"
+            sx={{
+                mt: 6,
+                bgcolor: "background.default",
+                borderTop: 1,
+                borderColor: "divider",
+            }}
+        >
+            <Box
+                sx={{
+                    height: 3,
+                    background: "linear-gradient(90deg, rgba(99,102,241,0.65) 0%, rgba(14,165,233,0.55) 45%, rgba(16,185,129,0.45) 100%)",
+                }}
+            />
+
+            <Container maxWidth="lg" sx={{ py: { xs: 5, md: 6 } }}>
+                <Box
+                    sx={{
+                        display: { xs: "block", md: "grid" },
+                        gridTemplateColumns: { md: "minmax(0, 1.2fr) repeat(3, minmax(0, 1fr))" },
+                        gap: 3,
+                    }}
+                >
+                    <Stack spacing={1.25}>
+                        <Typography variant="h6" sx={{ fontWeight: 900, letterSpacing: -0.2 }}>
                             {t("header.brand")}
                         </Typography>
-                        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                            {t("hero.subtitle")}
+                        <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 520 }}>
+                            {t("header.subtitle") || t("hero.subtitle")}
                         </Typography>
-                    </Grid>
-
-                    <Grid item xs={12} sm={6} md={3}>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
-                            {t("footer.technology")}
-                        </Typography>
-                        <Stack spacing={0.5}>
-                            <Typography variant="body2" color="text.secondary">Tesseract</Typography>
-                            <Typography variant="body2" color="text.secondary">iText PDF</Typography>
-                            <Typography variant="body2" color="text.secondary">SkiaSharp</Typography>
-                            <Typography variant="body2" color="text.secondary">PDFium</Typography>
-                            <Typography variant="body2" color="text.secondary">Scalable Processing</Typography>
+                        <Stack direction="row" spacing={1} sx={{ flexWrap: "wrap", pt: 0.5 }}>
+                            {["Tesseract", "PDFium", "iText", "SkiaSharp"].map((label) => (
+                                <Chip key={label} size="small" label={label} variant="outlined" />
+                            ))}
                         </Stack>
-                    </Grid>
+                    </Stack>
 
-                    <Grid item xs={12} sm={6} md={4}>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
+                    <Stack spacing={1}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 900 }}>
+                            {isPt ? "Produto" : "Product"}
+                        </Typography>
+                        <Stack spacing={0.75}>
+                            <Link component={RouterLink} to="/" underline="hover" sx={linkSx}>
+                                {isPt ? "Upload" : "Upload"}
+                            </Link>
+                            <Link component={RouterLink} to="/plans" underline="hover" sx={linkSx}>
+                                {isPt ? "Planos" : "Pricing"}
+                            </Link>
+                            <Link component={RouterLink} to="/api-keys" underline="hover" sx={linkSx}>
+                                {t("header.nav.apiKeys") || (isPt ? "Chaves de API" : "API Keys")}
+                            </Link>
+                            <Link component={RouterLink} to="/account" underline="hover" sx={linkSx}>
+                                {isPt ? "Conta" : "Account"}
+                            </Link>
+                        </Stack>
+                    </Stack>
+
+                    <Stack spacing={1}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 900 }}>
+                            {isPt ? "Recursos" : "Resources"}
+                        </Typography>
+                        <Stack spacing={0.75}>
+                            <Link component={RouterLink} to="/docs" underline="hover" sx={linkSx}>
+                                {t("header.nav.docs") || "Docs"}
+                            </Link>
+                            <Link component={RouterLink} to="/docs/api" underline="hover" sx={linkSx}>
+                                {isPt ? "Referência da API" : "API Reference"}
+                            </Link>
+                            <Link component={RouterLink} to="/guides/pdfjs-font-encoding" underline="hover" sx={linkSx}>
+                                {isPt ? "Guia (pdf.js)" : "Guide (pdf.js)"}
+                            </Link>
+                            <Link component={RouterLink} to="/contact" underline="hover" sx={linkSx}>
+                                {isPt ? "Contato" : "Contact"}
+                            </Link>
+                        </Stack>
+                    </Stack>
+
+                    <Stack spacing={1}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 900 }}>
                             {t("footer.privacy")}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
-                            {t("footer.privacy") === "Privacidade"
-                                ? "Arquivos processados de forma segura e removidos conforme política de retenção."
-                                : "Files are processed securely and removed according to retention policy."}
+                            {isPt
+                                ? "Arquivos são processados com segurança e removidos conforme a política de retenção."
+                                : "Files are processed securely and removed according to the retention policy."}
                         </Typography>
-                        <Stack direction="row" spacing={2} sx={{ mt: 1.5 }}>
-                            <Link component={RouterLink} to="/privacy" underline="hover">
-                                {t("footer.privacy")}
-                            </Link>
-                            <Link component={RouterLink} to="/docs" underline="hover">
-                                {t("header.nav.docs") || "Docs"}
-                            </Link>
-                            <Link component={RouterLink} to="/docs/api" underline="hover">
-                                API
-                            </Link>
-                            <Link component={RouterLink} to="/guides/pdfjs-font-encoding" underline="hover">
-                                {t("footer.privacy") === "Privacidade" ? "Guia pdf.js" : "pdf.js guide"}
-                            </Link>
-                            <Link component={RouterLink} to="/contact" underline="hover">
-                                Contact
+                        <Stack spacing={0.75} sx={{ pt: 0.25 }}>
+                            <Link component={RouterLink} to="/privacy" underline="hover" sx={linkSx}>
+                                {isPt ? "Política de privacidade" : "Privacy policy"}
                             </Link>
                         </Stack>
-                    </Grid>
-                </Grid>
+                    </Stack>
+                </Box>
 
                 <Divider sx={{ my: 4 }} />
 
-                <Typography variant="body2" color="text.secondary" align="center">
-                    © {year} {t("header.brand")}. {t("footer.copy")}
-                </Typography>
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: { xs: "column", sm: "row" },
+                        gap: 1.5,
+                        alignItems: { xs: "flex-start", sm: "center" },
+                        justifyContent: "space-between",
+                    }}
+                >
+                    <Typography variant="body2" color="text.secondary">
+                        © {year} {t("header.brand")}. {t("footer.copy")}
+                    </Typography>
+
+                    <Stack direction="row" spacing={2} sx={{ flexWrap: "wrap" }}>
+                        <Link component={RouterLink} to="/docs" underline="hover" sx={linkSx}>
+                            Docs
+                        </Link>
+                        <Link component={RouterLink} to="/contact" underline="hover" sx={linkSx}>
+                            {isPt ? "Suporte" : "Support"}
+                        </Link>
+                    </Stack>
+                </Box>
             </Container>
         </Box>
   );

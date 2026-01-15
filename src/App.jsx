@@ -307,6 +307,19 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
     return (
         <Box component="main" sx={{ py: { xs: 0, md: 4 } }}>
             <Container maxWidth="lg" sx={{ px: 0 }}>
+                {error && (
+                    <ErrorBox
+                        message={error?.message || error}
+                        details={error?.details}
+                        upgradeUrl={error?.upgradeUrl}
+                        onRetry={(error?.code === "JOB_NOT_FOUND" || error?.code === "API_UNAVAILABLE") ? () => handleProcess() : null}
+                        retryLabel={
+                            error?.code === "JOB_NOT_FOUND"
+                                ? (t("errors.processAgain") || "Process again")
+                                : (t("errors.tryAgain") || "Try again")
+                        }
+                    />
+                )}
                 <Paper elevation={0} sx={{ p: { xs: 2, md: 4 }, border: 1, borderColor: "divider" }}>
                     <Box sx={{ mb: 3 }}>
                         <Typography variant="h3" sx={{ fontWeight: 700, fontSize: { xs: "2rem", md: "2.75rem" } }}>
@@ -688,20 +701,6 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                             </Box>
                         </Paper>
                     </Box>
-
-                    {error && (
-                        <ErrorBox
-                            message={error?.message || error}
-                            details={error?.details}
-                            upgradeUrl={error?.upgradeUrl}
-                            onRetry={(error?.code === "JOB_NOT_FOUND" || error?.code === "API_UNAVAILABLE") ? () => handleProcess() : null}
-                            retryLabel={
-                                error?.code === "JOB_NOT_FOUND"
-                                    ? (t("errors.processAgain") || "Process again")
-                                    : (t("errors.tryAgain") || "Try again")
-                            }
-                        />
-                    )}
                 </Paper>
             </Container>
         </Box>
@@ -711,18 +710,11 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
 function MainApp() {
     const [showAuthDialog, setShowAuthDialog] = useState(false);
     const [authDialogMessage, setAuthDialogMessage] = useState('');
-    const [currentPage, setCurrentPage] = useState("home");
-
-    // Detectar rota de callback no carregamento
-    useEffect(() => {
+    const [currentPage, setCurrentPage] = useState(() => {
         const hash = window.location.hash;
         const params = new URLSearchParams(window.location.search);
-
-        // Verifica se é callback do OAuth
-        if (hash.includes('access_token') || params.get('code')) {
-            setCurrentPage("auth-callback");
-        }
-    }, []);
+        return (hash.includes('access_token') || params.get('code')) ? "auth-callback" : "home";
+    });
 
     return (
         <I18nProvider defaultLocale="en">

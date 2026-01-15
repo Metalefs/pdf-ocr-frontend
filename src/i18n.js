@@ -346,7 +346,7 @@ export function I18nProvider({ children, defaultLocale = "en" }) {
     try {
       const stored = localStorage.getItem('locale');
       if (stored) return stored;
-    } catch (e) {
+    } catch {
       // ignore
     }
 
@@ -358,7 +358,7 @@ export function I18nProvider({ children, defaultLocale = "en" }) {
   useEffect(() => {
     try {
       localStorage.setItem('locale', locale);
-    } catch (e) {
+    } catch {
       // ignore
     }
   }, [locale]);
