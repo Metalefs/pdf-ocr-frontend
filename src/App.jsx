@@ -18,6 +18,7 @@ import PdfJsFontEncodingGuidePage from "./pages/guides/PdfJsFontEncodingGuidePag
 
 import { processPdfAsync, processPdfDemo } from "./services/pdf.service";
 import { getJobStatus, getJobDownloadUrl } from "./services/jobs.service";
+import { withLanguageHeaders } from "./services/api";
 import { I18nProvider, useI18n } from "./i18n";
 import { AuthProvider } from "./contexts/AuthContext";
 import { useAuth } from "./contexts/AuthContext";
@@ -178,6 +179,12 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                             ? localized
                             : (err.details || fallback)
                     );
+                } else if (err && (err.code === 'API_UNAVAILABLE' || (typeof err.status === 'number' && err.status >= 500))) {
+                    setError({
+                        code: 'API_UNAVAILABLE',
+                        message: t('errors.apiUnavailable') || 'Service unavailable',
+                        details: t('errors.apiUnavailableDetails') || 'The API appears to be offline or unreachable. Please try again in a moment.'
+                    });
                 } else {
                     setError(err && err.message ? { message: err.message, details: err.details, upgradeUrl: err.upgradeUrl } : err);
                 }
@@ -228,8 +235,16 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                         clearInterval(interval);
                         try {
                             const downloadUrl = getJobDownloadUrl(jobId);
-                            const res = await fetch(downloadUrl);
-                            if (!res.ok) throw new Error("Failed to download result");
+                            const res = await fetch(downloadUrl, withLanguageHeaders());
+                            if (!res.ok) {
+                                if (res.status === 404) {
+                                    const e = new Error(t("errors.jobNotFound") || "Job not found");
+                                    e.status = 404;
+                                    e.code = "JOB_NOT_FOUND";
+                                    throw e;
+                                }
+                                throw new Error("Failed to download result");
+                            }
                             const blob = await res.blob();
                             const blobUrl = URL.createObjectURL(blob);
                             setResultUrl(blobUrl);
@@ -242,7 +257,11 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                             // If the run was a demo (user not authenticated), require auth for next calls
                             if (!auth.user) setRequireAuthForNext(true);
                         } catch (e) {
-                            setError(e && e.message ? { message: e.message, details: e.details, upgradeUrl: e.upgradeUrl } : (e.message || t("errors.generic")));
+                            if (e && (e.code === "JOB_NOT_FOUND" || e.status === 404)) {
+                                setError({ code: "JOB_NOT_FOUND", message: t("errors.jobNotFound") || "Job not found" });
+                            } else {
+                                setError(e && e.message ? { message: e.message, details: e.details, upgradeUrl: e.upgradeUrl } : (e.message || t("errors.generic")));
+                            }
                         } finally {
                             setLoading(false);
                         }
@@ -254,7 +273,11 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                     }
                 } catch (err) {
                     clearInterval(interval);
-                    setError(err && err.message ? { message: err.message, details: err.details, upgradeUrl: err.upgradeUrl } : err);
+                    if (err && (err.code === "JOB_NOT_FOUND" || err.status === 404)) {
+                        setError({ code: "JOB_NOT_FOUND", message: t("errors.jobNotFound") || "Job not found" });
+                    } else {
+                        setError(err && err.message ? { message: err.message, details: err.details, upgradeUrl: err.upgradeUrl } : err);
+                    }
                     setLoading(false);
                 }
             }, 1000);
@@ -516,7 +539,19 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                         ) : null}
                     </Box>
 
-                    {error && <ErrorBox message={error?.message || error} details={error?.details} upgradeUrl={error?.upgradeUrl} />}
+                    {error && (
+                        <ErrorBox
+                            message={error?.message || error}
+                            details={error?.details}
+                            upgradeUrl={error?.upgradeUrl}
+                            onRetry={(error?.code === "JOB_NOT_FOUND" || error?.code === "API_UNAVAILABLE") ? () => handleProcess() : null}
+                            retryLabel={
+                                error?.code === "JOB_NOT_FOUND"
+                                    ? (t("errors.processAgain") || "Process again")
+                                    : (t("errors.tryAgain") || "Try again")
+                            }
+                        />
+                    )}
                 </Paper>
             </Container>
         </Box>

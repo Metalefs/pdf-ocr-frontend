@@ -1,5 +1,6 @@
 // src/services/user.service.ts
 import { supabase } from './auth.service';
+import { withLanguageHeaders } from './api';
 
 const API_BASE = (import.meta as any).env.VITE_API_URL || 'http://localhost:5000';
 
@@ -36,9 +37,11 @@ class UserService {
     if (!session.data.session) throw new Error('Not authenticated');
 
     const response = await fetch(`${API_BASE}/api/users/me`, {
-      headers: {
-        Authorization: `Bearer ${session.data.session.access_token}`,
-      },
+      headers: withLanguageHeaders({
+        headers: {
+          Authorization: `Bearer ${session.data.session.access_token}`,
+        },
+      }).headers,
     });
 
     if (!response.ok) throw new Error('Failed to fetch user profile');
@@ -53,9 +56,11 @@ class UserService {
     if (!session.data.session) throw new Error('Not authenticated');
 
     const response = await fetch(`${API_BASE}/api/users/credits`, {
-      headers: {
-        Authorization: `Bearer ${session.data.session.access_token}`,
-      },
+      headers: withLanguageHeaders({
+        headers: {
+          Authorization: `Bearer ${session.data.session.access_token}`,
+        },
+      }).headers,
     });
 
     if (!response.ok) throw new Error('Failed to fetch credits');
@@ -70,9 +75,11 @@ class UserService {
     if (!session.data.session) throw new Error('Not authenticated');
 
     const response = await fetch(`${API_BASE}/api/users/usage`, {
-      headers: {
-        Authorization: `Bearer ${session.data.session.access_token}`,
-      },
+      headers: withLanguageHeaders({
+        headers: {
+          Authorization: `Bearer ${session.data.session.access_token}`,
+        },
+      }).headers,
     });
 
     if (!response.ok) throw new Error('Failed to fetch usage');
@@ -88,10 +95,12 @@ class UserService {
 
     const response = await fetch(`${API_BASE}/api/users/me`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${session.data.session.access_token}`,
-      },
+      headers: withLanguageHeaders({
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session.data.session.access_token}`,
+        },
+      }).headers,
       body: JSON.stringify({ name, avatar }),
     });
 

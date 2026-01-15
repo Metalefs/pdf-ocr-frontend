@@ -1,4 +1,5 @@
 import { createClient, Session } from '@supabase/supabase-js';
+import { withLanguageHeaders } from './api';
 
 const supabaseUrl = (import.meta as any).env.VITE_SUPABASE_URL;
 const supabaseAnonKey = (import.meta as any).env.VITE_SUPABASE_ANON_KEY;
@@ -41,9 +42,11 @@ class AuthService {
 
       const response = await fetch(`${apiUrl}/api/auth/sync`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: withLanguageHeaders({
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }).headers,
         body: JSON.stringify({ accessToken }),
       });
 
@@ -154,10 +157,12 @@ class AuthService {
 
         // Busca dados complementares do backend
         const response = await fetch(`${apiUrl}/api/auth/me`, {
-            headers: {
-            'Authorization': `Bearer ${session.access_token}`,
-            'Content-Type': 'application/json',
-            },
+            headers: withLanguageHeaders({
+              headers: {
+                'Authorization': `Bearer ${session.access_token}`,
+                'Content-Type': 'application/json',
+              },
+            }).headers,
         });
 
         if (!response.ok) {
@@ -215,7 +220,9 @@ class AuthService {
     try {
       const resp = await fetch(`${apiUrl}/api/auth/verify-code`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: withLanguageHeaders({
+          headers: { 'Content-Type': 'application/json' },
+        }).headers,
         body: JSON.stringify({ code })
       });
 

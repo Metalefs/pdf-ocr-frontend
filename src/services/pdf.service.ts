@@ -1,5 +1,6 @@
 import { ProcessResponse } from "../models/process-response";
 import { authService, supabase } from "./auth.service";
+import { withLanguageHeaders } from "./api";
 const API_BASE_URL = (import.meta as any).env.VITE_API_URL || 'http://localhost:5000';
 
 async function readJsonSafe(res: Response): Promise<any | null> {
@@ -39,16 +40,37 @@ function createApiError(res: Response, payload: any) {
         if (!err.upgradeUrl) err.upgradeUrl = '/plans';
     }
 
+    // Treat server errors as a temporarily unavailable API.
+    if (res.status >= 500) {
+        err.code = 'API_UNAVAILABLE';
+    }
+
+    return err;
+}
+
+function createNetworkError(originalError: any) {
+    const err: any = new Error('API unavailable');
+    err.code = 'API_UNAVAILABLE';
+    err.status = 0;
+    err.details = originalError?.message || String(originalError || 'Network error');
     return err;
 }
 
 export async function processPdfDemo(file: File): Promise<ProcessResponse> {
     const form = new FormData();
     form.append("File", file);
-    const res = await fetch(`${API_BASE_URL}/api/Pdf/demo`, {
-        method: "POST",
-        body: form,
-    });
+    let res: Response;
+    try {
+        res = await fetch(
+            `${API_BASE_URL}/api/Pdf/demo`,
+            withLanguageHeaders({
+                method: "POST",
+                body: form,
+            })
+        );
+    } catch (e) {
+        throw createNetworkError(e);
+    }
 
     if (!res.ok) {
         const payload = await readJsonSafe(res);
@@ -64,13 +86,21 @@ export async function processPdfAsync(file: File): Promise<ProcessResponse> {
     const session = await supabase.auth.getSession();
     if (!session.data.session) throw new Error('Not authenticated');
 
-    const res = await fetch(`${API_BASE_URL}/api/Pdf/process`, {
-        method: "POST",
-        body: form, 
-        headers: {
-            Authorization: `Bearer ${session.data.session.access_token}`,
-        },
-    });
+    let res: Response;
+    try {
+        res = await fetch(
+            `${API_BASE_URL}/api/Pdf/process`,
+            withLanguageHeaders({
+                method: "POST",
+                body: form,
+                headers: {
+                    Authorization: `Bearer ${session.data.session.access_token}`,
+                },
+            })
+        );
+    } catch (e) {
+        throw createNetworkError(e);
+    }
 
     if (!res.ok) {
         const payload = await readJsonSafe(res);

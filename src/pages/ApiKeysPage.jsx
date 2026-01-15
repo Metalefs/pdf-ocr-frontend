@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../services/auth.service';
+import { withLanguageHeaders } from '../services/api';
 import { useI18n } from '../i18n';
 
 import Alert from '@mui/material/Alert';
@@ -61,9 +62,11 @@ export default function ApiKeysPage() {
       setError(null);
       const session = await supabase.auth.getSession();
       const res = await fetch(`${API_BASE}/api/ApiKeys`, {
-        headers: {
-          Authorization: `Bearer ${session.data.session.access_token}`
-        }
+        headers: withLanguageHeaders({
+          headers: {
+            Authorization: `Bearer ${session.data.session.access_token}`
+          }
+        }).headers
       });
 
       if (res.ok) {
@@ -96,10 +99,12 @@ export default function ApiKeysPage() {
       const session = await supabase.auth.getSession();
       const res = await fetch(`${API_BASE}/api/ApiKeys`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.data.session.access_token}`
-        },
+        headers: withLanguageHeaders({
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${session.data.session.access_token}`
+          },
+        }).headers,
         body: JSON.stringify({ 
           name: newKeyName,
           rateLimitPerMinute: 60
@@ -129,9 +134,11 @@ export default function ApiKeysPage() {
       const session = await supabase.auth.getSession();
       const res = await fetch(`${API_BASE}/api/ApiKeys/${keyId}`, {
         method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${session.data.session.access_token}`
-        }
+        headers: withLanguageHeaders({
+          headers: {
+            Authorization: `Bearer ${session.data.session.access_token}`
+          }
+        }).headers
       });
 
       if (res.ok) {

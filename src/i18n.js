@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 const translations = {
   en: {
@@ -69,7 +69,7 @@ const translations = {
       promptTitle: "Drop or click to upload your PDF",
       promptSubtitle: "Max 10MB — we preserve fields, layout, and digital signatures",
       chooseAnother: "Choose another file",
-      multilangNote: "Supports multiple languages in the same file | detects languages automatically and supports multi-language OCR (PT, EN, AR, ZH, JP, KO, CHI).",
+      multilangNote: "Supports multiple languages in the same file | detects languages automatically and supports multi-language OCR (PT, EN, AR, ZH, JP, KO, CHI, RUS).",
     },
     process: {
       button: "Process PDF",
@@ -110,8 +110,8 @@ const translations = {
       howTo: {
         title: "How to use",
         authHeader: "Include your API key in the request header:",
-        curlExample: "curl -X POST {base}/api/Pdf/process -H \"X-API-Key: sk_live_abc123...\" -H \"Content-Type: multipart/form-data\" -F \"File=@document.pdf\"",
-        jsExample: "fetch('{base}/api/Pdf/process', { method: 'POST', headers: { 'X-API-Key': 'sk_live_abc123...', 'Content-Type': 'multipart/form-data' } })",
+        curlExample: "curl -X POST {base}/api/Pdf/process -H \"X-API-Key: sk_live_abc123...\" -H \"Accept-Language: en\" -H \"Content-Type: multipart/form-data\" -F \"File=@document.pdf\"",
+        jsExample: "fetch('{base}/api/Pdf/process', { method: 'POST', headers: { 'X-API-Key': 'sk_live_abc123...', 'Accept-Language': 'en', 'Content-Type': 'multipart/form-data' } })",
       },
     },
     contact: {
@@ -148,7 +148,14 @@ const translations = {
         "label": "{{count}} credits/month"
       }
     },
-    errors: { generic: "An error occurred" },
+    errors: {
+      generic: "An error occurred",
+      jobNotFound: "This processing job no longer exists (it may have expired). Please upload and process the PDF again.",
+      processAgain: "Process again",
+      apiUnavailable: "Service unavailable",
+      apiUnavailableDetails: "The API appears to be offline or unreachable. Please try again in a moment.",
+      tryAgain: "Try again",
+    },
   },
   pt: {
     header: {
@@ -163,9 +170,9 @@ const translations = {
         "Corrija mapas ausentes, fontes malformadas e mantenha todos os widgets do PDF.",
         claims: [
           "Preserva assinaturas digitais.",
-          "Processamento paralelo de alta performance para documentos com múltiplas páginas.",
+          "Processamento paralelo para documentos com múltiplas páginas.",
           "Corrige mapas 'toUnicode' ausentes em arquivos PDF legados.",
-          "Corrige dados da área de transferência em PDFs para que o texto copiado fique correto.",
+          "Corrige a área de transferência em PDFs para que o texto copiado fique correto.",
           "Corrige caracteres malformados exibidos no pdf.js e outros visualizadores.",
           "Tamanho de arquivo pequeno",
         ],
@@ -188,27 +195,27 @@ const translations = {
       title: "Casos de uso da plataforma e da API",
       items: [
         {
-          title: "🔧 Correção de Encoding de Fontes",
+          title: "Correção de Encoding de Fontes",
           desc: "Resolva divergências de renderização entre navegadores, visualizadores nativos e Adobe Reader.",
         },
         {
-          title: "📝 Formulários Sem Fontes Incorporadas",
+          title: "Formulários Sem Fontes Incorporadas",
           desc: "Adicione suporte a seleção de texto em PDFs onde as fontes originais foram perdidas.",
         },
         {
-          title: "🏛️ Migração de Sistemas Legados",
+          title: "Migração de Sistemas Legados",
           desc: "Atualize documentos antigos com fontes obsoletas para padrões modernos.",
         },
         {
-          title: "♿ Acessibilidade e OCR",
+          title: "Acessibilidade e OCR",
           desc: "Melhore a extração de texto e compatibilidade com leitores de tela.",
         },
         {
-          title: "📤 Automação de Workflows",
+          title: "Automação de Workflows",
           desc: "Integre na pipeline de processamento de documentos (uploads, conversões, arquivamento).",
         },
         {
-          title: "⚖️ Compliance Documental",
+          title: "Compliance Documental",
           desc: "Garanta conformidade em arquivos que exigem fidelidade visual (contratos, certidões).",
         },
       ],
@@ -217,7 +224,7 @@ const translations = {
       promptTitle: "Clique ou arraste seu PDF",
       promptSubtitle: "Máx 10MB — preservamos campos, layout e assinaturas digitais",
       chooseAnother: "Escolher outro arquivo",
-      multilangNote: "Aceita múltiplos idiomas no mesmo arquivo | detecta idiomas automaticamente e suporta OCR multilíngue (PT, EN, AR, ZH, JP, KO, CHI)",
+      multilangNote: "Aceita múltiplos idiomas no mesmo arquivo | detecta idiomas automaticamente e suporta OCR multilíngue (PT, EN, AR, ZH, JP, KO, CHI, RUS)",
     },
     ar: {
       upload: {
@@ -283,8 +290,8 @@ const translations = {
       howTo: {
         title: "Como usar",
         authHeader: "Inclua sua chave de API no cabeçalho da requisição:",
-        curlExample: "curl -X POST {base}/api/Pdf/process -H \"X-API-Key: sk_live_abc123...\" -H \"Content-Type: multipart/form-data\" -F \"File=@document.pdf\"",
-        jsExample: "fetch('{base}/api/Pdf/process', { method: 'POST', headers: { 'X-API-Key': 'sk_live_abc123...', 'Content-Type': 'multipart/form-data' } })",
+        curlExample: "curl -X POST {base}/api/Pdf/process -H \"X-API-Key: sk_live_abc123...\" -H \"Accept-Language: pt-BR\" -H \"Content-Type: multipart/form-data\" -F \"File=@document.pdf\"",
+        jsExample: "fetch('{base}/api/Pdf/process', { method: 'POST', headers: { 'X-API-Key': 'sk_live_abc123...', 'Accept-Language': 'pt-BR', 'Content-Type': 'multipart/form-data' } })",
       },
     },
     contact: {
@@ -321,14 +328,40 @@ const translations = {
         "label": "{count} créditos/mês"
       }
     },
-    errors: { generic: "Ocorreu um erro" },
+    errors: {
+      generic: "Ocorreu um erro",
+      jobNotFound: "Este job de processamento não existe mais (pode ter expirado). Envie e processe o PDF novamente.",
+      processAgain: "Processar novamente",
+      apiUnavailable: "Serviço indisponível",
+      apiUnavailableDetails: "A API parece estar fora do ar ou inacessível. Tente novamente em instantes.",
+      tryAgain: "Tentar novamente",
+    },
   },
 };
 
 const I18nContext = createContext();
 
 export function I18nProvider({ children, defaultLocale = "en" }) {
-  const [locale, setLocale] = useState(defaultLocale);
+  const [locale, setLocale] = useState(() => {
+    try {
+      const stored = localStorage.getItem('locale');
+      if (stored) return stored;
+    } catch (e) {
+      // ignore
+    }
+
+    const nav = (typeof navigator !== 'undefined' && navigator.language) ? String(navigator.language).toLowerCase() : '';
+    if (nav.startsWith('pt')) return 'pt';
+    return defaultLocale;
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('locale', locale);
+    } catch (e) {
+      // ignore
+    }
+  }, [locale]);
 
   function t(path, vars) {
     const parts = path.split(".");

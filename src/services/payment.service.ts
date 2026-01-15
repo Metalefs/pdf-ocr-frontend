@@ -1,6 +1,7 @@
 // src/services/payment.service.ts
 import { supabase } from './auth.service';
 import { CheckoutRequest, PlanDto } from '../config/stripe';
+import { withLanguageHeaders } from './api';
 
 const API_BASE = (import.meta as any).env.VITE_API_URL || 'http://localhost:5000';
 
@@ -9,7 +10,7 @@ class PaymentService {
    * Fetch available plans from the backend
    */
   async getPlans(): Promise<PlanDto[]> {
-    const response = await fetch(`${API_BASE}/api/payment/plans`);
+    const response = await fetch(`${API_BASE}/api/payment/plans`, withLanguageHeaders());
     if (!response.ok) throw new Error('Failed to fetch plans');
     return response.json();
   }
@@ -34,10 +35,12 @@ class PaymentService {
 
     const response = await fetch(`${API_BASE}/api/payment/checkout`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${session.data.session.access_token}`,
-      },
+      headers: withLanguageHeaders({
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session.data.session.access_token}`,
+        },
+      }).headers,
       body: JSON.stringify(checkoutRequest),
     });
 
@@ -53,9 +56,11 @@ class PaymentService {
     if (!session.data.session) throw new Error('Not authenticated');
 
     const response = await fetch(`${API_BASE}/api/payment/checkout/${sessionId}`, {
-      headers: {
-        Authorization: `Bearer ${session.data.session.access_token}`,
-      },
+      headers: withLanguageHeaders({
+        headers: {
+          Authorization: `Bearer ${session.data.session.access_token}`,
+        },
+      }).headers,
     });
 
     if (!response.ok) throw new Error('Failed to retrieve checkout session');
