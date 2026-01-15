@@ -50,6 +50,14 @@ import CloudDoneIcon from "@mui/icons-material/CloudDone";
 import DescriptionIcon from "@mui/icons-material/Description";
 import LockIcon from "@mui/icons-material/Lock";
 import SpeedIcon from "@mui/icons-material/Speed";
+import LightbulbOutlinedIcon from "@mui/icons-material/LightbulbOutlined";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import FontDownloadIcon from "@mui/icons-material/FontDownload";
+import FindInPageIcon from "@mui/icons-material/FindInPage";
+import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
+import AccessibilityNewIcon from "@mui/icons-material/AccessibilityNew";
+import AccountTreeIcon from "@mui/icons-material/AccountTree";
+import GavelIcon from "@mui/icons-material/Gavel";
 
 function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
     const { t, locale } = useI18n();
@@ -118,6 +126,15 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
     ];
 
     const featureAccents = ["primary", "secondary", "success", "info", "warning", "error"];
+
+    const useCaseIcons = [
+        FontDownloadIcon,
+        FindInPageIcon,
+        SwapHorizIcon,
+        AccessibilityNewIcon,
+        AccountTreeIcon,
+        GavelIcon,
+    ];
 
     const isAuthGated = !auth.user && requireAuthForNext;
     // Disable only for missing file or while processing; auth-gated should remain clickable (to prompt sign-in).
@@ -483,60 +500,193 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                     <Divider sx={{ my: { xs: 3, md: 4 } }} />
 
                     <Box component="section" aria-labelledby="why-title" sx={{ scrollMarginTop: 96 }}>
-                        <Typography id="why-title" variant="h4" sx={{ fontWeight: 900, letterSpacing: -0.25 }}>
-                            {t("why.title")}
-                        </Typography>
-                        <Typography variant="body1" color="text.secondary" sx={{ mt: 1, maxWidth: 980 }}>
-                            {t("why.body1")}
-                        </Typography>
-                        <Typography variant="body1" color="text.secondary" sx={{ mt: 1.25, maxWidth: 980 }}>
-                            {t("why.body2")}
-                        </Typography>
+                        <Paper
+                            variant="outlined"
+                            sx={(theme) => ({
+                                mt: 0,
+                                borderRadius: 4,
+                                overflow: "hidden",
+                                borderColor: alpha(theme.palette.primary.main, 0.18),
+                                background: `linear-gradient(180deg, ${alpha(theme.palette.primary.main, 0.06)} 0%, ${alpha(theme.palette.background.paper, 0.75)} 70%)`,
+                            })}
+                        >
+                            <Box sx={{ p: { xs: 2.5, md: 3 } }}>
+                                <Grid container spacing={3} alignItems="flex-start">
+                                    <Grid item xs={12} md={7}>
+                                        <Stack direction="row" spacing={1.5} alignItems="center">
+                                            <Avatar
+                                                variant="rounded"
+                                                sx={(theme) => ({
+                                                    bgcolor: alpha(theme.palette.primary.main, 0.14),
+                                                    color: theme.palette.primary.main,
+                                                    width: 46,
+                                                    height: 46,
+                                                    borderRadius: 2.5,
+                                                })}
+                                            >
+                                                <LightbulbOutlinedIcon fontSize="small" />
+                                            </Avatar>
+                                            <Typography id="why-title" variant="h4" sx={{ fontWeight: 900, letterSpacing: -0.25, lineHeight: 1.15 }}>
+                                                {t("why.title")}
+                                            </Typography>
+                                        </Stack>
 
-                        {Array.isArray(whyBullets) && whyBullets.length ? (
-                            <Stack spacing={0.75} sx={{ mt: 2 }}>
-                                {whyBullets.map((line, idx) => (
-                                    <Typography key={`${idx}-${line}`} variant="body2" sx={{ display: "flex", gap: 1 }}>
-                                        <Box component="span" sx={{ color: "text.secondary" }}>•</Box>
-                                        <Box component="span" sx={{ fontWeight: 600 }}>{line}</Box>
-                                    </Typography>
-                                ))}
-                            </Stack>
-                        ) : null}
+                                        <Typography variant="body1" color="text.secondary" sx={{ mt: 1.25, maxWidth: 980 }}>
+                                            {t("why.body1")}
+                                        </Typography>
+                                        <Typography variant="body1" color="text.secondary" sx={{ mt: 1.25, maxWidth: 980 }}>
+                                            {t("why.body2")}
+                                        </Typography>
 
-                        <Stack direction={{ xs: "column", sm: "row" }} spacing={1} sx={{ mt: 2 }}>
-                            <Button component={RouterLink} to="/docs" variant="contained">
-                                {String(locale).toLowerCase().startsWith("pt") ? "Ler Docs" : "Read Docs"}
-                            </Button>
-                            <Button component={RouterLink} to="/guides/pdfjs-font-encoding" variant="outlined">
-                                {String(locale).toLowerCase().startsWith("pt") ? "Ver guia pdf.js" : "View pdf.js guide"}
-                            </Button>
-                        </Stack>
-                    </Box>
+                                        <Stack direction={{ xs: "column", sm: "row" }} spacing={1} sx={{ mt: 2.25 }}>
+                                            <Button component={RouterLink} to="/docs" variant="contained">
+                                                {String(locale).toLowerCase().startsWith("pt") ? "Ler Docs" : "Read Docs"}
+                                            </Button>
+                                            <Button component={RouterLink} to="/guides/pdfjs-font-encoding" variant="outlined">
+                                                {String(locale).toLowerCase().startsWith("pt") ? "Ver guia pdf.js" : "View pdf.js guide"}
+                                            </Button>
+                                        </Stack>
+                                    </Grid>
 
-                    <Box component="section" aria-labelledby="use-cases-title" sx={{ mt: { xs: 3, md: 4 }, scrollMarginTop: 96 }}>
-                        <Typography id="use-cases-title" variant="h4" sx={{ fontWeight: 900, letterSpacing: -0.25 }}>
-                            {t("useCases.title")}
-                        </Typography>
-
-                        {Array.isArray(useCaseItems) && useCaseItems.length ? (
-                            <Grid container spacing={2} sx={{ mt: 1 }}>
-                                {useCaseItems.map((item, idx) => (
-                                    <Grid item xs={12} md={6} key={`${idx}-${item?.title || "use-case"}`}>
-                                        <Card variant="outlined" sx={{ height: "100%", borderRadius: 3 }}>
+                                    <Grid item xs={12} md={5}>
+                                        <Card
+                                            variant="outlined"
+                                            sx={(theme) => ({
+                                                height: "100%",
+                                                borderRadius: 3,
+                                                borderColor: alpha(theme.palette.primary.main, 0.18),
+                                                bgcolor: alpha(theme.palette.background.paper, 0.75),
+                                            })}
+                                        >
                                             <CardContent>
-                                                <Typography variant="h6" sx={{ fontWeight: 800 }}>
-                                                    {item?.title}
+                                                <Typography variant="subtitle1" sx={{ fontWeight: 900, letterSpacing: -0.15 }}>
+                                                    {String(locale).toLowerCase().startsWith("pt") ? "O que a plataforma resolve" : "What the platform solves"}
                                                 </Typography>
-                                                <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75 }}>
-                                                    {item?.desc}
+
+                                                {Array.isArray(whyBullets) && whyBullets.length ? (
+                                                    <Stack spacing={1.25} sx={{ mt: 1.5 }}>
+                                                        {whyBullets.map((line, idx) => (
+                                                            <Stack key={`${idx}-${line}`} direction="row" spacing={1.25} alignItems="flex-start">
+                                                                <Box
+                                                                    sx={(theme) => ({
+                                                                        mt: "2px",
+                                                                        color: theme.palette.primary.main,
+                                                                        display: "flex",
+                                                                    })}
+                                                                >
+                                                                    <CheckCircleOutlineIcon fontSize="small" />
+                                                                </Box>
+                                                                <Typography variant="body2" sx={{ fontWeight: 700, lineHeight: 1.35 }}>
+                                                                    {line}
+                                                                </Typography>
+                                                            </Stack>
+                                                        ))}
+                                                    </Stack>
+                                                ) : null}
+
+                                                <Typography variant="body2" color="text.secondary" sx={{ mt: 1.75 }}>
+                                                    {String(locale).toLowerCase().startsWith("pt")
+                                                        ? "Foco em consistência de renderização e preservação de AcroForm — sem “achatar” o PDF."
+                                                        : "Focused on rendering consistency and AcroForm preservation — without flattening the PDF."}
                                                 </Typography>
                                             </CardContent>
                                         </Card>
                                     </Grid>
-                                ))}
-                            </Grid>
-                        ) : null}
+                                </Grid>
+                            </Box>
+                        </Paper>
+                    </Box>
+
+                    <Box component="section" aria-labelledby="use-cases-title" sx={{ mt: { xs: 3, md: 4 }, scrollMarginTop: 96 }}>
+                        <Paper
+                            variant="outlined"
+                            sx={(theme) => ({
+                                borderRadius: 4,
+                                overflow: "hidden",
+                                borderColor: alpha(theme.palette.secondary.main, 0.16),
+                                background: `linear-gradient(180deg, ${alpha(theme.palette.secondary.main, 0.05)} 0%, ${alpha(theme.palette.background.paper, 0.8)} 70%)`,
+                            })}
+                        >
+                            <Box sx={{ p: { xs: 2.5, md: 3 } }}>
+                                <Typography id="use-cases-title" variant="h4" sx={{ fontWeight: 900, letterSpacing: -0.25 }}>
+                                    {t("useCases.title")}
+                                </Typography>
+                                <Typography color="text.secondary" sx={{ mt: 1, maxWidth: 980 }}>
+                                    {String(locale).toLowerCase().startsWith("pt")
+                                        ? "Casos típicos onde corrigir fontes/Unicode e preservar formulários faz diferença no dia a dia."
+                                        : "Common scenarios where fixing fonts/Unicode and preserving forms makes a real difference."}
+                                </Typography>
+
+                                {Array.isArray(useCaseItems) && useCaseItems.length ? (
+                                    <Grid container spacing={2} sx={{ mt: 0.5 }}>
+                                        {useCaseItems.map((item, idx) => (
+                                            <Grid item xs={12} sm={6} key={`${idx}-${item?.title || "use-case"}`}>
+                                                <Card
+                                                    variant="outlined"
+                                                    sx={(theme) => {
+                                                        const accent = theme.palette[featureAccents[idx % featureAccents.length]]?.main || theme.palette.primary.main;
+                                                        return {
+                                                            height: "100%",
+                                                            borderRadius: 3,
+                                                            borderColor: alpha(accent, 0.22),
+                                                            transition: theme.transitions.create([
+                                                                "transform",
+                                                                "box-shadow",
+                                                                "border-color",
+                                                                "background-color",
+                                                            ], {
+                                                                duration: theme.transitions.duration.short,
+                                                            }),
+                                                            '&:hover': {
+                                                                transform: "translateY(-2px)",
+                                                                boxShadow: theme.shadows[3],
+                                                                borderColor: alpha(accent, 0.32),
+                                                                backgroundColor: alpha(accent, 0.05),
+                                                            },
+                                                        };
+                                                    }}
+                                                >
+                                                    <CardContent>
+                                                        <Stack direction="row" spacing={1.5} alignItems="flex-start">
+                                                            {(() => {
+                                                                const Icon = useCaseIcons[idx % useCaseIcons.length] || DescriptionIcon;
+                                                                return (
+                                                                    <Avatar
+                                                                        variant="rounded"
+                                                                        sx={(theme) => {
+                                                                            const accentKey = featureAccents[idx % featureAccents.length];
+                                                                            const accentMain = theme.palette[accentKey]?.main || theme.palette.primary.main;
+                                                                            return {
+                                                                                bgcolor: alpha(accentMain, 0.14),
+                                                                                color: accentMain,
+                                                                                width: 44,
+                                                                                height: 44,
+                                                                                borderRadius: 2.25,
+                                                                            };
+                                                                        }}
+                                                                    >
+                                                                        <Icon fontSize="small" />
+                                                                    </Avatar>
+                                                                );
+                                                            })()}
+
+                                                            <Box sx={{ minWidth: 0 }}>
+                                                                <Typography variant="subtitle1" sx={{ fontWeight: 900, lineHeight: 1.25 }}>
+                                                                    {item?.title}
+                                                                </Typography>
+                                                                <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75 }}>
+                                                                    {item?.desc}
+                                                                </Typography>
+                                                            </Box>
+                                                        </Stack>
+                                                    </CardContent>
+                                                </Card>
+                                            </Grid>
+                                        ))}
+                                    </Grid>
+                                ) : null}
+                            </Box>
+                        </Paper>
                     </Box>
 
                     {error && (
