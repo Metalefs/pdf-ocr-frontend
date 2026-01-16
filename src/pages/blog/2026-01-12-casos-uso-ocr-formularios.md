@@ -883,7 +883,7 @@ public async Task<SurveyAnalytics> GenerateAnalytics(List<SurveyData> surveys)
 ```
 
 ### Passo 2: Calcule Seu ROI Esperado
-Use nossa [calculadora de ROI](https://textlayerocr.com/roi-calculator) com seus dados.
+Use nossa [calculadora de ROI](/pt/blog/ocr-vs-digitacao-manual-roi) com seus dados.
 
 ### Passo 3: Implemente em Fases
 
@@ -930,31 +930,31 @@ Use nossa [calculadora de ROI](https://textlayerocr.com/roi-calculator) com seus
 
 ## 💡 Próximos Passos
 
-1. **[Agendar demonstração →](https://textlayerocr.com/demo)**  
-   Veja a solução funcionando com seus formulários
+1. **[Testar OCR → Texto no app →](/tools/ocr-text)**  
+    Faça um teste rápido e veja o texto retornado via API
 
-2. **[Calcular ROI específico →](https://textlayerocr.com/roi-calculator)**  
-   Descubra quanto você economizará
+2. **[Ver a calculadora de ROI →](/pt/blog/ocr-vs-digitacao-manual-roi)**  
+    Use o modelo do post (com calculadora embutida)
 
-3. **[Documentação API →](https://docs.textlayerocr.com)**  
-   Comece a integrar hoje mesmo
+3. **[Documentação da API →](/docs/api)**  
+    Veja endpoints, autenticação e exemplos
 
-4. **[Falar com especialista →](mailto:vendas@textlayerocr.com)**  
-   Tire dúvidas sobre seu caso específico
+4. **[Falar com a equipe →](/contact)**  
+    Tire dúvidas sobre seu caso
 
 ---
 
 ## 📚 Recursos Adicionais
 
-- [Guia: Como Adicionar Texto em PDFs](/blog/tutorial-adicionar-texto-pdf)
-- [Case: ROI de OCR vs Digitação Manual](/blog/ocr-vs-digitacao-roi)
-- [Technical: Resolvendo Problemas de Encoding](/blog/pdfjs-encoding-ocr-solution)
-- [Compliance: LGPD e Digitalização](/blog/lgpd-digitalizacao-compliance)
+- [Guia: Como Adicionar Camadas de Texto em PDFs Escaneados](/pt/blog/adicionar-camada-texto-pdf-escaneado)
+- [Case: ROI de OCR vs Digitação Manual](/pt/blog/ocr-vs-digitacao-manual-roi)
+- [Technical: PDF.js Renderiza com Encoding Errado?](/pt/blog/pdfjs-encoding-problem-ocr-solution)
+- [Compliance: LGPD e Digitalização](/pt/blog/lgpd-compliance-digitalizacao-documentos)
 
 ---
 
 **Conclusão:** OCR em formulários empresariais não é despesa, é investimento com ROI médio de **1.129%** em 6-12 meses. As empresas que automatizaram primeiro estão 3x mais produtivas que a concorrência.
 
-**Próxima leitura:** [Tesseract OCR: Guia Completo de Configuração →](/blog/tesseract-ocr-guia-completo)
+**Próxima leitura:** [Tesseract OCR: Guia Completo de Configuração →](/pt/blog/tesseract-ocr-guia-completo-configuracao)
 
 **Tags:** #OCR #Formulários #Automação #B2B #ROI #Empresarial #CasosDeUso

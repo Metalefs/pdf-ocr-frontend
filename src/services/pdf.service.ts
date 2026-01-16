@@ -1,4 +1,5 @@
 import { ProcessResponse } from "../models/process-response";
+import type { OcrTextResponse } from "../models/ocr-text-response";
 import { authService, supabase } from "./auth.service";
 import { withLanguageHeaders } from "./api";
 const API_BASE_URL = (import.meta as any).env.VITE_API_URL || 'http://localhost:5000';
@@ -80,6 +81,31 @@ export async function processPdfDemo(file: File): Promise<ProcessResponse> {
     return res.json();
 }
 
+export async function processPdfTextDemo(file: File): Promise<OcrTextResponse> {
+    const form = new FormData();
+    form.append("File", file);
+
+    let res: Response;
+    try {
+        res = await fetch(
+            `${API_BASE_URL}/api/Pdf/process-text-demo`,
+            withLanguageHeaders({
+                method: "POST",
+                body: form,
+            })
+        );
+    } catch (e) {
+        throw createNetworkError(e);
+    }
+
+    if (!res.ok) {
+        const payload = await readJsonSafe(res);
+        throw createApiError(res, payload);
+    }
+
+    return res.json();
+}
+
 export async function processPdfAsync(file: File): Promise<ProcessResponse> {
     const form = new FormData();
     form.append("File", file);
@@ -109,5 +135,37 @@ export async function processPdfAsync(file: File): Promise<ProcessResponse> {
 
     authService.refreshUserData();
 
+    return res.json();
+}
+
+export async function processPdfText(file: File): Promise<OcrTextResponse> {
+    const form = new FormData();
+    form.append("File", file);
+
+    const session = await supabase.auth.getSession();
+    if (!session.data.session) throw new Error('Not authenticated');
+
+    let res: Response;
+    try {
+        res = await fetch(
+            `${API_BASE_URL}/api/Pdf/process-text`,
+            withLanguageHeaders({
+                method: "POST",
+                body: form,
+                headers: {
+                    Authorization: `Bearer ${session.data.session.access_token}`,
+                },
+            })
+        );
+    } catch (e) {
+        throw createNetworkError(e);
+    }
+
+    if (!res.ok) {
+        const payload = await readJsonSafe(res);
+        throw createApiError(res, payload);
+    }
+
+    authService.refreshUserData();
     return res.json();
 }

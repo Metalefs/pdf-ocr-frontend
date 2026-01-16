@@ -432,9 +432,8 @@ public class RetentionPolicyService
 
 - **ANPD:** https://www.gov.br/anpd
 - **Guia LGPD:** https://www.serpro.gov.br/lgpd
-- **Consultar DPO:** dpo@textlayerocr.com
-- **Reportar incidente:** security@textlayerocr.com
+- **Contato:** /contact
 
-**Próximo artigo:** [Como Migrar 10.000 Documentos para Digital →](/blog/migrar-documentos-digital-semana)
+**Próximo artigo:** [Como Migrar 10.000 Documentos para Digital →](/pt/blog/migrar-10000-documentos-digital-uma-semana)
 
 **Tags:** #LGPD #Compliance #Privacidade #Segurança #Digitalização

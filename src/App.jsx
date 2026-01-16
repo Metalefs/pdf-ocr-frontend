@@ -17,6 +17,7 @@ import ApiDocsPage from "./pages/ApiDocsPage";
 import PdfJsFontEncodingGuidePage from "./pages/guides/PdfJsFontEncodingGuidePage";
 import BlogIndexPage from "./pages/blog/BlogIndexPage";
 import BlogPostPage from "./pages/blog/BlogPostPage";
+import OcrTextTestPage from "./pages/OcrTextTestPage";
 
 import { processPdfAsync, processPdfDemo } from "./services/pdf.service";
 import { getJobStatus, getJobDownloadUrl } from "./services/jobs.service";
@@ -751,6 +752,17 @@ function MainApp() {
                         <Route path="/api-keys" element={<ApiKeysPage />} />
                         <Route path="/privacy" element={<PrivacyPolicy />} />
                         <Route path="/contact" element={<ContactPage />} />
+                        <Route
+                            path="/tools/ocr-text"
+                            element={
+                                <OcrTextTestPage
+                                    onRequireAuth={(message) => {
+                                        setAuthDialogMessage(message);
+                                        setShowAuthDialog(true);
+                                    }}
+                                />
+                            }
+                        />
                         <Route
                             path="/"
                             element={

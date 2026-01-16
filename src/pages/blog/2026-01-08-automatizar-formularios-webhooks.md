@@ -600,8 +600,8 @@ setInterval(async () => {
 ## 🚀 Próximos Passos
 
 1. **[Testar API gratuitamente →](https://textlayerocr.com/api/playground)**
-2. **[Documentação completa →](https://docs.textlayerocr.com)**
+2. **[Documentação completa →](/docs/api)**
 3. **[Exemplos de código →](https://github.com/textlayerocr/examples)**
-4. **[Suporte técnico →](mailto:api@textlayerocr.com)**
+4. **[Suporte técnico →](/contact)**
 
 **Tags:** #API #Webhooks #Automação #Integração #OCR #Formulários

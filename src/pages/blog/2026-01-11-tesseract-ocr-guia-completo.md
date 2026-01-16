@@ -628,9 +628,9 @@ print(f"Melhor PSM: {best_psm} ({best_confidence}%)")
 
 ## 🚀 Próximos Passos
 
-1. **[Implementar em produção →](/blog/casos-uso-ocr-formularios)**
-2. **[Integrar com API →](/blog/automatizar-formularios-ocr-webhooks)**
-3. **[Garantir compliance →](/blog/lgpd-digitalizacao-compliance)**
+1. **[Implementar em produção →](/pt/blog/casos-uso-ocr-formularios-empresariais)**
+2. **[Integrar com API →](/pt/blog/automatizar-formularios-pdf-ocr-webhooks)**
+3. **[Garantir compliance →](/pt/blog/lgpd-compliance-digitalizacao-documentos)**
 
 ---
 

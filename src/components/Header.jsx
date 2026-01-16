@@ -61,6 +61,12 @@ export default function Header({ onNavigate }) {
         path: "/docs",
         active: currentPath.startsWith("/docs"),
       },
+      {
+        key: "text-test",
+        label: (t('header.nav.textTest') || (String(locale).toLowerCase().startsWith('pt') ? 'Teste (Texto)' : 'Text Test')),
+        path: "/tools/ocr-text",
+        active: currentPath === "/tools/ocr-text",
+      },
       // {
       //   key: "api",
       //   label: "API",

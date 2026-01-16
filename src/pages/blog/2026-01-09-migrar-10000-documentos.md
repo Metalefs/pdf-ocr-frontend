@@ -434,21 +434,6 @@ Performance:
 
 ---
 
-## ✅ Lições Aprendidas
-
-### O Que Funcionou Bem
-1. **Paralelização agressiva:** 32 threads simultâneos
-2. **Quality check automatizado:** Pegou 98.5% dos casos
-3. **Elasticsearch:** Busca instantânea em 10K docs
-4. **Infraestrutura cloud:** Escalou/descalou sob demanda
-
-### O Que Melhoraria
-1. **Pré-processamento de imagens:** Alguns PDFs ruins (anos 90)
-2. **Mais testes de carga:** Pico de 32 threads causou throttling
-3. **Melhor estimativa inicial:** Previmos 7 dias, finalizamos em 6
-
----
-
 ## 🚀 Replicando o Projeto
 
 ### Checklist de Preparação
@@ -463,26 +448,11 @@ Performance:
 - [ ] Teste piloto (100 docs)
 - [ ] Executar migração completa
 
-### Código Completo no GitHub
-```bash
-git clone https://github.com/textlayerocr/batch-migration
-cd batch-migration
-docker-compose up -d
-```
+Se você quiser aprofundar o tema, estes guias complementam bem esse modelo:
 
----
-
-## 📞 Consultoria
-
-Precisa migrar seu arquivo físico?
-
-**Oferecemos:**
-- Análise de viabilidade (gratuita)
-- Planejamento de migração
-- Execução turnkey
-- Treinamento de equipe
-- Suporte pós-migração
-
-**Contato:** projetos@textlayerocr.com
+- [Guia: Como Adicionar Camadas de Texto em PDFs Escaneados →](/pt/blog/adicionar-camada-texto-pdf-escaneado)
+- [Automatizando Formulários PDF com OCR e Webhooks →](/pt/blog/automatizar-formularios-pdf-ocr-webhooks)
+- [Compliance e LGPD ao Processar Documentos →](/pt/blog/lgpd-compliance-digitalizacao-documentos)
+- [Docs da API →](/docs/api)
 
 **Tags:** #CaseStudy #Migração #BatchProcessing #OCR #Digitalização

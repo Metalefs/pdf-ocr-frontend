@@ -5,7 +5,7 @@ const translations = {
     header: {
       brand: "TextLayer OCR",
       subtitle: "Preserve forms • Accurate • Secure",
-      nav: { features: "Features", docs: "Docs", apiKeys: "API Keys", blog: "Blog", cta: "Get Started" },
+      nav: { features: "Features", docs: "Docs", textTest: "Text Test", apiKeys: "API Keys", blog: "Blog", cta: "Get Started" },
     },
     hero: {
       title: "OCR with structure and widgets preserved.",
@@ -81,6 +81,18 @@ const translations = {
       status: "Status:",
     },
     result: { completed: "Processing completed" },
+    tools: {
+      text: {
+        title: "Extract text from a PDF",
+        subtitle: "Runs OCR and returns the extracted text (JSON).",
+        button: "Run OCR → Text",
+        demoNote: "Demo: 1MB limit and 3 calls/24h.",
+        authNote: "Authenticated: uses your credits.",
+        resultTitle: "Extracted text",
+        empty: "[No text extracted]",
+        copy: "Copy",
+      },
+    },
     sidebar: {
       title: "Document Preview",
       preserve: "Preserves form fields",
@@ -177,7 +189,7 @@ const translations = {
     header: {
       brand: "TextLayer OCR",
       subtitle: "Preserva formulários • OCR preciso • Seguro",
-      nav: { features: "Recursos", docs: "Docs", apiKeys: "Chaves de API", blog: "Blog", cta: "Começar" },
+      nav: { features: "Recursos", docs: "Docs", textTest: "Teste (Texto)", apiKeys: "Chaves de API", blog: "Blog", cta: "Começar" },
     },
     hero: {
       title: "OCR de PDF com Preservação de Formulários.",
@@ -277,6 +289,18 @@ const translations = {
       status: "Status:",
     },
     result: { completed: "Processamento concluído" },
+    tools: {
+      text: {
+        title: "Extrair texto de um PDF",
+        subtitle: "Executa OCR e retorna o texto extraído (JSON).",
+        button: "OCR → Texto",
+        demoNote: "Demo: limite de 1MB e 3 chamadas/24h.",
+        authNote: "Autenticado: consome seus créditos.",
+        resultTitle: "Texto extraído",
+        empty: "[Nenhum texto extraído]",
+        copy: "Copiar",
+      },
+    },
     sidebar: {
       title: "Prévia do Documento",
       preserve: "Preserva formulários",

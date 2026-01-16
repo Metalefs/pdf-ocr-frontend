@@ -48,6 +48,10 @@ ROI (%):
 = (savings ÷ ocrCostYear) × 100
 ```
 
+<!-- ROI_CALCULATOR -->
+
+[Try OCR → Text in the app](/tools/ocr-text)
+
 ### Picking realistic assumptions
 
 - **Typing minutes/page** depends on the document type and how much you need to capture.

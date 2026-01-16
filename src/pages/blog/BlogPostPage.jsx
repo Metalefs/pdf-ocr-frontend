@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo } from "react";
+﻿import { Fragment, useEffect, useMemo } from "react";
 import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
 
 import Box from "@mui/material/Box";
@@ -11,6 +11,7 @@ import Typography from "@mui/material/Typography";
 
 import BlogPostLayout from "../../components/BlogPostLayout";
 import Markdown from "../../components/Markdown";
+import RoiCalculator from "../../components/RoiCalculator";
 
 import { useI18n } from "../../i18n";
 import { getAllBlogPostsByLanguage, getBlogPostBySlug } from "./posts";
@@ -98,6 +99,27 @@ function extractToc(markdown) {
   }
 
   return toc.slice(0, 12);
+}
+
+const ROI_CALCULATOR_TOKEN = "<!-- ROI_CALCULATOR -->";
+
+function renderMarkdownWithEmbeds(markdown) {
+  const raw = String(markdown || "");
+  if (!raw.includes(ROI_CALCULATOR_TOKEN)) {
+    return <Markdown content={raw} />;
+  }
+
+  const parts = raw.split(ROI_CALCULATOR_TOKEN);
+  return (
+    <>
+      {parts.map((part, idx) => (
+        <Fragment key={idx}>
+          {part ? <Markdown content={part} /> : null}
+          {idx < parts.length - 1 ? <RoiCalculator /> : null}
+        </Fragment>
+      ))}
+    </>
+  );
 }
 
 export default function BlogPostPage() {
@@ -296,7 +318,7 @@ export default function BlogPostPage() {
       toc={toc}
       aside={aside}
     >
-      <Markdown content={content} />
+      {renderMarkdownWithEmbeds(content)}
     </BlogPostLayout>
   );
 }
