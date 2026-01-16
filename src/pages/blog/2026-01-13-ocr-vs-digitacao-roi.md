@@ -2,7 +2,7 @@
 title: "OCR vs. Digitação Manual: ROI e Economia de Tempo em 2026"
 slug: ocr-vs-digitacao-manual-roi
 date: 2026-01-13
-author: Carlos Mendes
+author: TextLayer Team
 category: Business Case
 tags: [roi, ocr, produtividade, custo-beneficio, automacao]
 excerpt: "Análise financeira comparando OCR automatizado vs digitação manual. Dados reais de economia de tempo e custos em diferentes cenários empresariais."
@@ -329,8 +329,6 @@ Use a calculadora acima ou [nossa ferramenta online](https://textlayerocr.com/ro
 
 ---
 
-**Ainda tem dúvidas?** Comente abaixo ou agende uma demonstração gratuita.
-
-**Próximo artigo:** [5 Casos de Uso para OCR em Formulários Empresariais →](/blog/casos-uso-ocr-formularios)
+**Próximo post:** [Como Adicionar Camadas de Texto em PDFs Escaneados →](/pt/blog/adicionar-camada-texto-pdf-escaneado)
 
 **Tags:** #ROI #OCR #Produtividade #Automação #CustoBenefício #Economia

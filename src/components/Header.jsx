@@ -59,13 +59,19 @@ export default function Header({ onNavigate }) {
         key: "docs",
         label: (t('header.nav.docs') || 'Docs'),
         path: "/docs",
-        active: currentPath === "/docs",
+        active: currentPath.startsWith("/docs"),
       },
+      // {
+      //   key: "api",
+      //   label: "API",
+      //   path: "/docs/api",
+      //   active: currentPath === "/docs/api" || currentPath === "/api",
+      // },
       {
-        key: "api",
-        label: "API",
-        path: "/docs/api",
-        active: currentPath === "/docs/api" || currentPath === "/api",
+        key: "blog",
+        label: t('header.nav.blog') ?? 'Blog',
+        path: String(locale).toLowerCase().startsWith('pt') ? '/pt/blog' : '/en/blog',
+        active: currentPath.startsWith('/pt/blog') || currentPath.startsWith('/en/blog'),
       },
       {
         key: "guide",
@@ -81,23 +87,23 @@ export default function Header({ onNavigate }) {
       },
     ];
 
-    if (user) {
-      items.push({
-        key: "account",
-        label: "Account",
-        path: "/account",
-        active: currentPath === "/account",
-      });
-      items.push({
-        key: "api-keys",
-        label: (t('header.nav.apiKeys') || t('apiKeys.title')),
-        path: "/api-keys",
-        active: currentPath === "/api-keys",
-      });
-    }
+    // if (user) {
+    //   items.push({
+    //     key: "account",
+    //     label: "Account",
+    //     path: "/account",
+    //     active: currentPath === "/account",
+    //   });
+    //   items.push({
+    //     key: "api-keys",
+    //     label: (t('header.nav.apiKeys') || t('apiKeys.title')),
+    //     path: "/api-keys",
+    //     active: currentPath === "/api-keys",
+    //   });
+    // }
 
     return items;
-  }, [currentPath, locale, t, user]);
+  }, [currentPath, locale, t]);
 
   const handleSignOut = async () => {
     try {

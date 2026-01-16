@@ -15,6 +15,8 @@ import AuthRequiredDialog from "./components/AuthRequiredDialog";
 import DocsPage from "./pages/DocsPage";
 import ApiDocsPage from "./pages/ApiDocsPage";
 import PdfJsFontEncodingGuidePage from "./pages/guides/PdfJsFontEncodingGuidePage";
+import BlogIndexPage from "./pages/blog/BlogIndexPage";
+import BlogPostPage from "./pages/blog/BlogPostPage";
 
 import { processPdfAsync, processPdfDemo } from "./services/pdf.service";
 import { getJobStatus, getJobDownloadUrl } from "./services/jobs.service";
@@ -741,6 +743,10 @@ function MainApp() {
                         <Route path="/api" element={<Navigate to="/docs/api" replace />} />
                         <Route path="/docs/api" element={<ApiDocsPage />} />
                         <Route path="/guides/pdfjs-font-encoding" element={<PdfJsFontEncodingGuidePage />} />
+                        <Route path="/blog" element={<Navigate to="/pt/blog" replace />} />
+                        <Route path="/blog/:slug" element={<BlogLegacyPostRedirect />} />
+                        <Route path="/:lang/blog" element={<BlogIndexPage />} />
+                        <Route path="/:lang/blog/:slug" element={<BlogPostPage />} />
                         <Route path="/account" element={<AccountPage />} />
                         <Route path="/api-keys" element={<ApiKeysPage />} />
                         <Route path="/privacy" element={<PrivacyPolicy />} />
@@ -782,6 +788,16 @@ function MainApp() {
             </AuthProvider>
         </I18nProvider>
     );
+}
+
+function BlogLegacyPostRedirect() {
+    const { locale } = useI18n();
+    const params = new URLSearchParams(window.location.search);
+    const slug = window.location.pathname.split('/').pop();
+    const lang = String(locale).toLowerCase().startsWith('pt') ? 'pt' : 'en';
+    const qs = params.toString();
+    const suffix = qs ? `?${qs}` : '';
+    return <Navigate to={`/${lang}/blog/${slug}${suffix}`} replace />;
 }
 
 export default MainApp;

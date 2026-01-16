@@ -5,7 +5,7 @@ const translations = {
     header: {
       brand: "TextLayer OCR",
       subtitle: "Preserve forms • Accurate • Secure",
-      nav: { features: "Features", docs: "Docs", apiKeys: "API Keys", cta: "Get Started" },
+      nav: { features: "Features", docs: "Docs", apiKeys: "API Keys", blog: "Blog", cta: "Get Started" },
     },
     hero: {
       title: "OCR with structure and widgets preserved.",
@@ -90,6 +90,22 @@ const translations = {
       download: "Download",
     },
     footer: { technology: "Technology", privacy: "Privacy", copy: "All rights reserved." },
+    blog: {
+      title: "Blog",
+      subtitle: "Practical posts about OCR, PDFs and integrations.",
+      featured: "Featured",
+      allPosts: "All posts",
+      readTime: "{{count}} min",
+      notFoundTitle: "Post not found",
+      notFoundBody: "This link may be incorrect or the post was moved.",
+      backToBlog: "Back to blog",
+      nextSteps: "Next steps",
+      nextStepsBody: "Want to apply this to your workflow? Check Docs and the API reference.",
+      openDocs: "Open Docs",
+      openApi: "Open API",
+      onThisPage: "On this page",
+      relatedPosts: "Related posts",
+    },
     apiKeys: {
       title: "API Keys",
       description: "Use API keys to access our API programmatically.",
@@ -161,7 +177,7 @@ const translations = {
     header: {
       brand: "TextLayer OCR",
       subtitle: "Preserva formulários • OCR preciso • Seguro",
-      nav: { features: "Recursos", docs: "Docs", apiKeys: "Chaves de API", cta: "Começar" },
+      nav: { features: "Recursos", docs: "Docs", apiKeys: "Chaves de API", blog: "Blog", cta: "Começar" },
     },
     hero: {
       title: "OCR de PDF com Preservação de Formulários.",
@@ -270,6 +286,22 @@ const translations = {
       download: "Baixar",
     },
     footer: { technology: "Tecnologia", privacy: "Privacidade", copy: "Todos os direitos reservados." },
+    blog: {
+      title: "Blog",
+      subtitle: "Posts práticos sobre OCR, PDFs e integrações.",
+      featured: "Em destaque",
+      allPosts: "Todos os posts",
+      readTime: "{{count}} min",
+      notFoundTitle: "Post não encontrado",
+      notFoundBody: "Esse link pode estar incorreto ou o post foi movido.",
+      backToBlog: "Voltar para o blog",
+      nextSteps: "Próximos passos",
+      nextStepsBody: "Quer aplicar isso no seu fluxo? Veja as Docs e a referência da API.",
+      openDocs: "Abrir Docs",
+      openApi: "Abrir API",
+      onThisPage: "Nesta página",
+      relatedPosts: "Leia também",
+    },
     apiKeys: {
       title: "Chaves de API",
       description: "Use chaves de API para acessar nossa API programaticamente.",
@@ -358,6 +390,15 @@ export function I18nProvider({ children, defaultLocale = "en" }) {
   useEffect(() => {
     try {
       localStorage.setItem('locale', locale);
+    } catch {
+      // ignore
+    }
+  }, [locale]);
+
+  useEffect(() => {
+    try {
+      const lang = String(locale).toLowerCase().startsWith('pt') ? 'pt-BR' : 'en';
+      document.documentElement.lang = lang;
     } catch {
       // ignore
     }

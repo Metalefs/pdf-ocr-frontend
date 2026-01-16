@@ -91,6 +91,9 @@ const Footer = () => {
                             {isPt ? "Recursos" : "Resources"}
                         </Typography>
                         <Stack spacing={0.75}>
+                            <Link component={RouterLink} to={isPt ? "/pt/blog" : "/en/blog"} underline="hover" sx={linkSx}>
+                                Blog
+                            </Link>
                             <Link component={RouterLink} to="/docs" underline="hover" sx={linkSx}>
                                 {t("header.nav.docs") || "Docs"}
                             </Link>

@@ -189,6 +189,6 @@ Para PDFs escaneados ou com encoding problemático, **OCR oferece solução mais
 
 ---
 
-**Perguntas?** Comente abaixo ou [abra uma issue](https://github.com/seu-repo/issues) no GitHub.
+**Próximo post:** [Como Adicionar Camadas de Texto em PDFs Escaneados →](/pt/blog/adicionar-camada-texto-pdf-escaneado)
 
 **Tags:** #OCR #PDFjs #Tesseract #Encoding #WebDev #CSharp
