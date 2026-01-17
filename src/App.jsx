@@ -67,6 +67,10 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
     const auth = useAuth();
     const { refreshUser } = auth;
 
+    const DEMO_MAX_UPLOADS = 1;
+    const DEMO_WINDOW_MS = 24 * 60 * 60 * 1000;
+    const DEMO_STORAGE_KEY = 'pdf_ocr_demo_uploads_v1';
+
     const [file, setFile] = useState(null);
     const [loading, setLoading] = useState(false);
     const [progressText, setProgressText] = useState("");
@@ -75,7 +79,36 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
     const [resultUrl, setResultUrl] = useState(null);
     const [inputPreviewUrl, setInputPreviewUrl] = useState(null);
     const [error, setError] = useState(null);
-    const [requireAuthForNext, setRequireAuthForNext] = useState(false);
+
+    const readDemoCounter = () => {
+        try {
+            const now = Date.now();
+            const raw = window.localStorage.getItem(DEMO_STORAGE_KEY);
+            if (!raw) return { count: 0, resetAt: now + DEMO_WINDOW_MS };
+            const parsed = JSON.parse(raw);
+            const count = typeof parsed?.count === 'number' ? parsed.count : 0;
+            const resetAt = typeof parsed?.resetAt === 'number' ? parsed.resetAt : (now + DEMO_WINDOW_MS);
+            if (now >= resetAt) return { count: 0, resetAt: now + DEMO_WINDOW_MS };
+            return { count: Math.max(0, Math.floor(count)), resetAt };
+        } catch {
+            return { count: 0, resetAt: Date.now() + DEMO_WINDOW_MS };
+        }
+    };
+
+    const writeDemoCounter = (counter) => {
+        try {
+            window.localStorage.setItem(DEMO_STORAGE_KEY, JSON.stringify(counter));
+        } catch {
+            // ignore
+        }
+    };
+
+    const [demoCounter, setDemoCounter] = useState(() => {
+        if (typeof window === 'undefined') return { count: 0, resetAt: 0 };
+        return readDemoCounter();
+    });
+
+    const [forceAuthForNext, setForceAuthForNext] = useState(false);
 
     const [previewTab, setPreviewTab] = useState("before");
 
@@ -139,7 +172,8 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
         GavelIcon,
     ];
 
-    const isAuthGated = !auth.user && requireAuthForNext;
+    const demoLimitReached = demoCounter.count >= DEMO_MAX_UPLOADS;
+    const isAuthGated = !auth.user && (forceAuthForNext || demoLimitReached);
     // Disable only for missing file or while processing; auth-gated should remain clickable (to prompt sign-in).
     const isProcessDisabled = !file || loading;
 
@@ -176,8 +210,8 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                 setProgressText(t("process.uploading") || "Uploading file...");
                 if (!auth.user) {
                     // unauthenticated: use demo endpoint
-                    if (requireAuthForNext) {
-                        onRequireAuth?.('You have used your free demo. Please sign in to continue.');
+                    if (isAuthGated) {
+                        onRequireAuth?.('You have used all free demo uploads. Please sign in to continue.');
                         setLoading(false);
                         return;
                     }
@@ -191,7 +225,11 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
             } catch (err) {
                 // If demo limit exceeded, require auth for next calls
                 if (err && (err.status === 429 || err.code === 'DEMO_LIMIT')) {
-                    setRequireAuthForNext(true);
+                    setForceAuthForNext(true);
+                    // Keep local counter in sync so the UI gates immediately
+                    const next = { ...readDemoCounter(), count: DEMO_MAX_UPLOADS };
+                    writeDemoCounter(next);
+                    setDemoCounter(next);
                     const localized = t('authDialog.message');
                     const fallback = 'Demo limit reached. Please sign in or upgrade.';
                     onRequireAuth?.(
@@ -274,8 +312,19 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                             } catch (e) {
                                 console.warn('Failed to refresh user after job completion', e);
                             }
-                            // If the run was a demo (user not authenticated), require auth for next calls
-                            if (!auth.user) setRequireAuthForNext(true);
+                            // If the run was a demo (user not authenticated), increment the demo counter.
+                            if (!auth.user) {
+                                const current = readDemoCounter();
+                                const updated = {
+                                    ...current,
+                                    count: current.count + 1,
+                                };
+                                writeDemoCounter(updated);
+                                setDemoCounter(updated);
+                                if (updated.count >= DEMO_MAX_UPLOADS) {
+                                    setForceAuthForNext(true);
+                                }
+                            }
                         } catch (e) {
                             if (e && (e.code === "JOB_NOT_FOUND" || e.status === 404)) {
                                 setError({ code: "JOB_NOT_FOUND", message: t("errors.jobNotFound") || "Job not found" });
