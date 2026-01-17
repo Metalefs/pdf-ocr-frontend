@@ -14,7 +14,7 @@ const translations = {
       uniqueClaim:
         "* Unicode maps and font fixing capabilities, preserving all widgets.",
         claims: [
-          "Preserves digital signatures.",
+          "If the PDF has digital signatures, we attach the original.",
           "High-performance for multi-page documents.",
           "Fixes missing 'toUnicode' maps in legacy PDF files.",
           "Fixes clipboard data in PDFs so copied text is correct.",
@@ -67,7 +67,7 @@ const translations = {
     },
     upload: {
       promptTitle: "Drop or click to upload your PDF",
-      promptSubtitle: "Max 10MB — we preserve fields, layout, and digital signatures",
+      promptSubtitle: "Max 10MB — we preserve fields and layout; if digitally signed, we attach the original",
       chooseAnother: "Choose another file",
       multilangNote: "Supports multiple languages in the same file | detects languages automatically and supports multi-language OCR (PT, EN, AR, ZH, JP, KO, CHI, RUS).",
     },
@@ -197,7 +197,7 @@ const translations = {
       uniqueClaim:
         "Corrija mapas ausentes, fontes malformadas e mantenha todos os widgets do PDF.",
         claims: [
-          "Preserva assinaturas digitais.",
+          "Se o PDF tiver assinaturas digitais, anexamos o original.",
           "Processamento paralelo para documentos com múltiplas páginas.",
           "Corrige mapas 'toUnicode' ausentes em arquivos PDF legados.",
           "Corrige a área de transferência em PDFs para que o texto copiado fique correto.",
@@ -250,7 +250,7 @@ const translations = {
     },
     upload: {
       promptTitle: "Clique ou arraste seu PDF",
-      promptSubtitle: "Máx 10MB — preservamos campos, layout e assinaturas digitais",
+      promptSubtitle: "Máx 10MB — preservamos campos e layout; se for assinado, anexamos o original",
       chooseAnother: "Escolher outro arquivo",
       multilangNote: "Aceita múltiplos idiomas no mesmo arquivo | detecta idiomas automaticamente e suporta OCR multilíngue (PT, EN, AR, ZH, JP, KO, CHI, RUS)",
     },
