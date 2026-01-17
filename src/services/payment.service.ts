@@ -66,6 +66,45 @@ class PaymentService {
     if (!response.ok) throw new Error('Failed to retrieve checkout session');
     return response.json();
   }
+
+  /**
+   * Cancel the current user's subscription.
+   * Default behavior: cancel at the end of the current billing period.
+   */
+  async cancelSubscription(immediate = false): Promise<{
+    subscriptionId: string;
+    status: string;
+    cancelAtPeriodEnd: boolean;
+    currentPeriodEnd?: string;
+  }> {
+    const session = await supabase.auth.getSession();
+    if (!session.data.session) throw new Error('Not authenticated');
+
+    const response = await fetch(`${API_BASE}/api/payment/cancel`, {
+      method: 'POST',
+      headers: withLanguageHeaders({
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session.data.session.access_token}`,
+        },
+      }).headers,
+      body: JSON.stringify({ immediate }),
+    });
+
+    if (!response.ok) {
+      // Try to surface backend error payload
+      let message = 'Failed to cancel subscription';
+      try {
+        const data = await response.json();
+        message = data?.error || data?.message || message;
+      } catch {
+        // ignore
+      }
+      throw new Error(message);
+    }
+
+    return response.json();
+  }
 }
 
 export const paymentService = new PaymentService();

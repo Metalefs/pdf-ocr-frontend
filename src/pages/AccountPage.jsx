@@ -10,6 +10,11 @@ import Chip from "@mui/material/Chip";
 import CircularProgress from "@mui/material/CircularProgress";
 import Container from "@mui/material/Container";
 import Divider from "@mui/material/Divider";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 import Grid from "@mui/material/Grid";
 import LinearProgress from "@mui/material/LinearProgress";
 import Paper from "@mui/material/Paper";
@@ -25,6 +30,7 @@ import SecurityIcon from "@mui/icons-material/Security";
 import { useI18n } from "../i18n";
 import { useAuth } from "../contexts/AuthContext";
 import { userService } from "../services/user.service";
+import { paymentService } from "../services/payment.service";
 
 export default function AccountPage({ onNavigate }) {
   const navigate = useNavigate();
@@ -39,6 +45,8 @@ export default function AccountPage({ onNavigate }) {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
+  const [canceling, setCanceling] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -101,6 +109,26 @@ export default function AccountPage({ onNavigate }) {
       window.location.href = '/';
     } catch {
       setError('Failed to sign out');
+    }
+  };
+
+  const handleCancelSubscription = async () => {
+    try {
+      setCanceling(true);
+      setError(null);
+      setSuccess(null);
+
+      // Default: cancel at period end (matches Plans page copy)
+      await paymentService.cancelSubscription(false);
+
+      await refreshUser();
+      setSuccess('Subscription cancellation scheduled. Your access will remain active until the end of the billing period.');
+      setCancelDialogOpen(false);
+      setTimeout(() => setSuccess(null), 6000);
+    } catch (err) {
+      setError(err?.message || 'Failed to cancel subscription');
+    } finally {
+      setCanceling(false);
     }
   };
 
@@ -400,9 +428,48 @@ export default function AccountPage({ onNavigate }) {
                       {t("header.nav.apiKeys") || t("apiKeys.title")}
                     </Button>
                   </Stack>
+
+                  {user?.plan && user.plan !== 'free' ? (
+                    <Button
+                      color="error"
+                      variant="text"
+                      onClick={() => setCancelDialogOpen(true)}
+                      disabled={canceling}
+                      sx={{ alignSelf: 'flex-start' }}
+                    >
+                      Cancel subscription
+                    </Button>
+                  ) : null}
                 </Stack>
               </Paper>
             </Grid>
+
+            <Dialog
+              open={cancelDialogOpen}
+              onClose={() => (canceling ? null : setCancelDialogOpen(false))}
+              aria-labelledby="cancel-subscription-title"
+              aria-describedby="cancel-subscription-description"
+            >
+              <DialogTitle id="cancel-subscription-title">Cancel subscription</DialogTitle>
+              <DialogContent>
+                <DialogContentText id="cancel-subscription-description">
+                  This will cancel your subscription at the end of your current billing period. You will keep access until then.
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => setCancelDialogOpen(false)} disabled={canceling}>
+                  Keep subscription
+                </Button>
+                <Button
+                  onClick={handleCancelSubscription}
+                  color="error"
+                  variant="contained"
+                  disabled={canceling}
+                >
+                  {canceling ? 'Canceling…' : 'Confirm cancel'}
+                </Button>
+              </DialogActions>
+            </Dialog>
 
             {/* Usage */}
             <Grid item xs={12} md={6}>
