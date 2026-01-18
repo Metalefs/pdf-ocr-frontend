@@ -100,16 +100,13 @@ export default function ApiDocsPage() {
               </Stack>
               <Typography color="text.secondary" sx={{ maxWidth: 980 }}>
                 {isPt
-                  ? "Exemplos e fluxo baseados no Swagger oficial da API."
-                  : "Examples and flow based on the official API Swagger."}
+                  ? "Endpoints + exemplos mínimos. Detalhes completos no Swagger."
+                  : "Endpoints + minimal examples. Full details in Swagger."}
               </Typography>
 
               <Stack direction={{ xs: "column", sm: "row" }} spacing={1}>
-                <Button component="a" href={`${baseUrl}/swagger/index.html`} target="_blank" rel="noreferrer" variant="contained">
-                  {isPt ? "Abrir Swagger" : "Open Swagger"}
-                </Button>
-                <Button component="a" href={`${baseUrl}/swagger/v1/swagger.json`} target="_blank" rel="noreferrer" variant="outlined">
-                  {isPt ? "Baixar swagger.json" : "Download swagger.json"}
+                <Button component="a" href={`${baseUrl}/swagger/index.html`} target="_blank" rel="noreferrer" variant="outlined" size="small">
+                  {isPt ? "Swagger UI" : "Swagger UI"}
                 </Button>
               </Stack>
             </Stack>
@@ -150,7 +147,7 @@ export default function ApiDocsPage() {
                         : "Expand to see main calls, payloads, and examples."}
                     </Typography>
 
-                    <Accordion variant="outlined" disableGutters sx={{ borderRadius: 2, overflow: "hidden" }}>
+                    <Accordion expanded variant="outlined" disableGutters sx={{ borderRadius: 2, overflow: "hidden" }}>
                       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         <Stack direction="row" spacing={1} alignItems="center" sx={{ flexWrap: "wrap" }}>
                           <Typography sx={{ fontWeight: 900 }}>Pdf</Typography>
@@ -175,28 +172,15 @@ export default function ApiDocsPage() {
                             </Typography>
                             <CodeBlock
                               title="Request (cURL)"
-                              code={`curl -X POST ${baseUrl}/api/Pdf/process \\\n+  -H "X-API-Key: sk_live_..." \\\n+  -H "Content-Type: multipart/form-data" \\\n+  -F "File=@document.pdf"`}
+                              code={`curl -X POST ${baseUrl}/api/Pdf/process \\
+  -H "X-API-Key: sk_live_..." \\
+  -H "Content-Type: multipart/form-data" \\
+  -F "File=@document.pdf"`}
                             />
                             <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                               {isPt ? "Response (application/json):" : "Response (application/json):"}
                             </Typography>
                             <CodeBlock title="ProcessResponse" code={processResponseExample} />
-                          </Box>
-
-                          <Box>
-                            <Stack direction="row" spacing={1} alignItems="center" sx={{ flexWrap: "wrap" }}>
-                              <Chip size="small" label="POST" color="primary" />
-                              <Typography sx={{ fontWeight: 900 }}>/api/Pdf/demo</Typography>
-                              <Chip size="small" label="multipart/form-data" variant="outlined" />
-                              <Chip size="small" label="200: ProcessResponse" variant="outlined" />
-                            </Stack>
-                            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75 }}>
-                              {isPt ? "Endpoint de demonstração (pode ter limites)." : "Demo endpoint (may have limits)."}
-                            </Typography>
-                            <CodeBlock
-                              title="Request (cURL)"
-                              code={`curl -X POST ${baseUrl}/api/Pdf/demo \\\n+  -H "Content-Type: multipart/form-data" \\\n+  -F "File=@document.pdf"`}
-                            />
                           </Box>
 
                           <Box>
@@ -219,36 +203,33 @@ export default function ApiDocsPage() {
                         </Stack>
                       </AccordionDetails>
                     </Accordion>
-
                     <Accordion variant="outlined" disableGutters sx={{ borderRadius: 2, overflow: "hidden" }}>
                       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         <Stack direction="row" spacing={1} alignItems="center" sx={{ flexWrap: "wrap" }}>
                           <Typography sx={{ fontWeight: 900 }}>Jobs</Typography>
                           <Chip size="small" label="GET /api/Jobs/{jobId}/status" variant="outlined" />
-                          <Chip size="small" label="GET /api/Jobs/{jobId}/download" variant="outlined" />
                         </Stack>
                       </AccordionSummary>
                       <AccordionDetails>
                         <Stack spacing={2}>
                           <Box>
                             <Stack direction="row" spacing={1} alignItems="center" sx={{ flexWrap: "wrap" }}>
-                              <Chip size="small" label="GET" />
+                              <Chip size="small" label="GET" color="primary" />
                               <Typography sx={{ fontWeight: 900 }}>/api/Jobs/{"{jobId}"}/status</Typography>
-                              <Chip size="small" label="200: JobStatusResponse" variant="outlined" />
+                              <Chip size="small" label="200: JobStatus" variant="outlined" />
                             </Stack>
-                            <CodeBlock title="Response example" code={jobStatusExample} />
-                          </Box>
-
-                          <Box>
-                            <Stack direction="row" spacing={1} alignItems="center" sx={{ flexWrap: "wrap" }}>
-                              <Chip size="small" label="GET" />
-                              <Typography sx={{ fontWeight: 900 }}>/api/Jobs/{"{jobId}"}/download</Typography>
-                              <Chip size="small" label="200: PDF (binary)" variant="outlined" />
-                            </Stack>
+                            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75 }}>
+                              {isPt ? "Consulta status do job." : "Checks job status."}
+                            </Typography>
                             <CodeBlock
                               title="Request (cURL)"
-                              code={`curl -L ${baseUrl}/api/Jobs/9b7a0c1c2b3d4e5f/download \\\n+  -H "X-API-Key: sk_live_..." \\\n+  -o result.pdf`}
+                              code={`curl -L ${baseUrl}/api/Jobs/9b7a0c1c2b3d4e5f/status \\
+  -H "X-API-Key: sk_live_..."`}
                             />
+                            <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                              {isPt ? "Response (application/json):" : "Response (application/json):"}
+                            </Typography>
+                            <CodeBlock title="Response example" code={jobStatusExample} />
                           </Box>
                         </Stack>
                       </AccordionDetails>

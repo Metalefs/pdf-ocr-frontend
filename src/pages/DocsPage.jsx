@@ -117,16 +117,13 @@ export default function DocsPage() {
 
               <Typography color="text.secondary" sx={{ maxWidth: 980 }}>
                 {isPt
-                  ? "Fluxo recomendado (assíncrono) para processar PDFs e baixar o arquivo final."
-                  : "Recommended async flow to process PDFs and download the final file."}
+                  ? "Envie PDF → Acompanhe progresso → Baixe resultado."
+                  : "Upload PDF → Track progress → Download result."}
               </Typography>
 
               <Stack direction={{ xs: "column", sm: "row" }} spacing={1}>
-                <Button component={RouterLink} to="/docs/api" variant="contained">
-                  {isPt ? "Abrir referência da API" : "Open API reference"}
-                </Button>
-                <Button component="a" href={`${baseUrl}/swagger/index.html`} target="_blank" rel="noreferrer" variant="outlined">
-                  {isPt ? "Ver Swagger" : "View Swagger"}
+                <Button component={RouterLink} to="/docs/api" variant="outlined" size="small">
+                  {isPt ? "Referência completa" : "Full API reference"}
                 </Button>
               </Stack>
             </Stack>
@@ -193,16 +190,23 @@ export default function DocsPage() {
                   </AccordionDetails>
                 </Accordion>
 
-                <Divider sx={{ my: 2 }} />
-
-                <Typography variant="h6" sx={{ fontWeight: 800 }}>
-                  {isPt ? "Autenticação" : "Authentication"}
-                </Typography>
-                <Typography color="text.secondary" sx={{ mt: 0.75 }}>
-                  {isPt
-                    ? "Server-to-server: use X-API-Key. App autenticado: use Authorization: Bearer <token>."
-                    : "Server-to-server: use X-API-Key. Authenticated app: use Authorization: Bearer <token>."}
-                </Typography>
+                <Stack
+                  direction="row"
+                  spacing={1}
+                  sx={{
+                    mt: 2,
+                    p: 1.5,
+                    borderRadius: 2,
+                    bgcolor: "action.hover",
+                  }}
+                >
+                  <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                    {isPt ? "🔑 Auth:" : "🔑 Auth:"}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    X-API-Key: sk_live_...
+                  </Typography>
+                </Stack>
 
                 <Divider sx={{ my: 2 }} />
 
@@ -210,20 +214,18 @@ export default function DocsPage() {
                   {isPt ? "1) Enviar PDF" : "1) Upload PDF"}
                 </Typography>
 
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                  {isPt
-                    ? "Request (multipart/form-data): campo obrigatório `File` (PDF)."
-                    : "Request (multipart/form-data): required field `File` (PDF)."}
-                </Typography>
+                <CodeBlock title="POST /api/Pdf/process" code={curlAsync} />
 
-                <CodeBlock title={isPt ? "Exemplo (cURL)" : "Example (cURL)"} code={curlAsync} />
-
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 1.25 }}>
-                  {isPt
-                    ? "Response 200 (ProcessResponse):"
-                    : "200 Response (ProcessResponse):"}
-                </Typography>
-                <CodeBlock title="application/json" code={processResponseExample} />
+                <Accordion variant="outlined" disableGutters sx={{ mt: 1, borderRadius: 1.5 }}>
+                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                      {isPt ? "Ver response" : "View response"}
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <CodeBlock title="application/json" code={processResponseExample} />
+                  </AccordionDetails>
+                </Accordion>
 
                 <Divider sx={{ my: 2 }} />
 
@@ -233,67 +235,51 @@ export default function DocsPage() {
 
                 <CodeBlock
                   title="GET /api/Jobs/{jobId}/status"
-                  code={`curl -s ${baseUrl}/api/Jobs/9b7a0c1c2b3d4e5f/status \\\n+  -H "Accept-Language: ${isPt ? "pt-BR" : "en"}" \\\n+  -H "X-API-Key: sk_live_..."`}
+                  code={`curl ${baseUrl}/api/Jobs/{jobId}/status -H "X-API-Key: sk_live_..."`}
                 />
 
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 1.25 }}>
-                  {isPt ? "Response 200 (JobStatusResponse):" : "200 Response (JobStatusResponse):"}
-                </Typography>
-                <CodeBlock title="application/json" code={jobStatusExample} />
+                <Accordion variant="outlined" disableGutters sx={{ mt: 1, borderRadius: 1.5 }}>
+                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                      {isPt ? "Ver response" : "View response"}
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <CodeBlock title="application/json" code={jobStatusExample} />
+                  </AccordionDetails>
+                </Accordion>
 
                 <Divider sx={{ my: 2 }} />
 
                 <Typography variant="h6" sx={{ fontWeight: 800 }}>
-                  {isPt ? "3) Baixar o PDF" : "3) Download the PDF"}
+                  {isPt ? "3) Baixar resultado" : "3) Download result"}
                 </Typography>
 
                 <CodeBlock
                   title="GET /api/Jobs/{jobId}/download"
-                  code={`curl -L ${baseUrl}/api/Jobs/9b7a0c1c2b3d4e5f/download \\\n+  -H "X-API-Key: sk_live_..." \\\n+  -o result.pdf`}
-                />
-
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 1.25 }}>
-                  {isPt
-                    ? "Response 200: arquivo PDF (binário)."
-                    : "200 Response: PDF file (binary)."}
-                </Typography>
-
-                <Divider sx={{ my: 2 }} />
-
-                <Typography variant="h6" sx={{ fontWeight: 800 }}>
-                  {isPt ? "Processamento síncrono" : "Synchronous processing"}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75 }}>
-                  {isPt
-                    ? "Para fluxos simples, o endpoint /api/Pdf/process-sync retorna o PDF diretamente (binário)."
-                    : "For simple flows, /api/Pdf/process-sync returns the PDF directly (binary)."}
-                </Typography>
-
-                <CodeBlock
-                  title="POST /api/Pdf/process-sync"
-                  code={`curl -X POST ${baseUrl}/api/Pdf/process-sync \\\n+  -H "X-API-Key: sk_live_..." \\\n+  -H "Content-Type: multipart/form-data" \\\n+  -F "File=@document.pdf" \\\n+  -o result.pdf`}
+                  code={`curl -L ${baseUrl}/api/Jobs/{jobId}/download -H "X-API-Key: sk_live_..." -o result.pdf`}
                 />
 
                 <Divider sx={{ my: 2 }} />
 
-                <Typography variant="h6" sx={{ fontWeight: 800 }}>
-                  {isPt ? "Erros (ErrorResponse)" : "Errors (ErrorResponse)"}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75 }}>
-                  {isPt
-                    ? "Em 400/500 a API retorna um ErrorResponse com `error`, `details` e (quando aplicável) `upgradeUrl`."
-                    : "On 400/500 the API returns an ErrorResponse with `error`, `details` and (when applicable) `upgradeUrl`."}
-                </Typography>
-                <CodeBlock title="application/json" code={errorResponseExample} />
-
-                <Stack direction={{ xs: "column", sm: "row" }} spacing={1} sx={{ mt: 2 }}>
-                  <Button component={RouterLink} to="/docs/api" variant="contained">
-                    {isPt ? "Ver referência da API" : "View API reference"}
-                  </Button>
-                  <Button component={RouterLink} to="/guides/pdfjs-font-encoding" variant="outlined">
-                    {isPt ? "Guia: pdf.js vs PDFium" : "Guide: pdf.js vs PDFium"}
-                  </Button>
-                </Stack>
+                <Accordion variant="outlined" disableGutters sx={{ borderRadius: 1.5 }}>
+                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                      {isPt ? "💡 Opção: Modo síncrono" : "💡 Option: Sync mode"}
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      {isPt
+                        ? "Para PDFs pequenos, use /api/Pdf/process-sync que retorna o arquivo diretamente (sem polling)."
+                        : "For small PDFs, use /api/Pdf/process-sync which returns the file directly (no polling)."}
+                    </Typography>
+                    <CodeBlock
+                      title="POST /api/Pdf/process-sync"
+                      code={`curl -X POST ${baseUrl}/api/Pdf/process-sync -H "X-API-Key: sk_live_..." -F "File=@doc.pdf" -o result.pdf`}
+                    />
+                  </AccordionDetails>
+                </Accordion>
               </CardContent>
             </Card>
           </Grid>
@@ -303,68 +289,40 @@ export default function DocsPage() {
               <Card variant="outlined" sx={{ borderRadius: 3 }}>
                 <CardContent>
                   <Typography variant="h6" sx={{ fontWeight: 800 }}>
-                    {isPt ? "Dicas de integração" : "Integration tips"}
+                    {isPt ? "💡 Dicas" : "💡 Tips"}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                    {isPt
-                      ? "Use o modo assíncrono para lotes, trate timeouts e cacheie resultados por hash do arquivo."
-                      : "Use async mode for batches, handle timeouts, and cache results by file hash."}
-                  </Typography>
+                  <Stack spacing={1} sx={{ mt: 1.25 }}>
+                    <Typography variant="body2" color="text.secondary">
+                      • {isPt ? "Use modo assíncrono para lotes" : "Use async mode for batches"}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      • {isPt ? "Cache resultados por hash" : "Cache results by file hash"}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      • {isPt ? "Timeout recomendado: 60s" : "Recommended timeout: 60s"}
+                    </Typography>
+                  </Stack>
                 </CardContent>
               </Card>
 
               <Card variant="outlined" sx={{ borderRadius: 3 }}>
                 <CardContent>
                   <Typography variant="h6" sx={{ fontWeight: 800 }}>
-                    {isPt ? "Comparação com sites de OCR" : "Compared to typical OCR websites"}
+                    {isPt ? "🔗 Links úteis" : "🔗 Useful links"}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                    {isPt
-                      ? "Muitos sites de OCR (conversores “PDF → Word”, “OCR online”, etc.) otimizam para exportar texto e acabam reconstruindo o PDF — o que frequentemente quebra formulários (AcroForm) e altera a estrutura do documento."
-                      : "Many OCR websites (‘PDF → Word’ converters, ‘online OCR’ tools, etc.) optimize for text export and often rebuild the PDF — which frequently breaks forms (AcroForm) and changes the document structure."}
-                  </Typography>
-
-                  <Stack spacing={0.75} sx={{ mt: 1.25 }}>
-                    {[0, 1, 2].map((i) => (
-                      <Stack key={i} direction="row" spacing={1} alignItems="flex-start">
-                        <Box sx={{ mt: "3px", width: 6, height: 6, borderRadius: 999, bgcolor: "text.secondary", opacity: 0.5 }} />
-                        <Typography variant="body2" color="text.secondary">
-                          {isPt
-                            ? (
-                              [
-                                "Perde campos preenchíveis, ações e aparências do formulário",
-                                "“Achata” o PDF e troca a estrutura interna",
-                                "Aumenta inconsistência entre pdf.js, PDFium e Adobe Reader",
-                              ][i]
-                            )
-                            : (
-                              [
-                                "Lose fillable fields, actions, and form appearances",
-                                "Flatten/rebuild the PDF and change internal structure",
-                                "Increase inconsistencies across pdf.js, PDFium, and Adobe Reader",
-                              ][i]
-                            )}
-                        </Typography>
-                      </Stack>
-                    ))}
+                  <Stack spacing={1} sx={{ mt: 1.25 }}>
+                    <Button component={RouterLink} to="/docs/api" variant="outlined" size="small" fullWidth sx={{ justifyContent: "flex-start" }}>
+                      {isPt ? "Referência completa da API" : "Full API reference"}
+                    </Button>
+                    <Button component="a" href={`${baseUrl}/swagger/index.html`} target="_blank" rel="noreferrer" variant="outlined" size="small" fullWidth sx={{ justifyContent: "flex-start" }}>
+                      Swagger UI
+                    </Button>
+                    <Button component={RouterLink} to="/guides/pdfjs-font-encoding" variant="outlined" size="small" fullWidth sx={{ justifyContent: "flex-start" }}>
+                      {isPt ? "Guia: pdf.js vs PDFium" : "Guide: pdf.js vs PDFium"}
+                    </Button>
                   </Stack>
-
-                  <Divider sx={{ my: 1.5 }} />
-
-                  <Typography variant="body2" sx={{ fontWeight: 800 }}>
-                    {isPt ? "O diferencial do TextLayer OCR" : "TextLayer OCR difference"}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75 }}>
-                    {isPt
-                      ? "Foco em corrigir fontes/toUnicode e gerar camada de texto sem achatar ou reconstruir o PDF — para você ter OCR sem “destruir” o documento."
-                      : "Focused on repairing fonts/toUnicode and producing a text layer without flattening or rebuilding the PDF — OCR without ‘destroying’ the document."}
-                  </Typography>
                 </CardContent>
               </Card>
-
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                pdf.js, PDFium, AcroForm, toUnicode, font encoding.
-              </Typography>
             </Stack>
           </Grid>
         </Grid>

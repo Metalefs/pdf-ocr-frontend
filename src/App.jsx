@@ -192,16 +192,16 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
 
     const trustBadges = isPt
         ? [
+            { icon: LockIcon, label: "Zero armazenamento" },
             { icon: VerifiedUserIcon, label: "Sem flatten" },
             { icon: AutoAwesomeIcon, label: "Corrige fontes/toUnicode" },
             { icon: ApiIcon, label: "UI + API" },
-            { icon: LockIcon, label: "Uploads seguros" },
         ]
         : [
+            { icon: LockIcon, label: "Zero storage" },
             { icon: VerifiedUserIcon, label: "No PDF flattening" },
             { icon: AutoAwesomeIcon, label: "Fixes fonts/toUnicode" },
             { icon: ApiIcon, label: "UI + API" },
-            { icon: LockIcon, label: "Secure uploads" },
         ];
 
     const howItWorksSteps = isPt
@@ -259,6 +259,10 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
     const faqItems = isPt
         ? [
             {
+                q: "Meus arquivos são armazenados?",
+                a: "Não. Nenhum arquivo ou dado é armazenado permanentemente. Tudo é processado em memória e descartado imediatamente após a conclusão.",
+            },
+            {
                 q: "Isso achata o PDF (flatten)?",
                 a: "Não. O foco é corrigir fontes/toUnicode e mapeamentos de texto sem achatar ou reconstruir o PDF.",
             },
@@ -276,6 +280,10 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
             },
         ]
         : [
+            {
+                q: "Are my files stored?",
+                a: "No. No files or data are permanently stored. Everything is processed in memory and immediately discarded after completion.",
+            },
             {
                 q: "Does this flatten the PDF?",
                 a: "No. The goal is to fix fonts/toUnicode and text mappings without flattening or rebuilding the PDF.",

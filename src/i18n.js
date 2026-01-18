@@ -20,9 +20,10 @@ const translations = {
           "Fixes clipboard data in PDFs so copied text is correct.",
           "Fixes malformed characters rendered in pdf.js and other viewers.",
           "Small file size",
+          "Zero storage: no files are permanently saved",
         ],
       feature1: { title: "Reliable Accuracy", desc: "High-fidelity OCR tuned for documents and form fields." },
-      feature2: { title: "Enterprise Ready", desc: "Secure uploads, retention policies, and scalable processing." },
+      feature2: { title: "Total Privacy", desc: "In-memory processing, zero storage, no data trail." },
     },
     why: {
       title: "Why this exists",
@@ -203,9 +204,10 @@ const translations = {
           "Corrige a área de transferência em PDFs para que o texto copiado fique correto.",
           "Corrige caracteres malformados exibidos no pdf.js e outros visualizadores.",
           "Tamanho de arquivo pequeno",
+          "Zero armazenamento: nenhum arquivo é gravado permanentemente",
         ],
       feature1: { title: "Precisão confiável", desc: "OCR de alta fidelidade ajustado para documentos e formulários." },
-      feature2: { title: "Pronto para empresas", desc: "Uploads seguros, políticas de retenção e processamento escalável." },
+      feature2: { title: "Privacidade total", desc: "Processamento em memória, zero armazenamento, sem rastros de dados." },
     },
     why: {
       title: "Por que isso existe?",
