@@ -16,6 +16,7 @@ import Typography from "@mui/material/Typography";
 import CodeBlock from "../components/CodeBlock";
 
 import { useI18n } from "../i18n";
+import { TechArticleSchema } from '../components/SEOSchema';
 
 function setMetaDescription(content) {
   const tag = document.querySelector('meta[name="description"]');
