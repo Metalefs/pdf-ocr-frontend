@@ -80,6 +80,12 @@ export default function DocsPage() {
   }, [isPt]);
 
   return (
+   <>
+    <TechArticleSchema 
+        title="TextLayer OCR API Documentation"
+        description="Complete API reference for PDF OCR processing"
+        url="https://ocr-frontend.vercel.app/docs"
+      />
     <Box sx={{ bgcolor: "background.default", py: { xs: 3, md: 5 } }}>
       <Container maxWidth="lg">
         <Paper
@@ -266,5 +272,6 @@ export default function DocsPage() {
         </Grid>
       </Container>
     </Box>
+    </>
   );
 }

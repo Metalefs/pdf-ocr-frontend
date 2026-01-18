@@ -71,6 +71,7 @@ import ApiIcon from "@mui/icons-material/Api";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import TipsAndUpdatesIcon from "@mui/icons-material/TipsAndUpdates";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { OrganizationSchema } from './components/SEOSchema';
 
 function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
     const { t, locale } = useI18n();
@@ -473,6 +474,9 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
     }
 
     return (
+        <>
+        <OrganizationSchema />
+
         <Box component="main" sx={{ py: { xs: 0, md: 4 } }}>
             <Container maxWidth="lg" sx={{ px: 0 }}>
                 {error && (
@@ -1234,6 +1238,7 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                 </Paper>
             </Container>
         </Box>
+        </>
     );
 }
 

@@ -5,12 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
     "test": "vitest",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
+    "build": "npm run generate:sitemap && vite build",
+    "preview": "vite preview",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "generate:sitemap": "node scripts/generate-sitemap.js",
+    "verify:seo": "node scripts/verify-seo.js",
+    "postbuild": "npm run generate:sitemap"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

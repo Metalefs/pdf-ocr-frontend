@@ -29,6 +29,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { SoftwareSchema } from '../components/SEOSchema';
 
 export default function PlansPage() {
   const { user, credits } = useAuth();
@@ -131,6 +132,9 @@ export default function PlansPage() {
   }
 
   return (
+    <>
+    <SoftwareSchema />
+
     <Box sx={{ bgcolor: 'background.default', py: { xs: 3, md: 4 } }}>
       <Container maxWidth="lg">
         <Stack spacing={2} sx={{ mb: 3 }}>
@@ -348,5 +352,6 @@ export default function PlansPage() {
         </Box>
       </Container>
     </Box>
+    </>
   );
 }

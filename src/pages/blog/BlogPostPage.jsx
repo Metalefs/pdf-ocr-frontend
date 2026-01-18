@@ -15,6 +15,7 @@ import RoiCalculator from "../../components/RoiCalculator";
 
 import { useI18n } from "../../i18n";
 import { getAllBlogPostsByLanguage, getBlogPostBySlug } from "./posts";
+import { BlogPostSchema } from '../../components/SEOSchema';
 
 function setMeta(name, content) {
   if (!content) return;
@@ -221,6 +222,8 @@ export default function BlogPostPage() {
 
   if (!post) {
     return (
+      <>
+      <BlogPostSchema post={post} lang={language} />
       <Box sx={{ bgcolor: "background.default", py: { xs: 3, md: 5 } }}>
         <Box sx={{ maxWidth: 900, mx: "auto", px: 2 }}>
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
@@ -240,6 +243,7 @@ export default function BlogPostPage() {
           </Card>
         </Box>
       </Box>
+      </>
     );
   }
 

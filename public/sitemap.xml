@@ -1,146 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://ocr-frontend.vercel.app/</loc>
+    <loc>https://pdf-ocr-frontend.onrender.com/</loc>
     <changefreq>daily</changefreq>
-    <priority>1.0</priority>
+    <priority>1</priority>
+    <lastmod>2026-01-18</lastmod>
   </url>
-
   <url>
-    <loc>https://ocr-frontend.vercel.app/docs</loc>
+    <loc>https://pdf-ocr-frontend.onrender.com/plans</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
+    <lastmod>2026-01-18</lastmod>
   </url>
-
   <url>
-    <loc>https://ocr-frontend.vercel.app/docs/api</loc>
+    <loc>https://pdf-ocr-frontend.onrender.com/docs</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-01-18</lastmod>
+  </url>
+  <url>
+    <loc>https://pdf-ocr-frontend.onrender.com/docs/api</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <lastmod>2026-01-18</lastmod>
   </url>
-
   <url>
-    <loc>https://ocr-frontend.vercel.app/pt/blog</loc>
+    <loc>https://pdf-ocr-frontend.onrender.com/account</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <lastmod>2026-01-18</lastmod>
+  </url>
+  <url>
+    <loc>https://pdf-ocr-frontend.onrender.com/blog</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <lastmod>2026-01-18</lastmod>
   </url>
   <url>
-    <loc>https://ocr-frontend.vercel.app/pt/blog/automatizar-formularios-pdf-ocr-webhooks</loc>
-    <lastmod>2026-01-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://ocr-frontend.vercel.app/pt/blog/migrar-10000-documentos-digital-uma-semana</loc>
-    <lastmod>2026-01-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://ocr-frontend.vercel.app/pt/blog/lgpd-compliance-digitalizacao-documentos</loc>
-    <lastmod>2026-01-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://ocr-frontend.vercel.app/pt/blog/tesseract-ocr-guia-completo-configuracao</loc>
-    <lastmod>2026-01-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://ocr-frontend.vercel.app/pt/blog/casos-uso-ocr-formularios-empresariais</loc>
-    <lastmod>2026-01-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://ocr-frontend.vercel.app/pt/blog/ocr-vs-digitacao-manual-roi</loc>
-    <lastmod>2026-01-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://ocr-frontend.vercel.app/pt/blog/adicionar-camada-texto-pdf-escaneado</loc>
-    <lastmod>2026-01-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://ocr-frontend.vercel.app/pt/blog/pdfjs-encoding-problem-ocr-solution</loc>
-    <lastmod>2026-01-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://ocr-frontend.vercel.app/en/blog</loc>
-    <lastmod>2026-01-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://ocr-frontend.vercel.app/en/blog/automatizar-formularios-pdf-ocr-webhooks</loc>
-    <lastmod>2026-01-15</lastmod>
+    <loc>https://pdf-ocr-frontend.onrender.com/contact</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <lastmod>2026-01-18</lastmod>
   </url>
   <url>
-    <loc>https://ocr-frontend.vercel.app/en/blog/migrar-10000-documentos-digital-uma-semana</loc>
-    <lastmod>2026-01-15</lastmod>
+    <loc>https://pdf-ocr-frontend.onrender.com/pt/blog/automatizar-formularios-pdf-ocr-webhooks</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.9</priority>
+    <lastmod>2026-01-08</lastmod>
   </url>
   <url>
-    <loc>https://ocr-frontend.vercel.app/en/blog/lgpd-compliance-digitalizacao-documentos</loc>
-    <lastmod>2026-01-15</lastmod>
+    <loc>https://pdf-ocr-frontend.onrender.com/pt/blog/migrar-10000-documentos-digital-uma-semana</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.9</priority>
+    <lastmod>2026-01-09</lastmod>
   </url>
   <url>
-    <loc>https://ocr-frontend.vercel.app/en/blog/tesseract-ocr-guia-completo-configuracao</loc>
-    <lastmod>2026-01-15</lastmod>
+    <loc>https://pdf-ocr-frontend.onrender.com/pt/blog/lgpd-compliance-digitalizacao-documentos</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.9</priority>
+    <lastmod>2026-01-10</lastmod>
   </url>
   <url>
-    <loc>https://ocr-frontend.vercel.app/en/blog/casos-uso-ocr-formularios-empresariais</loc>
-    <lastmod>2026-01-15</lastmod>
+    <loc>https://pdf-ocr-frontend.onrender.com/pt/blog/tesseract-ocr-guia-completo-configuracao</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.9</priority>
+    <lastmod>2026-01-11</lastmod>
   </url>
   <url>
-    <loc>https://ocr-frontend.vercel.app/en/blog/ocr-vs-digitacao-manual-roi</loc>
-    <lastmod>2026-01-15</lastmod>
+    <loc>https://pdf-ocr-frontend.onrender.com/pt/blog/casos-uso-ocr-formularios-empresariais</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.9</priority>
+    <lastmod>2026-01-12</lastmod>
   </url>
   <url>
-    <loc>https://ocr-frontend.vercel.app/en/blog/adicionar-camada-texto-pdf-escaneado</loc>
+    <loc>https://pdf-ocr-frontend.onrender.com/pt/blog/adicionar-camada-texto-pdf-escaneado</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
     <lastmod>2026-01-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://ocr-frontend.vercel.app/en/blog/pdfjs-encoding-problem-ocr-solution</loc>
+    <loc>https://pdf-ocr-frontend.onrender.com/pt/blog/pdfjs-encoding-problem-ocr-solution</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
     <lastmod>2026-01-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://ocr-frontend.vercel.app/guides/pdfjs-font-encoding</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://ocr-frontend.vercel.app/privacy</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://ocr-frontend.vercel.app/contact</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
   </url>
 </urlset>

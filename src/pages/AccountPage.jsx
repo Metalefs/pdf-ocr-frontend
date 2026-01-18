@@ -26,6 +26,8 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import SecurityIcon from "@mui/icons-material/Security";
+import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
+import InfoIcon from '@mui/icons-material/Info';
 
 import { useI18n } from "../i18n";
 import { useAuth } from "../contexts/AuthContext";
@@ -131,6 +133,24 @@ export default function AccountPage({ onNavigate }) {
       setCanceling(false);
     }
   };
+
+  const getSubscriptionStatusDisplay = (status) => {
+    if (!status) return { label: 'No subscription', color: 'default' };
+    
+    const statusMap = {
+      'active': { label: 'Active', color: 'success' },
+      'canceled': { label: 'Canceled', color: 'warning' },
+      'past_due': { label: 'Past due', color: 'error' },
+      'unpaid': { label: 'Unpaid', color: 'error' },
+      'trialing': { label: 'Trial', color: 'info' }
+    };
+    
+    return statusMap[status] || { label: status, color: 'default' };
+  };
+
+  const subscriptionStatusDisplay = useMemo(() => {
+    return getSubscriptionStatusDisplay(user?.subscriptionStatus);
+  }, [user?.subscriptionStatus]);
 
   const memberSinceLabel = useMemo(() => {
     const raw = user?.createdAt;
@@ -242,9 +262,16 @@ export default function AccountPage({ onNavigate }) {
               <Stack direction={{ xs: "column", sm: "row" }} spacing={1} alignItems={{ xs: "stretch", sm: "center" }}>
                 <Chip label={`Plan: ${planLabel}`} color="primary" variant="outlined" />
                 <Chip label={`Credits: ${credits?.credits || 0}`} variant="outlined" />
-                {limit ? (
+                {user?.subscriptionStatus && (
+                  <Chip 
+                    label={`Status: ${subscriptionStatusDisplay.label}`} 
+                    color={subscriptionStatusDisplay.color}
+                    variant="outlined" 
+                  />
+                )}
+                {limit && (
                   <Chip label={`Today: ${today != null ? today : 0} / ${limit}`} variant="outlined" />
-                ) : null}
+                )}
               </Stack>
             </Stack>
           </Paper>
@@ -267,10 +294,34 @@ export default function AccountPage({ onNavigate }) {
             </Alert>
           )}
 
+          {/* Status Alert - quando assinatura está cancelada */}
+          {user?.subscriptionStatus === 'canceled' && user?.subscriptionEndsAt && (
+            <Alert severity="warning" variant="outlined" icon={<InfoIcon />}>
+              Your subscription has been canceled. You'll retain access until{' '}
+              <strong>{new Date(user.subscriptionEndsAt).toLocaleDateString()}</strong>.
+            </Alert>
+          )}
+
+          {/* Status Alert - quando assinatura está com pagamento atrasado */}
+          {(user?.subscriptionStatus === 'past_due' || user?.subscriptionStatus === 'unpaid') && (
+            <Alert severity="error" variant="outlined">
+              Your subscription payment is {user.subscriptionStatus === 'past_due' ? 'past due' : 'unpaid'}. 
+              Please update your payment method to continue using your plan.
+            </Alert>
+          )}
+
           <Grid container spacing={2.5}>
             {/* Summary stats */}
-            <Grid item xs={12} md={4}>
-              <StatCard title="Plan" value={planLabel} caption={user?.subscriptionEndsAt ? `Renews ${new Date(user.subscriptionEndsAt).toLocaleDateString()}` : ""} />
+             <Grid item xs={12} md={4}>
+              <StatCard 
+                title="Plan" 
+                value={planLabel} 
+                caption={
+                  user?.subscriptionEndsAt 
+                    ? `${user?.subscriptionStatus === 'canceled' ? 'Ends' : 'Renews'} ${new Date(user.subscriptionEndsAt).toLocaleDateString()}`
+                    : ""
+                } 
+              />
             </Grid>
             <Grid item xs={12} md={4}>
               <StatCard title="Credits" value={credits?.credits || 0} caption="Monthly allocation" />
@@ -382,13 +433,29 @@ export default function AccountPage({ onNavigate }) {
             <Grid item xs={12} md={6}>
               <Paper variant="outlined" sx={{ p: { xs: 2.5, md: 3 } }}>
                 <Stack spacing={2}>
-                  <SectionTitle
-                    icon={<CreditCardIcon fontSize="small" />}
-                    title="Current plan"
-                    action={<Chip label={planLabel} color="primary" variant="outlined" />}
-                  />
+                  <SectionTitle icon={<WorkspacePremiumIcon fontSize="small" />} title="Plan & subscription" />
+                  <Divider />
+
+                  <Stack spacing={1.5}>
+                    <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}>
+                      <Typography color="text.secondary">Current plan</Typography>
+                      <Typography sx={{ fontWeight: 700 }}>{planLabel}</Typography>
+                    </Box>
+                  </Stack>
 
                   <Divider />
+
+                  {user?.subscriptionStatus && (
+                    <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}>
+                      <Typography color="text.secondary">Status</Typography>
+                      <Chip 
+                        label={subscriptionStatusDisplay.label} 
+                        color={subscriptionStatusDisplay.color}
+                        size="small"
+                      />
+                    </Box>
+                  )}
+
 
                   <Stack spacing={1.25}>
                     <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}>
@@ -399,14 +466,17 @@ export default function AccountPage({ onNavigate }) {
                       <Typography color="text.secondary">Plan type</Typography>
                       <Typography sx={{ fontWeight: 700 }}>{user.plan}</Typography>
                     </Box>
-                    {user?.subscriptionEndsAt ? (
+                     {user?.subscriptionEndsAt && (
                       <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}>
-                        <Typography color="text.secondary">Renews on</Typography>
+                        <Typography color="text.secondary">
+                          {user?.subscriptionStatus === 'canceled' ? 'Ends on' : 'Renews on'}
+                        </Typography>
                         <Typography sx={{ fontWeight: 700 }}>
                           {new Date(user.subscriptionEndsAt).toLocaleDateString()}
                         </Typography>
                       </Box>
-                    ) : null}
+                    )}
+
                   </Stack>
 
                   <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5}>
@@ -429,7 +499,7 @@ export default function AccountPage({ onNavigate }) {
                     </Button>
                   </Stack>
 
-                  {user?.plan && user.plan !== 'free' ? (
+                 {user?.plan && user.plan !== 'free' && user?.subscriptionStatus !== 'canceled' && (
                     <Button
                       color="error"
                       variant="text"
@@ -439,7 +509,7 @@ export default function AccountPage({ onNavigate }) {
                     >
                       Cancel subscription
                     </Button>
-                  ) : null}
+                  )}
                 </Stack>
               </Paper>
             </Grid>
