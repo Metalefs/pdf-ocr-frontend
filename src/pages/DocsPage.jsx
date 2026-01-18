@@ -84,7 +84,7 @@ export default function DocsPage() {
     <TechArticleSchema 
         title="TextLayer OCR API Documentation"
         description="Complete API reference for PDF OCR processing"
-        url="https://ocr-frontend.vercel.app/docs"
+        url="https://pdf-ocr-frontend.onrender.com/docs"
       />
     <Box sx={{ bgcolor: "background.default", py: { xs: 3, md: 5 } }}>
       <Container maxWidth="lg">

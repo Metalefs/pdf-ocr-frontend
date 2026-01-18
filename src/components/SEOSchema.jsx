@@ -8,7 +8,7 @@ export function BlogPostSchema({ post, lang = 'pt' }) {
   useEffect(() => {
     if (!post) return;
 
-    const baseUrl = 'https://ocr-frontend.vercel.app';
+    const baseUrl = 'https://pdf-ocr-frontend.onrender.com';
     const articleUrl = `${baseUrl}/${lang}/blog/${post.slug}`;
     
     const schema = {
@@ -65,7 +65,7 @@ export function BlogPostSchema({ post, lang = 'pt' }) {
  */
 export function BlogListSchema({ posts = [], lang = 'pt' }) {
   useEffect(() => {
-    const baseUrl = 'https://ocr-frontend.vercel.app';
+    const baseUrl = 'https://pdf-ocr-frontend.onrender.com';
     
     const schema = {
       '@context': 'https://schema.org',
@@ -142,8 +142,8 @@ export function OrganizationSchema() {
       '@context': 'https://schema.org',
       '@type': 'Organization',
       'name': 'TextLayer OCR',
-      'url': 'https://ocr-frontend.vercel.app',
-      'logo': 'https://ocr-frontend.vercel.app/logo.png',
+      'url': 'https://pdf-ocr-frontend.onrender.com',
+      'logo': 'https://pdf-ocr-frontend.onrender.com/logo.png',
       'description': 'Professional OCR platform for PDF processing and document automation',
       'sameAs': [
         // Adicionar redes sociais quando disponíveis

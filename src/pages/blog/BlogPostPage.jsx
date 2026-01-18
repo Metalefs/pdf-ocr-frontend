@@ -181,7 +181,7 @@ export default function BlogPostPage() {
   }, [post, language]);
 
   useEffect(() => {
-    const baseUrl = "https://ocr-frontend.vercel.app";
+    const baseUrl = "https://pdf-ocr-frontend.onrender.com";
 
     if (!post) {
       document.title = `${t('blog.notFoundTitle')} — ${t('blog.title')}`;
@@ -211,7 +211,7 @@ export default function BlogPostPage() {
   useEffect(() => {
     if (!slug) return;
 
-    const baseUrl = "https://ocr-frontend.vercel.app";
+    const baseUrl = "https://pdf-ocr-frontend.onrender.com";
     const hasPt = Boolean(getBlogPostBySlug(slug, 'pt'));
     const hasEn = Boolean(getBlogPostBySlug(slug, 'en'));
 
