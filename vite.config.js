@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import plugin from '@vitejs/plugin-react';
 import path from 'path';
-
+const __dirname = path.dirname(__filename);
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [plugin()],

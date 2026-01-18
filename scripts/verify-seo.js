@@ -1,3 +1,4 @@
+/* eslint-env node */
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -5,7 +6,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const BASE_URL = 'https://pdf-ocr-frontend.onrender.com';
+const BASE_URL = 'https://ocr-frontend.vercel.app';
 
 console.log('🔍 Verificando configuração de SEO...\n');
 

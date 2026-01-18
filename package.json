@@ -8,7 +8,7 @@
     "test": "vitest",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "build": "npm run generate:sitemap && vite build",
+    "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint .",
     "generate:sitemap": "node scripts/generate-sitemap.js",
