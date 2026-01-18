@@ -133,7 +133,7 @@ export default function PlansPage() {
 
   return (
     <>
-    <SoftwareSchema />
+    <SoftwareSchema plans={plans} lang={locale === 'pt' ? 'pt' : 'en'} />
 
     <Box sx={{ bgcolor: 'background.default', py: { xs: 3, md: 4 } }}>
       <Container maxWidth="lg">

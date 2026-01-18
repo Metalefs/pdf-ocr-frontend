@@ -1,16 +1,21 @@
 import { useEffect } from "react";
 
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Chip from "@mui/material/Chip";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import Chip from "@mui/material/Chip";
 import Container from "@mui/material/Container";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import CodeBlock from "../components/CodeBlock";
 
@@ -25,7 +30,7 @@ export default function ApiDocsPage() {
   const { locale } = useI18n();
   const isPt = String(locale).toLowerCase().startsWith("pt");
 
-  const baseUrl = "https://pdf-ocr-api-production.up.railway.app";
+  const baseUrl = (import.meta?.env?.VITE_API_BASE || "https://pdf-ocr-api-production.up.railway.app").replace(/\/$/, "");
 
   const processResponseExample = `{
   "jobId": "9b7a0c1c2b3d4e5f",
@@ -64,7 +69,6 @@ export default function ApiDocsPage() {
   "timestamp": "2026-01-15T12:00:00Z"
 }`;
 
-
   useEffect(() => {
     document.title = isPt ? "API — TextLayer OCR" : "API — TextLayer OCR";
     setMetaDescription(
@@ -87,7 +91,7 @@ export default function ApiDocsPage() {
           })}
         >
           <Box sx={{ p: { xs: 2.5, md: 3 } }}>
-            <Stack spacing={1}>
+            <Stack spacing={1.5}>
               <Stack direction={{ xs: "column", sm: "row" }} spacing={1} alignItems={{ xs: "flex-start", sm: "center" }}>
                 <Typography variant="h3" sx={{ fontWeight: 900, letterSpacing: -0.5, lineHeight: 1.1 }}>
                   {isPt ? "Referência da API" : "API Reference"}
@@ -96,8 +100,8 @@ export default function ApiDocsPage() {
               </Stack>
               <Typography color="text.secondary" sx={{ maxWidth: 980 }}>
                 {isPt
-                  ? "Exemplos de request/response baseados no Swagger da API (schemas oficiais)."
-                  : "Request/response examples based on the API Swagger (official schemas)."}
+                  ? "Exemplos e fluxo baseados no Swagger oficial da API."
+                  : "Examples and flow based on the official API Swagger."}
               </Typography>
 
               <Stack direction={{ xs: "column", sm: "row" }} spacing={1}>
@@ -105,143 +109,171 @@ export default function ApiDocsPage() {
                   {isPt ? "Abrir Swagger" : "Open Swagger"}
                 </Button>
                 <Button component="a" href={`${baseUrl}/swagger/v1/swagger.json`} target="_blank" rel="noreferrer" variant="outlined">
-                  {isPt ? "Baixar swagger.json" : "Open swagger.json"}
+                  {isPt ? "Baixar swagger.json" : "Download swagger.json"}
                 </Button>
               </Stack>
             </Stack>
           </Box>
         </Paper>
 
-        <Grid container spacing={2}>
+        <Grid container spacing={3}>
           <Grid item xs={12} md={8}>
-            <Card variant="outlined" sx={{ borderRadius: 3 }}>
-              <CardContent>
-                <Typography variant="h5" sx={{ fontWeight: 900 }}>
-                  {isPt ? "Autenticação" : "Authentication"}
-                </Typography>
-                <Typography color="text.secondary" sx={{ mt: 1 }}>
-                  {isPt
-                    ? "A API suporta dois modos: X-API-Key (server-to-server) e Bearer JWT (usuário logado)."
-                    : "The API supports two modes: X-API-Key (server-to-server) and Bearer JWT (logged-in user)."}
-                </Typography>
+            <Stack spacing={2.5}>
+              <Card variant="outlined" sx={{ borderRadius: 3 }}>
+                <CardContent sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+                  <Typography variant="h5" sx={{ fontWeight: 900 }}>
+                    {isPt ? "Autenticação" : "Authentication"}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {isPt
+                      ? "Use o header X-API-Key com a chave ativa. Em staging, prefira chaves de teste."
+                      : "Send X-API-Key with your active key. Use test keys on staging."}
+                  </Typography>
+                  <Divider />
+                  <Typography variant="body2" color="text.secondary">
+                    {isPt
+                      ? "Todas as respostas são JSON, exceto downloads de PDF (application/pdf)."
+                      : "All responses are JSON except PDF downloads (application/pdf)."}
+                  </Typography>
+                </CardContent>
+              </Card>
 
-                <Stack spacing={1} sx={{ mt: 1.5 }}>
-                  <CodeBlock
-                    title="Headers"
-                    code={`Accept-Language: ${isPt ? "pt-BR" : "en"}\nX-API-Key: sk_live_...\nAuthorization: Bearer <token> (optional, app-only)`}
-                  />
-                </Stack>
-
-                <Divider sx={{ my: 2 }} />
-
-                <Typography variant="h5" sx={{ fontWeight: 900 }}>
-                  Pdf
-                </Typography>
-
-                <Stack spacing={2} sx={{ mt: 1.25 }}>
-                  <Box>
-                    <Stack direction="row" spacing={1} alignItems="center" sx={{ flexWrap: "wrap" }}>
-                      <Chip size="small" label="POST" color="primary" />
-                      <Typography sx={{ fontWeight: 900 }}>/api/Pdf/process</Typography>
-                      <Chip size="small" label="multipart/form-data" variant="outlined" />
-                      <Chip size="small" label="200: ProcessResponse" variant="outlined" />
-                    </Stack>
-                    <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75 }}>
+              <Card variant="outlined" sx={{ borderRadius: 3 }}>
+                <CardContent>
+                  <Stack spacing={1.25}>
+                    <Typography variant="h5" sx={{ fontWeight: 900 }}>
+                      {isPt ? "Endpoints" : "Endpoints"}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
                       {isPt
-                        ? "Cria um job assíncrono e retorna URLs para status/download."
-                        : "Creates an async job and returns status/download URLs."}
+                        ? "Expanda para ver chamadas principais, payloads e exemplos."
+                        : "Expand to see main calls, payloads, and examples."}
                     </Typography>
-                    <CodeBlock
-                      title={isPt ? "Request (cURL)" : "Request (cURL)"}
-                      code={`curl -X POST ${baseUrl}/api/Pdf/process \\\n+  -H "X-API-Key: sk_live_..." \\\n+  -H "Content-Type: multipart/form-data" \\\n+  -F "File=@document.pdf"`}
-                    />
-                    <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                      {isPt ? "Response (application/json):" : "Response (application/json):"}
-                    </Typography>
-                    <CodeBlock title="ProcessResponse" code={processResponseExample} />
-                  </Box>
 
-                  <Box>
-                    <Stack direction="row" spacing={1} alignItems="center" sx={{ flexWrap: "wrap" }}>
-                      <Chip size="small" label="POST" color="primary" />
-                      <Typography sx={{ fontWeight: 900 }}>/api/Pdf/demo</Typography>
-                      <Chip size="small" label="multipart/form-data" variant="outlined" />
-                      <Chip size="small" label="200: ProcessResponse" variant="outlined" />
-                    </Stack>
-                    <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75 }}>
-                      {isPt
-                        ? "Endpoint de demonstração (pode ter limites)."
-                        : "Demo endpoint (may have limits)."}
-                    </Typography>
-                    <CodeBlock
-                      title="Request (cURL)"
-                      code={`curl -X POST ${baseUrl}/api/Pdf/demo \\\n+  -H "Content-Type: multipart/form-data" \\\n+  -F "File=@document.pdf"`}
-                    />
-                  </Box>
+                    <Accordion variant="outlined" disableGutters sx={{ borderRadius: 2, overflow: "hidden" }}>
+                      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                        <Stack direction="row" spacing={1} alignItems="center" sx={{ flexWrap: "wrap" }}>
+                          <Typography sx={{ fontWeight: 900 }}>Pdf</Typography>
+                          <Chip size="small" label="POST /api/Pdf/process" color="primary" variant="outlined" />
+                          <Chip size="small" label="POST /api/Pdf/process-sync" variant="outlined" />
+                          <Chip size="small" label="POST /api/Pdf/demo" variant="outlined" />
+                        </Stack>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Stack spacing={2}>
+                          <Box>
+                            <Stack direction="row" spacing={1} alignItems="center" sx={{ flexWrap: "wrap" }}>
+                              <Chip size="small" label="POST" color="primary" />
+                              <Typography sx={{ fontWeight: 900 }}>/api/Pdf/process</Typography>
+                              <Chip size="small" label="multipart/form-data" variant="outlined" />
+                              <Chip size="small" label="200: ProcessResponse" variant="outlined" />
+                            </Stack>
+                            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75 }}>
+                              {isPt
+                                ? "Cria um job assíncrono e retorna URLs de status/download."
+                                : "Creates an async job and returns status/download URLs."}
+                            </Typography>
+                            <CodeBlock
+                              title="Request (cURL)"
+                              code={`curl -X POST ${baseUrl}/api/Pdf/process \\\n+  -H "X-API-Key: sk_live_..." \\\n+  -H "Content-Type: multipart/form-data" \\\n+  -F "File=@document.pdf"`}
+                            />
+                            <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                              {isPt ? "Response (application/json):" : "Response (application/json):"}
+                            </Typography>
+                            <CodeBlock title="ProcessResponse" code={processResponseExample} />
+                          </Box>
 
-                  <Box>
-                    <Stack direction="row" spacing={1} alignItems="center" sx={{ flexWrap: "wrap" }}>
-                      <Chip size="small" label="POST" color="primary" />
-                      <Typography sx={{ fontWeight: 900 }}>/api/Pdf/process-sync</Typography>
-                      <Chip size="small" label="multipart/form-data" variant="outlined" />
-                      <Chip size="small" label="200: PDF (binary)" variant="outlined" />
-                    </Stack>
-                    <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75 }}>
-                      {isPt
-                        ? "Retorna o PDF processado diretamente (binário)."
-                        : "Returns the processed PDF directly (binary)."}
-                    </Typography>
-                    <CodeBlock
-                      title="Request (cURL)"
-                      code={`curl -X POST ${baseUrl}/api/Pdf/process-sync \\\n+  -H "X-API-Key: sk_live_..." \\\n+  -H "Content-Type: multipart/form-data" \\\n+  -F "File=@document.pdf" \\\n+  -o result.pdf`}
-                    />
-                  </Box>
-                </Stack>
+                          <Box>
+                            <Stack direction="row" spacing={1} alignItems="center" sx={{ flexWrap: "wrap" }}>
+                              <Chip size="small" label="POST" color="primary" />
+                              <Typography sx={{ fontWeight: 900 }}>/api/Pdf/demo</Typography>
+                              <Chip size="small" label="multipart/form-data" variant="outlined" />
+                              <Chip size="small" label="200: ProcessResponse" variant="outlined" />
+                            </Stack>
+                            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75 }}>
+                              {isPt ? "Endpoint de demonstração (pode ter limites)." : "Demo endpoint (may have limits)."}
+                            </Typography>
+                            <CodeBlock
+                              title="Request (cURL)"
+                              code={`curl -X POST ${baseUrl}/api/Pdf/demo \\\n+  -H "Content-Type: multipart/form-data" \\\n+  -F "File=@document.pdf"`}
+                            />
+                          </Box>
 
-                <Divider sx={{ my: 2 }} />
+                          <Box>
+                            <Stack direction="row" spacing={1} alignItems="center" sx={{ flexWrap: "wrap" }}>
+                              <Chip size="small" label="POST" color="primary" />
+                              <Typography sx={{ fontWeight: 900 }}>/api/Pdf/process-sync</Typography>
+                              <Chip size="small" label="multipart/form-data" variant="outlined" />
+                              <Chip size="small" label="200: PDF (binary)" variant="outlined" />
+                            </Stack>
+                            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75 }}>
+                              {isPt
+                                ? "Retorna o PDF processado diretamente (binário)."
+                                : "Returns the processed PDF directly (binary)."}
+                            </Typography>
+                            <CodeBlock
+                              title="Request (cURL)"
+                              code={`curl -X POST ${baseUrl}/api/Pdf/process-sync \\\n+  -H "X-API-Key: sk_live_..." \\\n+  -H "Content-Type: multipart/form-data" \\\n+  -F "File=@document.pdf" \\\n+  -o result.pdf`}
+                            />
+                          </Box>
+                        </Stack>
+                      </AccordionDetails>
+                    </Accordion>
 
-                <Typography variant="h5" sx={{ fontWeight: 900 }}>
-                  Jobs
-                </Typography>
-                <Stack spacing={2} sx={{ mt: 1.25 }}>
-                  <Box>
-                    <Stack direction="row" spacing={1} alignItems="center" sx={{ flexWrap: "wrap" }}>
-                      <Chip size="small" label="GET" />
-                      <Typography sx={{ fontWeight: 900 }}>/api/Jobs/{"{jobId}"}/status</Typography>
-                      <Chip size="small" label="200: JobStatusResponse" variant="outlined" />
-                    </Stack>
-                    <CodeBlock
-                      title="Response example"
-                      code={jobStatusExample}
-                    />
-                  </Box>
+                    <Accordion variant="outlined" disableGutters sx={{ borderRadius: 2, overflow: "hidden" }}>
+                      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                        <Stack direction="row" spacing={1} alignItems="center" sx={{ flexWrap: "wrap" }}>
+                          <Typography sx={{ fontWeight: 900 }}>Jobs</Typography>
+                          <Chip size="small" label="GET /api/Jobs/{jobId}/status" variant="outlined" />
+                          <Chip size="small" label="GET /api/Jobs/{jobId}/download" variant="outlined" />
+                        </Stack>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Stack spacing={2}>
+                          <Box>
+                            <Stack direction="row" spacing={1} alignItems="center" sx={{ flexWrap: "wrap" }}>
+                              <Chip size="small" label="GET" />
+                              <Typography sx={{ fontWeight: 900 }}>/api/Jobs/{"{jobId}"}/status</Typography>
+                              <Chip size="small" label="200: JobStatusResponse" variant="outlined" />
+                            </Stack>
+                            <CodeBlock title="Response example" code={jobStatusExample} />
+                          </Box>
 
-                  <Box>
-                    <Stack direction="row" spacing={1} alignItems="center" sx={{ flexWrap: "wrap" }}>
-                      <Chip size="small" label="GET" />
-                      <Typography sx={{ fontWeight: 900 }}>/api/Jobs/{"{jobId}"}/download</Typography>
-                      <Chip size="small" label="200: PDF (binary)" variant="outlined" />
-                    </Stack>
-                    <CodeBlock
-                      title="Request (cURL)"
-                      code={`curl -L ${baseUrl}/api/Jobs/9b7a0c1c2b3d4e5f/download \\\n+  -H "X-API-Key: sk_live_..." \\\n+  -o result.pdf`}
-                    />
-                  </Box>
-                </Stack>
-                
-                <Divider sx={{ my: 2 }} />
+                          <Box>
+                            <Stack direction="row" spacing={1} alignItems="center" sx={{ flexWrap: "wrap" }}>
+                              <Chip size="small" label="GET" />
+                              <Typography sx={{ fontWeight: 900 }}>/api/Jobs/{"{jobId}"}/download</Typography>
+                              <Chip size="small" label="200: PDF (binary)" variant="outlined" />
+                            </Stack>
+                            <CodeBlock
+                              title="Request (cURL)"
+                              code={`curl -L ${baseUrl}/api/Jobs/9b7a0c1c2b3d4e5f/download \\\n+  -H "X-API-Key: sk_live_..." \\\n+  -o result.pdf`}
+                            />
+                          </Box>
+                        </Stack>
+                      </AccordionDetails>
+                    </Accordion>
 
-                <Typography variant="h5" sx={{ fontWeight: 900 }}>
-                  {isPt ? "Erros" : "Errors"}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75 }}>
-                  {isPt
-                    ? "Alguns endpoints retornam ErrorResponse (400/500) e outros retornam ProblemDetails (ex.: 401/404 em alguns recursos)."
-                    : "Some endpoints return ErrorResponse (400/500) while others return ProblemDetails (e.g., 401/404 for some resources)."}
-                </Typography>
-                <CodeBlock title="ErrorResponse" code={errorResponseExample} />
-              </CardContent>
-            </Card>
+                    <Accordion variant="outlined" disableGutters sx={{ borderRadius: 2, overflow: "hidden" }}>
+                      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                        <Stack direction="row" spacing={1} alignItems="center" sx={{ flexWrap: "wrap" }}>
+                          <Typography sx={{ fontWeight: 900 }}>{isPt ? "Erros" : "Errors"}</Typography>
+                          <Chip size="small" label="ErrorResponse" variant="outlined" />
+                        </Stack>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Typography variant="body2" color="text.secondary" sx={{ mb: 1.25 }}>
+                          {isPt
+                            ? "Alguns endpoints retornam ErrorResponse (400/500) e outros retornam ProblemDetails (401/404 em alguns recursos)."
+                            : "Some endpoints return ErrorResponse (400/500) and others return ProblemDetails (401/404 on some resources)."}
+                        </Typography>
+                        <CodeBlock title="ErrorResponse" code={errorResponseExample} />
+                      </AccordionDetails>
+                    </Accordion>
+                  </Stack>
+                </CardContent>
+              </Card>
+            </Stack>
           </Grid>
 
           <Grid item xs={12} md={4}>
@@ -253,7 +285,7 @@ export default function ApiDocsPage() {
                   </Typography>
                   <Stack spacing={1} sx={{ mt: 1.25 }}>
                     <Button component="a" href={`${baseUrl}/swagger/index.html`} target="_blank" rel="noreferrer" variant="outlined" sx={{ justifyContent: "flex-start" }}>
-                      {isPt ? "Swagger UI" : "Swagger UI"}
+                      Swagger UI
                     </Button>
                     <Button component="a" href={`${baseUrl}/swagger/v1/swagger.json`} target="_blank" rel="noreferrer" variant="outlined" sx={{ justifyContent: "flex-start" }}>
                       OpenAPI (swagger.json)
@@ -283,7 +315,6 @@ export default function ApiDocsPage() {
             </Stack>
           </Grid>
         </Grid>
-
       </Container>
     </Box>
   );

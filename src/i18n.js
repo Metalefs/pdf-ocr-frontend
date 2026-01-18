@@ -4,15 +4,15 @@ const translations = {
   en: {
     header: {
       brand: "TextLayer OCR",
-      subtitle: "Preserve forms • Fix broken PDF text • API-ready",
+      subtitle: "Fix broken PDF text • Searchable OCR • API-ready",
       nav: { features: "Features", docs: "Docs", textTest: "Text Test", apiKeys: "API Keys", blog: "Blog", cta: "Get Started" },
     },
     hero: {
       title: "Fix broken PDF text — without losing forms.",
       subtitle:
-        "OCR + font/toUnicode repair that keeps AcroForm widgets working. Use the UI or integrate via API.",
+        "OCR + font/toUnicode repair for consistent rendering and searchable text. Use the UI or integrate via API.",
       uniqueClaim:
-        "* Unicode maps and font fixing capabilities, preserving all widgets.",
+        "* Fix toUnicode/font issues without flattening the PDF.",
         claims: [
           "If the PDF has digital signatures, we attach the original.",
           "High-performance for multi-page documents.",
@@ -29,10 +29,10 @@ const translations = {
       body1:
         "Corrupted or incomplete PDF fonts can produce unreadable characters and inconsistent rendering across viewers.",
       body2:
-        "Most ‘fix’ approaches rebuild the PDF and end up breaking forms and metadata. This API regenerates font resources while keeping the original document properties intact — preserving interactive forms while fixing rendering issues.",
+        "Most ‘fix’ approaches rebuild the PDF and can break forms and metadata. This API repairs font resources while keeping the original document structure intact — improving rendering without a destructive rebuild.",
       bullets: [
         "Fixes missing/invalid font resources and Unicode maps (toUnicode)",
-        "Keeps form fields/widgets (AcroForm) fully functional",
+        "Avoids flattening/rebuilding the PDF",
         "Normalizes rendering across viewers (pdf.js, PDFium, Adobe Reader)",
       ],
     },
@@ -45,7 +45,7 @@ const translations = {
         },
         {
           title: "Regenerate fonts without breaking forms",
-          desc: "Repair missing/broken font resources while preserving AcroForm fields, appearances, and widget behavior.",
+          desc: "Repair missing/broken font resources while keeping the document structure intact.",
         },
         {
           title: "Fix copy/paste and text extraction",
@@ -67,7 +67,7 @@ const translations = {
     },
     upload: {
       promptTitle: "Drop or click to upload your PDF",
-      promptSubtitle: "Max 10MB — we preserve fields and layout; if digitally signed, we attach the original",
+      promptSubtitle: "Max 10MB — keeps layout intact; if digitally signed, we attach the original",
       chooseAnother: "Choose another file",
       multilangNote: "Supports multiple languages in the same file | detects languages automatically and supports multi-language OCR (PT, EN, AR, ZH, JP, KO, CHI, RUS).",
     },
@@ -95,7 +95,7 @@ const translations = {
     },
     sidebar: {
       title: "Document Preview",
-      preserve: "Preserves form fields",
+      preserve: "Non-destructive output",
       none: "No document processed yet",
       sendPdf: "Upload a PDF to preview",
       open: "Open",
@@ -188,14 +188,14 @@ const translations = {
   pt: {
     header: {
       brand: "TextLayer OCR",
-      subtitle: "Preserva formulários • Corrige texto do PDF • API pronta",
+      subtitle: "Corrige texto do PDF • OCR pesquisável • API pronta",
       nav: { features: "Recursos", docs: "Docs", textTest: "Teste (Texto)", apiKeys: "Chaves de API", blog: "Blog", cta: "Começar" },
     },
     hero: {
       title: "Corrija texto quebrado em PDFs — sem perder formulários.",
-      subtitle: "OCR + correção de fontes/toUnicode preservando widgets (AcroForm). Use pela UI ou via API.",
+      subtitle: "OCR + correção de fontes/toUnicode para renderização consistente e texto pesquisável. Use pela UI ou via API.",
       uniqueClaim:
-        "Corrija mapas ausentes, fontes malformadas e mantenha todos os widgets do PDF.",
+        "Corrija toUnicode/fontes sem achatar (flatten) ou reconstruir o PDF.",
         claims: [
           "Se o PDF tiver assinaturas digitais, anexamos o original.",
           "Processamento paralelo para documentos com múltiplas páginas.",
@@ -212,10 +212,10 @@ const translations = {
       body1:
         "Fontes corrompidas em PDFs causam caracteres ilegíveis e incompatibilidade entre visualizadores. Soluções tradicionais destroem formulários e metadados ao tentar corrigir o problema.",
       body2:
-        "Esta API regenera fontes mantendo intactas todas as propriedades do documento original — a única solução que preserva formulários interativos enquanto corrige problemas de renderização.",
+        "Esta API corrige recursos de fonte mantendo a estrutura do documento original — sem reconstruções destrutivas que quebram formulários e metadados.",
       bullets: [
         "Regenera recursos de fontes e mapeamentos Unicode (toUnicode)",
-        "Preserva formulários interativos (AcroForm), widgets e aparências",
+        "Evita achatar (flatten) ou reconstruir o PDF",
         "Padroniza a visualização entre pdf.js, PDFium e Adobe Reader",
       ],
     },
@@ -250,7 +250,7 @@ const translations = {
     },
     upload: {
       promptTitle: "Clique ou arraste seu PDF",
-      promptSubtitle: "Máx 10MB — preservamos campos e layout; se for assinado, anexamos o original",
+      promptSubtitle: "Máx 10MB — mantemos o layout; se for assinado, anexamos o original",
       chooseAnother: "Escolher outro arquivo",
       multilangNote: "Aceita múltiplos idiomas no mesmo arquivo | detecta idiomas automaticamente e suporta OCR multilíngue (PT, EN, AR, ZH, JP, KO, CHI, RUS)",
     },

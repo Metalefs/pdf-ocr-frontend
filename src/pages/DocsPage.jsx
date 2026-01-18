@@ -12,6 +12,11 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import CodeBlock from "../components/CodeBlock";
 
@@ -26,6 +31,8 @@ function setMetaDescription(content) {
 export default function DocsPage() {
   const { locale } = useI18n();
   const isPt = String(locale).toLowerCase().startsWith("pt");
+
+  const publicSiteUrl = (typeof window !== "undefined" ? window.location.origin : "https://example.com");
 
   const baseUrl = "https://pdf-ocr-api-production.up.railway.app";
 
@@ -75,8 +82,8 @@ export default function DocsPage() {
 
     setMetaDescription(
       isPt
-        ? "Documentação da plataforma TextLayer OCR: endpoints da API, autenticação por API key, processamento assíncrono e preservação de formulários (AcroForm)."
-        : "TextLayer OCR documentation: API endpoints, API key authentication, async processing and AcroForm preservation."
+        ? "Documentação da plataforma TextLayer OCR: endpoints da API, autenticação por API key e processamento assíncrono."
+        : "TextLayer OCR documentation: API endpoints, API key authentication, and async processing."
     );
   }, [isPt]);
 
@@ -85,7 +92,7 @@ export default function DocsPage() {
     <TechArticleSchema 
         title="TextLayer OCR API Documentation"
         description="Complete API reference for PDF OCR processing"
-        url="https://pdf-ocr-frontend.onrender.com/docs"
+        url={`${publicSiteUrl}/docs`}
       />
     <Box sx={{ bgcolor: "background.default", py: { xs: 3, md: 5 } }}>
       <Container maxWidth="lg">
@@ -110,8 +117,8 @@ export default function DocsPage() {
 
               <Typography color="text.secondary" sx={{ maxWidth: 980 }}>
                 {isPt
-                  ? "Fluxo recomendado (assíncrono) para processar PDFs e baixar o arquivo final preservando formulários (AcroForm)."
-                  : "Recommended async flow to process PDFs and download the final file while preserving forms (AcroForm)."}
+                  ? "Fluxo recomendado (assíncrono) para processar PDFs e baixar o arquivo final."
+                  : "Recommended async flow to process PDFs and download the final file."}
               </Typography>
 
               <Stack direction={{ xs: "column", sm: "row" }} spacing={1}>
@@ -140,11 +147,51 @@ export default function DocsPage() {
                     : "You upload a PDF via multipart/form-data. The API creates an async job and returns URLs to poll status and download the result."}
                 </Typography>
 
-                <Stack direction={{ xs: "column", sm: "row" }} spacing={1} sx={{ mt: 1.5, flexWrap: "wrap" }}>
-                  <Chip size="small" label="POST /api/Pdf/process" color="primary" variant="outlined" />
-                  <Chip size="small" label="GET /api/Jobs/{jobId}/status" variant="outlined" />
-                  <Chip size="small" label="GET /api/Jobs/{jobId}/download" variant="outlined" />
-                </Stack>
+                <Accordion variant="outlined" disableGutters sx={{ mt: 1.5, borderRadius: 2, overflow: "hidden" }}>
+                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <Stack direction={{ xs: "column", sm: "row" }} spacing={1} alignItems={{ xs: "flex-start", sm: "center" }}>
+                      <Typography sx={{ fontWeight: 900 }}>
+                        {isPt ? "Endpoints (resumo)" : "Endpoints (quick view)"}
+                      </Typography>
+                      <Chip size="small" label="POST /api/Pdf/process" color="primary" variant="outlined" />
+                      <Chip size="small" label="GET /api/Jobs/{jobId}/status" variant="outlined" />
+                      <Chip size="small" label="GET /api/Jobs/{jobId}/download" variant="outlined" />
+                    </Stack>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Stack spacing={1.1}>
+                      <Stack direction={{ xs: "column", sm: "row" }} spacing={1} alignItems={{ xs: "flex-start", sm: "center" }}>
+                        <Chip size="small" label="POST" color="primary" />
+                        <Typography sx={{ fontWeight: 900 }}>/api/Pdf/process</Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {isPt ? "Cria job assíncrono" : "Creates an async job"}
+                        </Typography>
+                      </Stack>
+                      <Stack direction={{ xs: "column", sm: "row" }} spacing={1} alignItems={{ xs: "flex-start", sm: "center" }}>
+                        <Chip size="small" label="GET" />
+                        <Typography sx={{ fontWeight: 900 }}>/api/Jobs/{"{jobId}"}/status</Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {isPt ? "Acompanha progresso" : "Polls progress"}
+                        </Typography>
+                      </Stack>
+                      <Stack direction={{ xs: "column", sm: "row" }} spacing={1} alignItems={{ xs: "flex-start", sm: "center" }}>
+                        <Chip size="small" label="GET" />
+                        <Typography sx={{ fontWeight: 900 }}>/api/Jobs/{"{jobId}"}/download</Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {isPt ? "Baixa o PDF final" : "Downloads the final PDF"}
+                        </Typography>
+                      </Stack>
+                      <Divider />
+                      <Stack direction={{ xs: "column", sm: "row" }} spacing={1} alignItems={{ xs: "flex-start", sm: "center" }}>
+                        <Chip size="small" label="POST" color="primary" />
+                        <Typography sx={{ fontWeight: 900 }}>/api/Pdf/process-sync</Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {isPt ? "Retorna o PDF direto (binário)" : "Returns PDF directly (binary)"}
+                        </Typography>
+                      </Stack>
+                    </Stack>
+                  </AccordionDetails>
+                </Accordion>
 
                 <Divider sx={{ my: 2 }} />
 
@@ -265,8 +312,58 @@ export default function DocsPage() {
                   </Typography>
                 </CardContent>
               </Card>
+
+              <Card variant="outlined" sx={{ borderRadius: 3 }}>
+                <CardContent>
+                  <Typography variant="h6" sx={{ fontWeight: 800 }}>
+                    {isPt ? "Comparação com sites de OCR" : "Compared to typical OCR websites"}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                    {isPt
+                      ? "Muitos sites de OCR (conversores “PDF → Word”, “OCR online”, etc.) otimizam para exportar texto e acabam reconstruindo o PDF — o que frequentemente quebra formulários (AcroForm) e altera a estrutura do documento."
+                      : "Many OCR websites (‘PDF → Word’ converters, ‘online OCR’ tools, etc.) optimize for text export and often rebuild the PDF — which frequently breaks forms (AcroForm) and changes the document structure."}
+                  </Typography>
+
+                  <Stack spacing={0.75} sx={{ mt: 1.25 }}>
+                    {[0, 1, 2].map((i) => (
+                      <Stack key={i} direction="row" spacing={1} alignItems="flex-start">
+                        <Box sx={{ mt: "3px", width: 6, height: 6, borderRadius: 999, bgcolor: "text.secondary", opacity: 0.5 }} />
+                        <Typography variant="body2" color="text.secondary">
+                          {isPt
+                            ? (
+                              [
+                                "Perde campos preenchíveis, ações e aparências do formulário",
+                                "“Achata” o PDF e troca a estrutura interna",
+                                "Aumenta inconsistência entre pdf.js, PDFium e Adobe Reader",
+                              ][i]
+                            )
+                            : (
+                              [
+                                "Lose fillable fields, actions, and form appearances",
+                                "Flatten/rebuild the PDF and change internal structure",
+                                "Increase inconsistencies across pdf.js, PDFium, and Adobe Reader",
+                              ][i]
+                            )}
+                        </Typography>
+                      </Stack>
+                    ))}
+                  </Stack>
+
+                  <Divider sx={{ my: 1.5 }} />
+
+                  <Typography variant="body2" sx={{ fontWeight: 800 }}>
+                    {isPt ? "O diferencial do TextLayer OCR" : "TextLayer OCR difference"}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75 }}>
+                    {isPt
+                      ? "Foco em corrigir fontes/toUnicode e gerar camada de texto sem achatar ou reconstruir o PDF — para você ter OCR sem “destruir” o documento."
+                      : "Focused on repairing fonts/toUnicode and producing a text layer without flattening or rebuilding the PDF — OCR without ‘destroying’ the document."}
+                  </Typography>
+                </CardContent>
+              </Card>
+
               <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                pdf.js, PDFium, AcroForm, toUnicode, font encoding, OCR preservando formulários.
+                pdf.js, PDFium, AcroForm, toUnicode, font encoding.
               </Typography>
             </Stack>
           </Grid>

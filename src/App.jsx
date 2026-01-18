@@ -192,13 +192,13 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
 
     const trustBadges = isPt
         ? [
-            { icon: VerifiedUserIcon, label: "Preserva AcroForm" },
+            { icon: VerifiedUserIcon, label: "Sem flatten" },
             { icon: AutoAwesomeIcon, label: "Corrige fontes/toUnicode" },
             { icon: ApiIcon, label: "UI + API" },
             { icon: LockIcon, label: "Uploads seguros" },
         ]
         : [
-            { icon: VerifiedUserIcon, label: "AcroForm preserved" },
+            { icon: VerifiedUserIcon, label: "No PDF flattening" },
             { icon: AutoAwesomeIcon, label: "Fixes fonts/toUnicode" },
             { icon: ApiIcon, label: "UI + API" },
             { icon: LockIcon, label: "Secure uploads" },
@@ -206,14 +206,14 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
 
     const howItWorksSteps = isPt
         ? [
-            { title: "Envie o PDF", desc: "Arraste e solte ou integre via API. Mantemos campos e layout." },
+            { title: "Envie o PDF", desc: "Arraste e solte ou integre via API. Mantemos layout e estrutura." },
             { title: "Processamos", desc: "OCR e correção de recursos (fontes/toUnicode) com logs em tempo real." },
-            { title: "Baixe e use", desc: "PDF resultante com texto selecionável e formulários funcionando." },
+            { title: "Baixe e use", desc: "PDF resultante com texto selecionável e estrutura intacta." },
         ]
         : [
-            { title: "Upload the PDF", desc: "Drag & drop or integrate via API. Fields and layout stay intact." },
+            { title: "Upload the PDF", desc: "Drag & drop or integrate via API. Layout and structure stay intact." },
             { title: "We process", desc: "OCR + resource repair (fonts/toUnicode) with live progress." },
-            { title: "Download & ship", desc: "Get a usable PDF with selectable text and working forms." },
+            { title: "Download & ship", desc: "Get a usable PDF with selectable text and intact structure." },
         ];
 
     const logoItems = isPt
@@ -240,7 +240,7 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
         ]
         : [
             {
-                quote: "Fixed legacy PDFs that broke in pdf.js—without losing fillable fields.",
+                quote: "Fixed legacy PDFs that broke in pdf.js, without losing fillable fields.",
                 name: "Product Team",
                 role: "Document SaaS",
             },
@@ -260,7 +260,7 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
         ? [
             {
                 q: "Isso achata o PDF (flatten)?",
-                a: "Não. O foco é preservar widgets/campos (AcroForm) e corrigir recursos e mapeamentos de texto.",
+                a: "Não. O foco é corrigir fontes/toUnicode e mapeamentos de texto sem achatar ou reconstruir o PDF.",
             },
             {
                 q: "Funciona com PDFs assinados digitalmente?",
@@ -278,7 +278,7 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
         : [
             {
                 q: "Does this flatten the PDF?",
-                a: "No. The goal is to preserve widgets/forms (AcroForm) while fixing resources and text mappings.",
+                a: "No. The goal is to fix fonts/toUnicode and text mappings without flattening or rebuilding the PDF.",
             },
             {
                 q: "Does it work with digitally signed PDFs?",
@@ -986,8 +986,8 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
 
                                                 <Typography variant="body2" color="text.secondary" sx={{ mt: 1.75 }}>
                                                     {String(locale).toLowerCase().startsWith("pt")
-                                                        ? "Foco em consistência de renderização e preservação de AcroForm — sem “achatar” o PDF."
-                                                        : "Focused on rendering consistency and AcroForm preservation — without flattening the PDF."}
+                                                        ? "Foco em consistência de renderização."
+                                                        : "Focused on rendering consistency."}
                                                 </Typography>
                                             </CardContent>
                                         </Card>
@@ -1013,8 +1013,8 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                                 </Typography>
                                 <Typography color="text.secondary" sx={{ mt: 1, maxWidth: 980 }}>
                                     {String(locale).toLowerCase().startsWith("pt")
-                                        ? "Casos típicos onde corrigir fontes/Unicode e preservar formulários faz diferença no dia a dia."
-                                        : "Common scenarios where fixing fonts/Unicode and preserving forms makes a real difference."}
+                                        ? "Casos típicos onde corrigir fontes/Unicode sem reconstruir o PDF faz diferença no dia a dia."
+                                        : "Common scenarios where fixing fonts/Unicode without rebuilding the PDF makes a real difference."}
                                 </Typography>
 
                                 {Array.isArray(useCaseItems) && useCaseItems.length ? (
@@ -1131,7 +1131,7 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                                         >
                                             <CardContent>
                                                 <Stack spacing={1.25}>
-                                                    {["API keys", isPt ? "Logs e rastreabilidade" : "Logs & traceability", isPt ? "Preserva AcroForm" : "Preserve AcroForm"].map((line) => (
+                                                    {["API keys", isPt ? "Logs e rastreabilidade" : "Logs & traceability", isPt ? "Sem flatten" : "Non-destructive"].map((line) => (
                                                         <Stack key={line} direction="row" spacing={1.1} alignItems="flex-start">
                                                             <Box sx={(theme) => ({ mt: "2px", color: theme.palette.success.main, display: "flex" })}>
                                                                 <CheckCircleOutlineIcon fontSize="small" />
