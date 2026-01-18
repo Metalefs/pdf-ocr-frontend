@@ -623,7 +623,7 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                             </Stack>
                         </Grid>
 
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={12} md={resultUrl ? 12 : 6}>
                             <Card
                                 variant="outlined"
                                 id="upload-zone-anchor"
@@ -669,8 +669,8 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                                                 onChange={(_, v) => setPreviewTab(v)}
                                                 sx={{ mt: 0.5, borderBottom: 1, borderColor: "divider" }}
                                             >
-                                                <Tab value="before" label={isPt ? "Antes" : "Before"} />
-                                                <Tab value="after" label={resultUrl ? (isPt ? "Depois" : "After") : (isPt ? "Depois (processando...)" : "After (processing...) ")} />
+                                                <Tab value="before" label={isPt ? "Antes" : "Before"} sx={{ flex: 1, maxWidth: "50%" }} />
+                                                <Tab value="after" label={resultUrl ? (isPt ? "Depois" : "After") : (isPt ? "Depois (processando...)" : "After (processing...) ")} sx={{ flex: 1, maxWidth: "50%" }} />
                                             </Tabs>
 
                                             <Box sx={{ mt: 2 }}>
