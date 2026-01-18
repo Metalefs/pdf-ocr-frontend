@@ -32,9 +32,9 @@ export default function DocsPage() {
   const { locale } = useI18n();
   const isPt = String(locale).toLowerCase().startsWith("pt");
 
-  const publicSiteUrl = (typeof window !== "undefined" ? window.location.origin : "https://example.com");
+  const publicSiteUrl = (import.meta?.env?.VITE_PUBLIC_SITE_URL || (typeof window !== "undefined" ? window.location.origin : "https://textlayerocr.up.railway.app"));
 
-  const baseUrl = "https://pdf-ocr-api-production.up.railway.app";
+  const baseUrl = (import.meta?.env?.VITE_API_BASE || import.meta?.env?.VITE_API_URL || "https://pdf-ocr-api-production.up.railway.app").replace(/\/$/, "");
 
   const curlAsync = `curl -X POST ${baseUrl}/api/Pdf/process \\\n+  -H "Accept-Language: ${isPt ? "pt-BR" : "en"}" \\\n+  -H "X-API-Key: sk_live_..." \\\n+  -H "Content-Type: multipart/form-data" \\\n+  -F "File=@document.pdf"`;
 

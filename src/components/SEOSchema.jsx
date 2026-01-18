@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 function getPublicSiteUrl() {
   const envUrl = (import.meta?.env?.VITE_PUBLIC_SITE_URL || '').trim();
-  const fallback = typeof window !== 'undefined' ? window.location.origin : 'https://example.com';
+  const fallback = typeof window !== 'undefined' ? window.location.origin : 'https://textlayerocr.up.railway.app';
   return (envUrl || fallback).replace(/\/+$/, '');
 }
 

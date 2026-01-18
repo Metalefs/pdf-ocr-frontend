@@ -30,7 +30,7 @@ export default function ApiDocsPage() {
   const { locale } = useI18n();
   const isPt = String(locale).toLowerCase().startsWith("pt");
 
-  const baseUrl = (import.meta?.env?.VITE_API_BASE || "https://pdf-ocr-api-production.up.railway.app").replace(/\/$/, "");
+  const baseUrl = (import.meta?.env?.VITE_API_BASE || import.meta?.env?.VITE_API_URL || "https://pdf-ocr-api-production.up.railway.app").replace(/\/$/, "");
 
   const processResponseExample = `{
   "jobId": "9b7a0c1c2b3d4e5f",
