@@ -150,6 +150,15 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
         };
     }, [resultUrl]);
 
+    // Scroll to status container when processing starts
+    useEffect(() => {
+        if (loading) {
+            setTimeout(() => {
+                document.getElementById("upload-zone-anchor")?.scrollIntoView({ behavior: "smooth", block: "start" });
+            }, 100);
+        }
+    }, [loading]);
+
     function resetAll() {
         setFile(null);
         setResultUrl(null);
@@ -320,6 +329,7 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
             return;
         }
 
+        document.getElementById("upload-zone-anchor")?.scrollIntoView({ behavior: "smooth", block: "start" });
         void handleProcess();
     }
 
@@ -431,6 +441,7 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                             const blob = await res.blob();
                             const blobUrl = URL.createObjectURL(blob);
                             setResultUrl(blobUrl);
+                            setPreviewTab("after");
                             // Refresh authenticated user data (credits/profile) after processing completes
                             try {
                                 await refreshUser();
@@ -485,7 +496,7 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
         <>
         <OrganizationSchema />
 
-        <Box component="main" sx={{ py: { xs: 0, md: 4 } }}>
+        <Box component="main" sx={{ py: { xs: 0, md: 4 }, pt: { xs: 0, md: 1 }, minHeight: '80vh' }}>
             <Container maxWidth="lg" sx={{ px: 0 }}>
                 {error && (
                     <ErrorBox
@@ -623,7 +634,7 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                             </Stack>
                         </Grid>
 
-                        <Grid item xs={12} md={resultUrl ? 12 : 6}>
+                        <Grid item xs={12} md={(file && (loading || resultUrl)) ? 12 : 6} width={ status.progress > 30 ? status.progress+"%" :'100%'}>
                             <Card
                                 variant="outlined"
                                 id="upload-zone-anchor"
