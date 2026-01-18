@@ -4,13 +4,13 @@ const translations = {
   en: {
     header: {
       brand: "TextLayer OCR",
-      subtitle: "Preserve forms • Accurate • Secure",
+      subtitle: "Preserve forms • Fix broken PDF text • API-ready",
       nav: { features: "Features", docs: "Docs", textTest: "Text Test", apiKeys: "API Keys", blog: "Blog", cta: "Get Started" },
     },
     hero: {
-      title: "OCR with structure and widgets preserved.",
+      title: "Fix broken PDF text — without losing forms.",
       subtitle:
-        "Convert scanned PDFs into editable documents while fixing resources, keeping widgets and layout intact.",
+        "OCR + font/toUnicode repair that keeps AcroForm widgets working. Use the UI or integrate via API.",
       uniqueClaim:
         "* Unicode maps and font fixing capabilities, preserving all widgets.",
         claims: [
@@ -188,12 +188,12 @@ const translations = {
   pt: {
     header: {
       brand: "TextLayer OCR",
-      subtitle: "Preserva formulários • OCR preciso • Seguro",
+      subtitle: "Preserva formulários • Corrige texto do PDF • API pronta",
       nav: { features: "Recursos", docs: "Docs", textTest: "Teste (Texto)", apiKeys: "Chaves de API", blog: "Blog", cta: "Começar" },
     },
     hero: {
-      title: "OCR de PDF com Preservação de Formulários.",
-      subtitle: "Converta PDFs escaneados em documentos editáveis mantendo widgets e layout.",
+      title: "Corrija texto quebrado em PDFs — sem perder formulários.",
+      subtitle: "OCR + correção de fontes/toUnicode preservando widgets (AcroForm). Use pela UI ou via API.",
       uniqueClaim:
         "Corrija mapas ausentes, fontes malformadas e mantenha todos os widgets do PDF.",
         claims: [

@@ -44,6 +44,10 @@ import Tabs from "@mui/material/Tabs";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Chip from "@mui/material/Chip";
 
 import { alpha } from "@mui/material/styles";
 
@@ -61,6 +65,12 @@ import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 import AccessibilityNewIcon from "@mui/icons-material/AccessibilityNew";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import GavelIcon from "@mui/icons-material/Gavel";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
+import ApiIcon from "@mui/icons-material/Api";
+import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
+import TipsAndUpdatesIcon from "@mui/icons-material/TipsAndUpdates";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
     const { t, locale } = useI18n();
@@ -176,6 +186,112 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
     const isAuthGated = !auth.user && (forceAuthForNext || demoLimitReached);
     // Disable only for missing file or while processing; auth-gated should remain clickable (to prompt sign-in).
     const isProcessDisabled = !file || loading;
+
+    const isPt = String(locale).toLowerCase().startsWith("pt");
+
+    const trustBadges = isPt
+        ? [
+            { icon: VerifiedUserIcon, label: "Preserva AcroForm" },
+            { icon: AutoAwesomeIcon, label: "Corrige fontes/toUnicode" },
+            { icon: ApiIcon, label: "UI + API" },
+            { icon: LockIcon, label: "Uploads seguros" },
+        ]
+        : [
+            { icon: VerifiedUserIcon, label: "AcroForm preserved" },
+            { icon: AutoAwesomeIcon, label: "Fixes fonts/toUnicode" },
+            { icon: ApiIcon, label: "UI + API" },
+            { icon: LockIcon, label: "Secure uploads" },
+        ];
+
+    const howItWorksSteps = isPt
+        ? [
+            { title: "Envie o PDF", desc: "Arraste e solte ou integre via API. Mantemos campos e layout." },
+            { title: "Processamos", desc: "OCR e correção de recursos (fontes/toUnicode) com logs em tempo real." },
+            { title: "Baixe e use", desc: "PDF resultante com texto selecionável e formulários funcionando." },
+        ]
+        : [
+            { title: "Upload the PDF", desc: "Drag & drop or integrate via API. Fields and layout stay intact." },
+            { title: "We process", desc: "OCR + resource repair (fonts/toUnicode) with live progress." },
+            { title: "Download & ship", desc: "Get a usable PDF with selectable text and working forms." },
+        ];
+
+    const logoItems = isPt
+        ? ["Finanças", "Jurídico", "Operações"]
+        : ["Finance", "Legal", "Operations"];
+
+    const testimonials = isPt
+        ? [
+            {
+                quote: "Resolveu PDFs antigos que quebravam no pdf.js sem perder os campos preenchíveis.",
+                name: "Equipe de Produto",
+                role: "SaaS de documentos",
+            },
+            {
+                quote: "Agora conseguimos indexar e buscar texto mantendo o AcroForm para o time jurídico.",
+                name: "Engenharia",
+                role: "Gestão de contratos",
+            },
+            {
+                quote: "API simples de integrar e resultados consistentes entre PDFium e Adobe Reader.",
+                name: "Plataforma",
+                role: "Automação / ECM",
+            },
+        ]
+        : [
+            {
+                quote: "Fixed legacy PDFs that broke in pdf.js—without losing fillable fields.",
+                name: "Product Team",
+                role: "Document SaaS",
+            },
+            {
+                quote: "We can index/search text while keeping AcroForm for legal workflows.",
+                name: "Engineering",
+                role: "Contract management",
+            },
+            {
+                quote: "Easy API integration and consistent output across PDFium and Adobe Reader.",
+                name: "Platform",
+                role: "Automation / ECM",
+            },
+        ];
+
+    const faqItems = isPt
+        ? [
+            {
+                q: "Isso achata o PDF (flatten)?",
+                a: "Não. O foco é preservar widgets/campos (AcroForm) e corrigir recursos e mapeamentos de texto.",
+            },
+            {
+                q: "Funciona com PDFs assinados digitalmente?",
+                a: "Sim. Quando há assinatura digital, anexamos o original para manter a cadeia de confiança.",
+            },
+            {
+                q: "Como uso via API?",
+                a: "Crie uma conta, gere uma API key e chame o endpoint de processamento. Veja a documentação para exemplos.",
+            },
+            {
+                q: "Quais idiomas são suportados?",
+                a: "Suporta OCR multilíngue e detecção automática; veja a lista atual na página inicial e na documentação.",
+            },
+        ]
+        : [
+            {
+                q: "Does this flatten the PDF?",
+                a: "No. The goal is to preserve widgets/forms (AcroForm) while fixing resources and text mappings.",
+            },
+            {
+                q: "Does it work with digitally signed PDFs?",
+                a: "Yes. When a signature exists, we attach the original to keep trust and integrity.",
+            },
+            {
+                q: "How do I use the API?",
+                a: "Create an account, generate an API key, and call the processing endpoint. Docs include examples.",
+            },
+            {
+                q: "Which languages are supported?",
+                a: "Multi-language OCR is supported with automatic detection; see the current list on the homepage/docs.",
+            },
+        ];
 
     const processButtonLabel = loading
         ? (
@@ -372,103 +488,318 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                         }
                     />
                 )}
-                <Paper elevation={0} sx={{ p: { xs: 2, md: 4 }, border: 1, borderColor: "divider" }}>
-                    <Box sx={{ mb: 3 }}>
-                        <Typography variant="h3" sx={{ fontWeight: 700, fontSize: { xs: "2rem", md: "2.75rem" } }}>
-                            {t("hero.title")}
-                        </Typography>
-                        <Typography variant="h6" color="text.secondary" sx={{ mt: 1, maxWidth: 900, fontWeight: 400 }}>
-                            {t("hero.subtitle")}
-                        </Typography>
-                    </Box>
+                <Paper
+                    elevation={0}
+                    sx={(theme) => ({
+                        p: { xs: 2, md: 4 },
+                        border: 1,
+                        borderColor: "divider",
+                        background: `radial-gradient(1200px 420px at 15% 0%, ${alpha(theme.palette.primary.main, 0.18)} 0%, transparent 60%),\n                            radial-gradient(900px 400px at 90% 8%, ${alpha(theme.palette.secondary.main, 0.16)} 0%, transparent 55%),\n                            linear-gradient(180deg, ${alpha(theme.palette.background.paper, 0.95)} 0%, ${alpha(theme.palette.background.paper, 0.9)} 100%)`,
+                        borderRadius: 4,
+                    })}
+                >
+                    <Grid container spacing={{ xs: 2.5, md: 4 }} alignItems="stretch">
+                        <Grid item xs={12} md={6}>
+                            <Stack spacing={2} sx={{ height: "100%" }}>
+                                <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+                                    <Chip
+                                        size="small"
+                                        color="primary"
+                                        variant="outlined"
+                                        icon={<TipsAndUpdatesIcon />}
+                                        label={isPt ? "OCR + correção de PDFs" : "OCR + PDF repair"}
+                                        sx={{ fontWeight: 700 }}
+                                    />
+                                    <Chip
+                                        size="small"
+                                        color="secondary"
+                                        variant="outlined"
+                                        icon={<ApiIcon />}
+                                        label={isPt ? "API pronta" : "API-ready"}
+                                        sx={{ fontWeight: 700 }}
+                                    />
+                                </Stack>
 
-                    {file && (loading || resultUrl) ? (
-                        <Box>
+                                <Box>
+                                    <Typography variant="h3" sx={{ fontWeight: 900, fontSize: { xs: "2.05rem", md: "2.9rem" }, letterSpacing: -0.6, lineHeight: 1.08 }}>
+                                        {t("hero.title")}
+                                    </Typography>
+                                    <Typography variant="h6" color="text.secondary" sx={{ mt: 1.25, maxWidth: 680, fontWeight: 400 }}>
+                                        {t("hero.subtitle")}
+                                    </Typography>
+                                </Box>
+
+                                <Stack direction={{ xs: "column", sm: "row" }} spacing={1.25} sx={{ pt: 0.5 }}>
+                                    <Button
+                                        variant="contained"
+                                        size="large"
+                                        endIcon={<ArrowForwardIcon />}
+                                        onClick={() => {
+                                            document.getElementById("upload-zone-anchor")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                                        }}
+                                    >
+                                        {isPt ? "Testar agora" : "Try it now"}
+                                    </Button>
+                                    <Button
+                                        component={RouterLink}
+                                        to="/plans"
+                                        variant="outlined"
+                                        size="large"
+                                    >
+                                        {isPt ? "Ver preços" : "View pricing"}
+                                    </Button>
+                                </Stack>
+
+                                <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ pt: 1 }}>
+                                    {trustBadges.map((b) => {
+                                        const Icon = b.icon;
+                                        return (
+                                            <Chip
+                                                key={b.label}
+                                                size="small"
+                                                variant="outlined"
+                                                icon={<Icon />}
+                                                label={b.label}
+                                                sx={{ fontWeight: 650 }}
+                                            />
+                                        );
+                                    })}
+                                </Stack>
+
+                                <Card
+                                    variant="outlined"
+                                    sx={(theme) => ({
+                                        mt: 1,
+                                        borderRadius: 3,
+                                        borderColor: alpha(theme.palette.primary.main, 0.18),
+                                        bgcolor: alpha(theme.palette.background.paper, 0.86),
+                                    })}
+                                >
+                                    <CardContent>
+                                        <Typography variant="subtitle1" sx={{ fontWeight: 900, letterSpacing: -0.15 }}>
+                                            {isPt ? "Como funciona" : "How it works"}
+                                        </Typography>
+                                        <Grid container spacing={2} sx={{ mt: 0.5 }}>
+                                            {howItWorksSteps.map((step, idx) => (
+                                                <Grid key={step.title} item xs={12} sm={4}>
+                                                    <Stack spacing={0.75}>
+                                                        <Avatar
+                                                            variant="rounded"
+                                                            sx={(theme) => ({
+                                                                width: 36,
+                                                                height: 36,
+                                                                borderRadius: 2,
+                                                                bgcolor: alpha(theme.palette.primary.main, 0.12),
+                                                                color: theme.palette.primary.main,
+                                                                fontWeight: 900,
+                                                            })}
+                                                        >
+                                                            {idx + 1}
+                                                        </Avatar>
+                                                        <Typography variant="body2" sx={{ fontWeight: 900, lineHeight: 1.25 }}>
+                                                            {step.title}
+                                                        </Typography>
+                                                        <Typography variant="caption" color="text.secondary" sx={{ lineHeight: 1.35 }}>
+                                                            {step.desc}
+                                                        </Typography>
+                                                    </Stack>
+                                                </Grid>
+                                            ))}
+                                        </Grid>
+                                    </CardContent>
+                                </Card>
+                            </Stack>
+                        </Grid>
+
+                        <Grid item xs={12} md={6}>
+                            <Card
+                                variant="outlined"
+                                id="upload-zone-anchor"
+                                sx={(theme) => ({
+                                    height: "100%",
+                                    borderRadius: 3,
+                                    borderColor: alpha(theme.palette.primary.main, 0.18),
+                                    boxShadow: `0 18px 45px ${alpha(theme.palette.primary.main, 0.12)}`,
+                                })}
+                            >
+                                <CardContent>
+                                    <Stack direction="row" spacing={1.25} alignItems="center" sx={{ mb: 1.5 }}>
+                                        <Avatar
+                                            variant="rounded"
+                                            sx={(theme) => ({
+                                                bgcolor: alpha(theme.palette.primary.main, 0.14),
+                                                color: theme.palette.primary.main,
+                                                width: 42,
+                                                height: 42,
+                                                borderRadius: 2.25,
+                                            })}
+                                        >
+                                            <BoltIcon fontSize="small" />
+                                        </Avatar>
+                                        <Box sx={{ minWidth: 0 }}>
+                                            <Typography variant="subtitle1" sx={{ fontWeight: 900, letterSpacing: -0.15 }}>
+                                                {isPt ? "Experimente com um PDF" : "Try it with a PDF"}
+                                            </Typography>
+                                            <Typography variant="caption" color="text.secondary">
+                                                {isPt ? "Sem achatar o PDF. Sem perder campos." : "No flattening. No lost fields."}
+                                            </Typography>
+                                        </Box>
+                                    </Stack>
+
+                                    {file && (loading || resultUrl) ? (
+                                        <Box>
+                                            <Typography variant="overline" color="text.secondary">
+                                                {isPt ? "Prévia" : "Preview"}
+                                            </Typography>
+
+                                            <Tabs
+                                                value={previewTab}
+                                                onChange={(_, v) => setPreviewTab(v)}
+                                                sx={{ mt: 0.5, borderBottom: 1, borderColor: "divider" }}
+                                            >
+                                                <Tab value="before" label={isPt ? "Antes" : "Before"} />
+                                                <Tab value="after" label={resultUrl ? (isPt ? "Depois" : "After") : (isPt ? "Depois (processando...)" : "After (processing...) ")} />
+                                            </Tabs>
+
+                                            <Box sx={{ mt: 2 }}>
+                                                {/* Keep the BEFORE iframe mounted to prevent flicker/reload while polling updates state */}
+                                                <Box hidden={previewTab !== "before"}>
+                                                    {inputPreviewUrl ? (
+                                                        <Box
+                                                            component="iframe"
+                                                            title="Before processing PDF preview"
+                                                            src={inputPreviewUrl}
+                                                            sx={{ width: "100%", height: { xs: 320, md: 400 }, border: 1, borderColor: "divider", borderRadius: 2 }}
+                                                        />
+                                                    ) : (
+                                                        <Box
+                                                            sx={{ height: { xs: 520, md: 640 }, display: "flex", alignItems: "center", justifyContent: "center", color: "text.secondary", border: 1, borderColor: "divider", borderRadius: 2 }}
+                                                        >
+                                                            {isPt ? "Sem prévia disponível" : "No preview available"}
+                                                        </Box>
+                                                    )}
+                                                </Box>
+
+                                                <Box hidden={previewTab !== "after"}>
+                                                    {resultUrl ? (
+                                                        <Box
+                                                            component="iframe"
+                                                            title="After processing PDF preview"
+                                                            src={resultUrl}
+                                                            sx={{ width: "100%", height: { xs: 320, md: 400 }, border: 1, borderColor: "divider", borderRadius: 2 }}
+                                                        />
+                                                    ) : (
+                                                        <Box
+                                                            sx={{ height: { xs: 520, md: 540 }, display: "flex", alignItems: "center", justifyContent: "center", color: "text.secondary", border: 1, borderColor: "divider", borderRadius: 2 }}
+                                                        >
+                                                            {isPt ? "Processando..." : "Processing..."}
+                                                        </Box>
+                                                    )}
+                                                </Box>
+                                            </Box>
+                                        </Box>
+                                    ) : (
+                                        <UploadZone file={file} onSelect={setFile} />
+                                    )}
+
+                                    {loading && <Progress text={progressText} percent={progressPercent} logs={logs} showLogs={false} />}
+                                    {resultUrl && <Result url={resultUrl} fileName={file?.name} onReset={resetAll} />}
+
+                                    <Tooltip
+                                        title={processButtonHint}
+                                        arrow
+                                        disableHoverListener={!processButtonHint}
+                                        disableFocusListener={!processButtonHint}
+                                        disableTouchListener={!processButtonHint}
+                                    >
+                                        <span>
+                                            <Button
+                                                onClick={handlePrimaryAction}
+                                                disabled={isProcessDisabled}
+                                                variant={isAuthGated ? "outlined" : "contained"}
+                                                size="large"
+                                                fullWidth
+                                                sx={{ mt: 2 }}
+                                                aria-busy={loading ? "true" : undefined}
+                                                startIcon={loading ? <CircularProgress size={18} color="inherit" /> : undefined}
+                                            >
+                                                <span id="btnText">{processButtonLabel}</span>
+                                            </Button>
+                                        </span>
+                                    </Tooltip>
+
+                                    {processButtonHint ? (
+                                        <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: "block" }}>
+                                            {processButtonHint}
+                                        </Typography>
+                                    ) : null}
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                    </Grid>
+
+                    <Box component="section" aria-label="Trusted by" sx={{ mt: { xs: 2.5, md: 3.5 } }}>
+                        <Stack spacing={1.25}>
                             <Typography variant="overline" color="text.secondary">
-                                Preview
+                                {isPt ? "Confiado por times em" : "Trusted by teams in"}
                             </Typography>
 
-                            <Tabs
-                                value={previewTab}
-                                onChange={(_, v) => setPreviewTab(v)}
-                                sx={{ mt: 0.5, borderBottom: 1, borderColor: "divider" }}
+                            <Stack
+                                direction="row"
+                                spacing={{ xs: 1, md: 1.5 }}
+                                flexWrap="wrap"
+                                useFlexGap
+                                sx={{ alignItems: "center" }}
                             >
-                                <Tab value="before" label="Before" />
-                                <Tab value="after" label={resultUrl ? "After" : "After (processing...)"} />
-                            </Tabs>
-
-                            <Box sx={{ mt: 2 }}>
-                                {/* Keep the BEFORE iframe mounted to prevent flicker/reload while polling updates state */}
-                                <Box hidden={previewTab !== "before"}>
-                                    {inputPreviewUrl ? (
-                                        <Box
-                                            component="iframe"
-                                            title="Before processing PDF preview"
-                                            src={inputPreviewUrl}
-                                            sx={{ width: "100%", height: { xs: 320, md: 400 }, border: 1, borderColor: "divider", borderRadius: 2 }}
-                                        />
-                                    ) : (
-                                        <Box
-                                            sx={{ height: { xs: 520, md: 640 }, display: "flex", alignItems: "center", justifyContent: "center", color: "text.secondary", border: 1, borderColor: "divider", borderRadius: 2 }}
+                                {logoItems.map((label) => (
+                                    <Box
+                                        key={label}
+                                        sx={(theme) => ({
+                                            px: { xs: 1.25, md: 1.5 },
+                                            py: { xs: 0.85, md: 0.95 },
+                                            borderRadius: 999,
+                                            border: `1px solid ${alpha(theme.palette.text.primary, 0.08)}`,
+                                            backgroundColor: alpha(theme.palette.text.primary, 0.02),
+                                            color: alpha(theme.palette.text.primary, 0.62),
+                                            transition: theme.transitions.create(["background-color", "border-color", "transform"], {
+                                                duration: theme.transitions.duration.short,
+                                            }),
+                                            '&::after': {
+                                                content: '""',
+                                                display: 'block',
+                                                width: 46,
+                                                height: 2,
+                                                marginTop: 0.4,
+                                                borderRadius: 1,
+                                                backgroundColor: 'currentColor',
+                                                opacity: 0.25,
+                                            },
+                                            '&:hover': {
+                                                backgroundColor: alpha(theme.palette.text.primary, 0.04),
+                                                borderColor: alpha(theme.palette.text.primary, 0.12),
+                                                transform: "translateY(-1px)",
+                                            },
+                                        })}
+                                    >
+                                        <Typography
+                                            component="span"
+                                            sx={{
+                                                display: 'block',
+                                                fontSize: 12,
+                                                fontWeight: 900,
+                                                letterSpacing: 1.2,
+                                                textTransform: 'uppercase',
+                                                lineHeight: 1.2,
+                                                whiteSpace: 'nowrap',
+                                            }}
                                         >
-                                            No preview available
-                                        </Box>
-                                    )}
-                                </Box>
-
-                                <Box hidden={previewTab !== "after"}>
-                                    {resultUrl ? (
-                                        <Box
-                                            component="iframe"
-                                            title="After processing PDF preview"
-                                            src={resultUrl}
-                                            sx={{ width: "100%", height: { xs: 320, md: 400 }, border: 1, borderColor: "divider", borderRadius: 2 }}
-                                        />
-                                    ) : (
-                                        <Box
-                                            sx={{ height: { xs: 520, md: 540 }, display: "flex", alignItems: "center", justifyContent: "center", color: "text.secondary", border: 1, borderColor: "divider", borderRadius: 2 }}
-                                        >
-                                            Processing...
-                                        </Box>
-                                    )}
-                                </Box>
-                            </Box>
-                        </Box>
-                    ) : (
-                        <UploadZone file={file} onSelect={setFile} />
-                    )}
-
-                    {loading && <Progress text={progressText} percent={progressPercent} logs={logs} showLogs={false} />}
-                    {resultUrl && <Result url={resultUrl} fileName={file?.name} onReset={resetAll} />}
-
-                    <Tooltip
-                        title={processButtonHint}
-                        arrow
-                        disableHoverListener={!processButtonHint}
-                        disableFocusListener={!processButtonHint}
-                        disableTouchListener={!processButtonHint}
-                    >
-                        <span>
-                            <Button
-                                onClick={handlePrimaryAction}
-                                disabled={isProcessDisabled}
-                                variant={isAuthGated ? "outlined" : "contained"}
-                                size="large"
-                                fullWidth
-                                sx={{ mt: 2 }}
-                                aria-busy={loading ? "true" : undefined}
-                                startIcon={loading ? <CircularProgress size={18} color="inherit" /> : undefined}
-                            >
-                                <span id="btnText">{processButtonLabel}</span>
-                            </Button>
-                        </span>
-                    </Tooltip>
-
-                    {processButtonHint ? (
-                        <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: "block" }}>
-                            {processButtonHint}
-                        </Typography>
-                    ) : null}
+                                            {label}
+                                        </Typography>
+                                    </Box>
+                                ))}
+                            </Stack>
+                        </Stack>
+                    </Box>
 
                     {Array.isArray(heroClaims) && heroClaims.length > 0 ? (
                         <Box sx={{ mt: 3 }}>
@@ -752,6 +1083,153 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                                 ) : null}
                             </Box>
                         </Paper>
+                    </Box>
+
+                    <Box component="section" aria-labelledby="pricing-teaser" sx={{ mt: { xs: 3, md: 4 }, scrollMarginTop: 96 }}>
+                        <Paper
+                            variant="outlined"
+                            sx={(theme) => ({
+                                borderRadius: 4,
+                                overflow: "hidden",
+                                borderColor: alpha(theme.palette.success.main, 0.18),
+                                background: `linear-gradient(180deg, ${alpha(theme.palette.success.main, 0.06)} 0%, ${alpha(theme.palette.background.paper, 0.85)} 75%)`,
+                            })}
+                        >
+                            <Box sx={{ p: { xs: 2.5, md: 3 } }}>
+                                <Grid container spacing={3} alignItems="center">
+                                    <Grid item xs={12} md={8}>
+                                        <Typography id="pricing-teaser" variant="h4" sx={{ fontWeight: 900, letterSpacing: -0.25 }}>
+                                            {isPt ? "Preços simples, prontos para produção" : "Simple pricing, production-ready"}
+                                        </Typography>
+                                        <Typography color="text.secondary" sx={{ mt: 1, maxWidth: 980 }}>
+                                            {isPt
+                                                ? "Comece com o demo, crie uma conta grátis para mais créditos, e escale com planos pagos com API keys."
+                                                : "Start with the demo, create a free account for more credits, and scale with paid plans + API keys."}
+                                        </Typography>
+                                        <Stack direction={{ xs: "column", sm: "row" }} spacing={1} sx={{ mt: 2 }}>
+                                            <Button component={RouterLink} to="/plans" variant="contained" endIcon={<ArrowForwardIcon />}
+                                            >
+                                                {isPt ? "Ver planos e preços" : "See plans & pricing"}
+                                            </Button>
+                                            <Button component={RouterLink} to="/docs" variant="outlined">
+                                                {isPt ? "Ver documentação" : "Read docs"}
+                                            </Button>
+                                        </Stack>
+                                    </Grid>
+                                    <Grid item xs={12} md={4}>
+                                        <Card
+                                            variant="outlined"
+                                            sx={(theme) => ({
+                                                borderRadius: 3,
+                                                borderColor: alpha(theme.palette.success.main, 0.18),
+                                                bgcolor: alpha(theme.palette.background.paper, 0.8),
+                                            })}
+                                        >
+                                            <CardContent>
+                                                <Stack spacing={1.25}>
+                                                    {["API keys", isPt ? "Logs e rastreabilidade" : "Logs & traceability", isPt ? "Preserva AcroForm" : "Preserve AcroForm"].map((line) => (
+                                                        <Stack key={line} direction="row" spacing={1.1} alignItems="flex-start">
+                                                            <Box sx={(theme) => ({ mt: "2px", color: theme.palette.success.main, display: "flex" })}>
+                                                                <CheckCircleOutlineIcon fontSize="small" />
+                                                            </Box>
+                                                            <Typography variant="body2" sx={{ fontWeight: 800, lineHeight: 1.35 }}>
+                                                                {line}
+                                                            </Typography>
+                                                        </Stack>
+                                                    ))}
+                                                </Stack>
+                                            </CardContent>
+                                        </Card>
+                                    </Grid>
+                                </Grid>
+                            </Box>
+                        </Paper>
+                    </Box>
+
+                    <Box component="section" aria-labelledby="testimonials" sx={{ mt: { xs: 3, md: 4 }, scrollMarginTop: 96 }}>
+                        <Typography id="testimonials" variant="h4" sx={{ fontWeight: 900, letterSpacing: -0.25 }}>
+                            {isPt ? "Feito para times que lidam com PDFs no mundo real" : "Built for teams dealing with real-world PDFs"}
+                        </Typography>
+                        <Typography color="text.secondary" sx={{ mt: 1, maxWidth: 980 }}>
+                            {isPt ? "Alguns exemplos do que a plataforma desbloqueia em fluxos de produção." : "A few examples of what this unlocks in production workflows."}
+                        </Typography>
+
+                        <Grid container spacing={2} sx={{ mt: 0.5 }}>
+                            {testimonials.map((item, idx) => (
+                                <Grid item xs={12} md={4} key={`${idx}-${item.name}`}>
+                                    <Card
+                                        variant="outlined"
+                                        sx={(theme) => ({
+                                            height: "100%",
+                                            borderRadius: 3,
+                                            borderColor: alpha(theme.palette.primary.main, 0.14),
+                                            backgroundColor: alpha(theme.palette.primary.main, 0.03),
+                                        })}
+                                    >
+                                        <CardContent>
+                                            <Typography variant="body1" sx={{ fontWeight: 750, lineHeight: 1.5 }}>
+                                                “{item.quote}”
+                                            </Typography>
+                                            <Divider sx={{ my: 1.75 }} />
+                                            <Stack direction="row" spacing={1.25} alignItems="center">
+                                                <Avatar
+                                                    variant="rounded"
+                                                    sx={(theme) => ({
+                                                        bgcolor: alpha(theme.palette.secondary.main, 0.14),
+                                                        color: theme.palette.secondary.main,
+                                                        width: 42,
+                                                        height: 42,
+                                                        borderRadius: 2.25,
+                                                        fontWeight: 900,
+                                                    })}
+                                                >
+                                                    {item.name?.slice(0, 1)?.toUpperCase()}
+                                                </Avatar>
+                                                <Box sx={{ minWidth: 0 }}>
+                                                    <Typography variant="subtitle2" sx={{ fontWeight: 900, lineHeight: 1.2 }}>
+                                                        {item.name}
+                                                    </Typography>
+                                                    <Typography variant="caption" color="text.secondary" sx={{ lineHeight: 1.2 }}>
+                                                        {item.role}
+                                                    </Typography>
+                                                </Box>
+                                            </Stack>
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                            ))}
+                        </Grid>
+                    </Box>
+
+                    <Box component="section" aria-labelledby="faq" sx={{ mt: { xs: 3, md: 4 }, scrollMarginTop: 96 }}>
+                        <Typography id="faq" variant="h4" sx={{ fontWeight: 900, letterSpacing: -0.25 }}>
+                            {isPt ? "Perguntas frequentes" : "FAQ"}
+                        </Typography>
+                        <Typography color="text.secondary" sx={{ mt: 1, maxWidth: 980 }}>
+                            {isPt ? "Respostas rápidas sobre preservação de formulários, assinaturas e uso via API." : "Quick answers about form preservation, signatures, and API usage."}
+                        </Typography>
+
+                        <Box sx={{ mt: 1.5 }}>
+                            {faqItems.map((item) => (
+                                <Accordion key={item.q} variant="outlined" sx={{ borderRadius: 2, mb: 1 }}>
+                                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                                        <Typography sx={{ fontWeight: 900 }}>{item.q}</Typography>
+                                    </AccordionSummary>
+                                    <AccordionDetails>
+                                        <Typography color="text.secondary">{item.a}</Typography>
+                                    </AccordionDetails>
+                                </Accordion>
+                            ))}
+                        </Box>
+
+                        <Stack direction={{ xs: "column", sm: "row" }} spacing={1} sx={{ mt: 2 }}>
+                            <Button component={RouterLink} to="/contact" variant="contained">
+                                {isPt ? "Falar com a gente" : "Contact us"}
+                            </Button>
+                            <Button component={RouterLink} to="/docs/api" variant="outlined">
+                                {isPt ? "Ver referência da API" : "Open API reference"}
+                            </Button>
+                        </Stack>
                     </Box>
                 </Paper>
             </Container>

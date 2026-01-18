@@ -1,7 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 /* Global visual tone: instigante e direto — profissional */
 body {
   background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);

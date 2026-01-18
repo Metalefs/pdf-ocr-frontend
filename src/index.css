@@ -1,7 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 /*
   Compatibility variables used by existing page-level CSS (e.g. plans/account).
   These map to the Material theme colors so legacy styles don't render
