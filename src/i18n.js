@@ -20,7 +20,7 @@ const translations = {
           "Fixes clipboard data in PDFs so copied text is correct.",
           "Fixes malformed characters rendered in pdf.js and other viewers.",
           "Small file size",
-          "Zero storage: no files are permanently saved",
+          "Zero storage",
         ],
       feature1: { title: "Reliable Accuracy", desc: "High-fidelity OCR tuned for documents and form fields." },
       feature2: { title: "Total Privacy", desc: "In-memory processing, zero storage, no data trail." },

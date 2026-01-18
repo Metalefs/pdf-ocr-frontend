@@ -115,8 +115,8 @@ const Footer = () => {
                         </Typography>
                         <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 700 }}>
                             {isPt
-                                ? "🔒 Zero armazenamento: nenhum arquivo é gravado. Tudo é processado em memória e descartado imediatamente."
-                                : "🔒 Zero storage: no files are saved. Everything is processed in-memory and discarded immediately."}
+                                ? "🔒 Zero armazenamento. Tudo é processado em memória e descartado imediatamente."
+                                : "🔒 Zero storage. Everything is processed in-memory and discarded immediately."}
                         </Typography>
                         <Stack spacing={0.75} sx={{ pt: 0.25 }}>
                             <Link component={RouterLink} to="/privacy" underline="hover" sx={linkSx}>
