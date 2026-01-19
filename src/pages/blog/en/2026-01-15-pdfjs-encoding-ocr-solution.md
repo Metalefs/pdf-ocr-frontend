@@ -15,7 +15,7 @@ seo:
 
 # PDF.js Renders Garbled Characters? Why OCR Often Beats Parsing for Broken Encodings
 
-You open a PDF in a native viewer and everything looks fine — but in PDF.js the text becomes unreadable (`�����`) or mapped to the wrong characters.
+You open a PDF in a native viewer and everything looks fine  but in PDF.js the text becomes unreadable (`�����`) or mapped to the wrong characters.
 
 This is a known class of problems when PDFs rely on **non-standard encodings**, missing/incorrect **CMaps**, or custom embedded fonts.
 

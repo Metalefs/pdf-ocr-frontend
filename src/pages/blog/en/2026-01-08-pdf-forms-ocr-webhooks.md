@@ -5,7 +5,7 @@ date: 2026-01-08
 author: TextLayer Team
 category: Technical Deep Dive
 tags: [api, webhooks, automation, integration, forms, ocr]
-excerpt: "A practical integration guide to automate PDF form processing with OCR and webhooks/callbacks — with safe, implementation-agnostic examples."
+excerpt: "A practical integration guide to automate PDF form processing with OCR and webhooks/callbacks  with safe, implementation-agnostic examples."
 featured: true
 readTime: 12
 seo:

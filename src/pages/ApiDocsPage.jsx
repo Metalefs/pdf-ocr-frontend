@@ -70,7 +70,7 @@ export default function ApiDocsPage() {
 }`;
 
   useEffect(() => {
-    document.title = isPt ? "API — TextLayer OCR" : "API — TextLayer OCR";
+    document.title = isPt ? "API  TextLayer OCR" : "API  TextLayer OCR";
     setMetaDescription(
       isPt
         ? "Referência da API do TextLayer OCR: autenticação, endpoints /api/Pdf/process, jobs, planos e erros."

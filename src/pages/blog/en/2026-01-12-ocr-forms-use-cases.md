@@ -5,17 +5,17 @@ date: 2026-01-12
 author: TextLayer Team
 category: Business Case
 tags: [ocr, forms, automation, b2b]
-excerpt: "Five common OCR use cases for business forms — focusing on workflow design (OCR + review) and system integration."
+excerpt: "Five common OCR use cases for business forms  focusing on workflow design (OCR + review) and system integration."
 featured: true
 readTime: 10
 seo:
-  description: "Common OCR use cases for business forms: contracts, invoices, HR documents, compliance, and intake forms — with practical integration notes."
+  description: "Common OCR use cases for business forms: contracts, invoices, HR documents, compliance, and intake forms  with practical integration notes."
   keywords: "ocr business forms, invoice ocr, contract ocr, hr document automation"
 ---
 
 # 5 OCR Use Cases for Business Forms
 
-Business forms combine predictable structure with recurring volume — which makes them a great fit for OCR automation.
+Business forms combine predictable structure with recurring volume  which makes them a great fit for OCR automation.
 
 Note: any “results” depend on volume, scan quality, and review time. Treat ROI numbers as scenario-based, not universal.
 

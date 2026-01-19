@@ -201,7 +201,7 @@ export default function ApiKeysPage() {
               <CardContent>
                 <Stack spacing={1.25}>
                   <Alert severity="warning" sx={{ alignItems: 'center' }}>
-                    <strong>{t('apiKeys.alertTitle')}</strong> — {t('apiKeys.alertDescription')}
+                    <strong>{t('apiKeys.alertTitle')}</strong>  {t('apiKeys.alertDescription')}
                   </Alert>
 
                   <Box

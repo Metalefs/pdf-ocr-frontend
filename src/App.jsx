@@ -521,9 +521,11 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                         borderRadius: 4,
                     })}
                 >
-                    <Grid container spacing={{ xs: 2.5, md: 4 }} alignItems="stretch">
+                    {/* Z-LAYOUT: START OF Z - Top-left: Hero section */}
+                    <Grid container spacing={{ xs: 2.5, md: 4 }} alignItems="flex-start">
+                        {/* TOP-LEFT: Hero Title + Tagline + Primary CTA */}
                         <Grid item xs={12} md={6}>
-                            <Stack spacing={2} sx={{ height: "100%" }}>
+                            <Stack spacing={2.5}>
                                 <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
                                     <Chip
                                         size="small"
@@ -544,10 +546,10 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                                 </Stack>
 
                                 <Box>
-                                    <Typography variant="h3" sx={{ fontWeight: 900, fontSize: { xs: "2.05rem", md: "2.9rem" }, letterSpacing: -0.6, lineHeight: 1.08 }}>
+                                    <Typography variant="h2" sx={{ fontWeight: 900, fontSize: { xs: "2.05rem", md: "3.2rem" }, letterSpacing: -0.6, lineHeight: 1.08 }}>
                                         {t("hero.title")}
                                     </Typography>
-                                    <Typography variant="h6" color="text.secondary" sx={{ mt: 1.25, maxWidth: 680, fontWeight: 400 }}>
+                                    <Typography variant="h6" color="text.secondary" sx={{ mt: 1.5, maxWidth: 680, fontWeight: 400, fontSize: { xs: "0.95rem", md: "1.05rem" }, lineHeight: 1.6 }}>
                                         {t("hero.subtitle")}
                                     </Typography>
                                 </Box>
@@ -560,6 +562,7 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                                         onClick={() => {
                                             document.getElementById("upload-zone-anchor")?.scrollIntoView({ behavior: "smooth", block: "start" });
                                         }}
+                                        sx={{ fontWeight: 700 }}
                                     >
                                         {isPt ? "Testar agora" : "Try it now"}
                                     </Button>
@@ -568,73 +571,94 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                                         to="/plans"
                                         variant="outlined"
                                         size="large"
+                                        sx={{ fontWeight: 700 }}
                                     >
                                         {isPt ? "Ver preços" : "View pricing"}
                                     </Button>
                                 </Stack>
+                            </Stack>
+                        </Grid>
 
-                                <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ pt: 1 }}>
-                                    {trustBadges.map((b) => {
-                                        const Icon = b.icon;
-                                        return (
-                                            <Chip
-                                                key={b.label}
-                                                size="small"
-                                                variant="outlined"
-                                                icon={<Icon />}
-                                                label={b.label}
-                                                sx={{ fontWeight: 650 }}
-                                            />
-                                        );
-                                    })}
-                                </Stack>
+                        {/* TOP-RIGHT: Trust badges + features grid - Z-layout's top-right diagonal */}
+                        <Grid item xs={12} md={6}>
+                            <Stack spacing={2.5} sx={{ height: "100%" }}>
+                                {/* Trust Badges - compact, scannable */}
+                                <Box>
+                                    <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 900, textTransform: "uppercase", letterSpacing: 0.8, display: "block", mb: 1 }}>
+                                        {isPt ? "Segurança e confiança" : "Security & Trust"}
+                                    </Typography>
+                                    <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ gap: 1, alignItems: "flex-start" }}>
+                                        {trustBadges.map((b) => {
+                                            const Icon = b.icon;
+                                            return (
+                                                <Chip
+                                                    key={b.label}
+                                                    size="small"
+                                                    variant="outlined"
+                                                    icon={<Icon fontSize="small" />}
+                                                    label={b.label}
+                                                    sx={{ fontWeight: 700, fontSize: "0.8rem" }}
+                                                />
+                                            );
+                                        })}
+                                    </Stack>
+                                </Box>
 
+                                {/* How it works - 3 step flow, visually prominent */}
                                 <Card
                                     variant="outlined"
                                     sx={(theme) => ({
-                                        mt: 1,
                                         borderRadius: 3,
                                         borderColor: alpha(theme.palette.primary.main, 0.18),
-                                        bgcolor: alpha(theme.palette.background.paper, 0.86),
+                                        bgcolor: alpha(theme.palette.primary.main, 0.03),
+                                        flexGrow: 1,
                                     })}
                                 >
                                     <CardContent>
-                                        <Typography variant="subtitle1" sx={{ fontWeight: 900, letterSpacing: -0.15 }}>
+                                        <Typography variant="subtitle2" sx={{ fontWeight: 900, letterSpacing: -0.15, mb: 1.5, fontSize: "0.95rem" }}>
                                             {isPt ? "Como funciona" : "How it works"}
                                         </Typography>
-                                        <Grid container spacing={2} sx={{ mt: 0.5 }}>
+                                        <Stack spacing={1.25}>
                                             {howItWorksSteps.map((step, idx) => (
-                                                <Grid key={step.title} item xs={12} sm={4}>
-                                                    <Stack spacing={0.75}>
-                                                        <Avatar
-                                                            variant="rounded"
-                                                            sx={(theme) => ({
-                                                                width: 36,
-                                                                height: 36,
-                                                                borderRadius: 2,
-                                                                bgcolor: alpha(theme.palette.primary.main, 0.12),
-                                                                color: theme.palette.primary.main,
-                                                                fontWeight: 900,
-                                                            })}
-                                                        >
-                                                            {idx + 1}
-                                                        </Avatar>
-                                                        <Typography variant="body2" sx={{ fontWeight: 900, lineHeight: 1.25 }}>
+                                                <Stack key={step.title} direction="row" spacing={1.25} alignItems="flex-start">
+                                                    <Avatar
+                                                        variant="rounded"
+                                                        sx={(theme) => ({
+                                                            width: 32,
+                                                            height: 32,
+                                                            borderRadius: 2,
+                                                            bgcolor: alpha(theme.palette.primary.main, 0.12),
+                                                            color: theme.palette.primary.main,
+                                                            fontWeight: 900,
+                                                            flexShrink: 0,
+                                                            fontSize: "0.85rem",
+                                                        })}
+                                                    >
+                                                        {idx + 1}
+                                                    </Avatar>
+                                                    <Box sx={{ minWidth: 0, pt: 0.25 }}>
+                                                        <Typography variant="subtitle2" sx={{ fontWeight: 800, fontSize: "0.9rem", lineHeight: 1.2 }}>
                                                             {step.title}
                                                         </Typography>
-                                                        <Typography variant="caption" color="text.secondary" sx={{ lineHeight: 1.35 }}>
+                                                        <Typography variant="caption" color="text.secondary" sx={{ lineHeight: 1.35, display: "block", mt: 0.25 }}>
                                                             {step.desc}
                                                         </Typography>
-                                                    </Stack>
-                                                </Grid>
+                                                    </Box>
+                                                </Stack>
                                             ))}
-                                        </Grid>
+                                        </Stack>
                                     </CardContent>
                                 </Card>
                             </Stack>
                         </Grid>
+                    </Grid>
 
-                        <Grid item xs={12} md={(file && (loading || resultUrl)) ? 12 : 6} width={ status.progress > 30 ? status.progress+"%" :'100%'}>
+                    {/* DIVIDER: Visual break between hero and CTA zone */}
+                    <Divider sx={{ my: { xs: 2.5, md: 3.5 } }} />
+
+                    {/* CENTER: Upload Zone - Main CTA, prominent placement */}
+                    <Grid container spacing={{ xs: 2.5, md: 4 }} alignItems="stretch">
+                        <Grid item xs={12} width={ status.progress > 30 ? status.progress+"%" :'100%'}>
                             <Card
                                 variant="outlined"
                                 id="upload-zone-anchor"
@@ -761,162 +785,165 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                         </Grid>
                     </Grid>
 
-                    <Box component="section" aria-label="Trusted by" sx={{ mt: { xs: 2.5, md: 3.5 } }}>
-                        <Stack spacing={1.25}>
-                            <Typography variant="overline" color="text.secondary">
-                                {isPt ? "Confiado por times em" : "Trusted by teams in"}
-                            </Typography>
+                    {/* DIVIDER: Visual break before content sections */}
+                    <Divider sx={{ my: { xs: 3, md: 4 } }} />
 
-                            <Stack
-                                direction="row"
-                                spacing={{ xs: 1, md: 1.5 }}
-                                flexWrap="wrap"
-                                useFlexGap
-                                sx={{ alignItems: "center" }}
-                            >
-                                {logoItems.map((label) => (
-                                    <Box
-                                        key={label}
-                                        sx={(theme) => ({
-                                            px: { xs: 1.25, md: 1.5 },
-                                            py: { xs: 0.85, md: 0.95 },
-                                            borderRadius: 999,
-                                            border: `1px solid ${alpha(theme.palette.text.primary, 0.08)}`,
-                                            backgroundColor: alpha(theme.palette.text.primary, 0.02),
-                                            color: alpha(theme.palette.text.primary, 0.62),
-                                            transition: theme.transitions.create(["background-color", "border-color", "transform"], {
-                                                duration: theme.transitions.duration.short,
-                                            }),
-                                            '&::after': {
-                                                content: '""',
-                                                display: 'block',
-                                                width: 46,
-                                                height: 2,
-                                                marginTop: 0.4,
-                                                borderRadius: 1,
-                                                backgroundColor: 'currentColor',
-                                                opacity: 0.25,
-                                            },
-                                            '&:hover': {
-                                                backgroundColor: alpha(theme.palette.text.primary, 0.04),
-                                                borderColor: alpha(theme.palette.text.primary, 0.12),
-                                                transform: "translateY(-1px)",
-                                            },
-                                        })}
-                                    >
-                                        <Typography
-                                            component="span"
-                                            sx={{
-                                                display: 'block',
-                                                fontSize: 12,
-                                                fontWeight: 900,
-                                                letterSpacing: 1.2,
-                                                textTransform: 'uppercase',
-                                                lineHeight: 1.2,
-                                                whiteSpace: 'nowrap',
-                                            }}
+                    {/* LOWER SECTION: Features & Trust - Z-layout's lower-left to lower-right path */}
+                    <Box component="section" aria-label="Trusted by" sx={{ mt: { xs: 2.5, md: 0 } }}>
+                        <Stack spacing={2.5}>
+                            <Box>
+                                <Typography variant="overline" color="text.secondary" sx={{ fontWeight: 900, letterSpacing: 1 }}>
+                                    {isPt ? "Confiado por times em" : "Trusted by teams in"}
+                                </Typography>
+                                <Stack
+                                    direction="row"
+                                    spacing={{ xs: 1, md: 1.5 }}
+                                    flexWrap="wrap"
+                                    useFlexGap
+                                    sx={{ alignItems: "center", mt: 1 }}
+                                >
+                                    {logoItems.map((label) => (
+                                        <Box
+                                            key={label}
+                                            sx={(theme) => ({
+                                                px: { xs: 1.25, md: 1.5 },
+                                                py: { xs: 0.85, md: 0.95 },
+                                                borderRadius: 999,
+                                                border: `1px solid ${alpha(theme.palette.text.primary, 0.08)}`,
+                                                backgroundColor: alpha(theme.palette.text.primary, 0.02),
+                                                color: alpha(theme.palette.text.primary, 0.62),
+                                                transition: theme.transitions.create(["background-color", "border-color", "transform"], {
+                                                    duration: theme.transitions.duration.short,
+                                                }),
+                                                '&::after': {
+                                                    content: '""',
+                                                    display: 'block',
+                                                    width: 46,
+                                                    height: 2,
+                                                    marginTop: 0.4,
+                                                    borderRadius: 1,
+                                                    backgroundColor: 'currentColor',
+                                                    opacity: 0.25,
+                                                },
+                                                '&:hover': {
+                                                    backgroundColor: alpha(theme.palette.text.primary, 0.04),
+                                                    borderColor: alpha(theme.palette.text.primary, 0.12),
+                                                    transform: "translateY(-1px)",
+                                                },
+                                            })}
                                         >
-                                            {label}
-                                        </Typography>
-                                    </Box>
-                                ))}
-                            </Stack>
+                                            <Typography
+                                                component="span"
+                                                sx={{
+                                                    display: 'block',
+                                                    fontSize: 12,
+                                                    fontWeight: 900,
+                                                    letterSpacing: 1.2,
+                                                    textTransform: 'uppercase',
+                                                    lineHeight: 1.2,
+                                                    whiteSpace: 'nowrap',
+                                                }}
+                                            >
+                                                {label}
+                                            </Typography>
+                                        </Box>
+                                    ))}
+                                </Stack>
+                            </Box>
+
+                            {/* Key Features Grid - scannable at a glance */}
+                            {Array.isArray(heroClaims) && heroClaims.length > 0 ? (
+                                <Box>
+                                    <Typography variant="overline" color="text.secondary" sx={{ fontWeight: 900, letterSpacing: 1, display: "block", mb: 1.5 }}>
+                                        {t("header.nav.features")}
+                                    </Typography>
+                                    <Grid container spacing={1.5}>
+                                        {heroClaims.map((claim, idx) => (
+                                            <Grid item xs={12} sm={6} lg={4} key={`${idx}-${claim}`}>
+                                                <Card
+                                                    tabIndex={0}
+                                                    role="listitem"
+                                                    aria-label={claim}
+                                                    sx={{
+                                                        height: "100%",
+                                                        borderRadius: 2.5,
+                                                    }}
+                                                >
+                                                    <CardActionArea
+                                                        sx={(theme) => {
+                                                            const accentKey = featureAccents[idx % featureAccents.length];
+                                                            const accentMain = theme.palette[accentKey]?.main || theme.palette.primary.main;
+
+                                                            return {
+                                                                height: "100%",
+                                                                borderRadius: 2.5,
+                                                                border: `1px solid ${alpha(accentMain, 0.18)}`,
+                                                                backgroundColor: alpha(accentMain, 0.06),
+                                                                transition: theme.transitions.create([
+                                                                    "transform",
+                                                                    "background-color",
+                                                                    "box-shadow",
+                                                                ], {
+                                                                    duration: theme.transitions.duration.short,
+                                                                }),
+                                                                '&:hover': {
+                                                                    backgroundColor: alpha(accentMain, 0.10),
+                                                                    boxShadow: theme.shadows[3],
+                                                                    transform: "translateY(-2px)",
+                                                                },
+                                                                '&:focus-visible': {
+                                                                    outline: `3px solid ${alpha(accentMain, 0.35)}`,
+                                                                    outlineOffset: 2,
+                                                                },
+                                                            };
+                                                        }}
+                                                    >
+                                                        <CardContent sx={{ p: 1.75 }}>
+                                                            <Stack direction="row" spacing={1.25} alignItems="flex-start">
+                                                                {(() => {
+                                                                    const Icon = featureIcons[idx % featureIcons.length] || DescriptionIcon;
+                                                                    return (
+                                                                        <Avatar
+                                                                            variant="rounded"
+                                                                            sx={(theme) => {
+                                                                                const accentKey = featureAccents[idx % featureAccents.length];
+                                                                                const accentMain = theme.palette[accentKey]?.main || theme.palette.primary.main;
+                                                                                return {
+                                                                                    bgcolor: alpha(accentMain, 0.14),
+                                                                                    color: accentMain,
+                                                                                    width: 40,
+                                                                                    height: 40,
+                                                                                    borderRadius: 2,
+                                                                                    flexShrink: 0,
+                                                                                };
+                                                                            }}
+                                                                        >
+                                                                            <Icon fontSize="small" />
+                                                                        </Avatar>
+                                                                    );
+                                                                })()}
+
+                                                                <Box sx={{ minWidth: 0 }}>
+                                                                    <Typography variant="subtitle2" sx={{ fontWeight: 800, lineHeight: 1.2, fontSize: "0.95rem" }}>
+                                                                        {claim}
+                                                                    </Typography>
+                                                                    <Typography variant="caption" color="text.secondary" sx={{ mt: 0.35, display: "block", lineHeight: 1.3 }}>
+                                                                        {t("hero.uniqueClaim")}
+                                                                    </Typography>
+                                                                </Box>
+                                                            </Stack>
+                                                        </CardContent>
+                                                    </CardActionArea>
+                                                </Card>
+                                            </Grid>
+                                        ))}
+                                    </Grid>
+                                </Box>
+                            ) : null}
                         </Stack>
                     </Box>
 
-                    {Array.isArray(heroClaims) && heroClaims.length > 0 ? (
-                        <Box sx={{ mt: 3 }}>
-                            <Typography variant="overline" color="text.secondary">
-                                {t("header.nav.features")}
-                            </Typography>
-                            <Grid container spacing={2} sx={{ mt: 0.5 }}>
-                                {heroClaims.map((claim, idx) => (
-                                    <Grid item xs={12} sm={6} lg={4} key={`${idx}-${claim}`}>
-                                        <Card
-                                            tabIndex={0}
-                                            role="listitem"
-                                            aria-label={claim}
-                                            sx={{
-                                                height: "100%",
-                                                borderRadius: 3,
-                                            }}
-                                        >
-                                            <CardActionArea
-                                                sx={(theme) => {
-                                                    const accentKey = featureAccents[idx % featureAccents.length];
-                                                    const accentMain = theme.palette[accentKey]?.main || theme.palette.primary.main;
-
-                                                    return {
-                                                        height: "100%",
-                                                        borderRadius: 3,
-                                                        border: `1px solid ${alpha(accentMain, 0.18)}`,
-                                                        backgroundColor: alpha(accentMain, 0.06),
-                                                        transition: theme.transitions.create([
-                                                            "transform",
-                                                            "background-color",
-                                                            "box-shadow",
-                                                        ], {
-                                                            duration: theme.transitions.duration.short,
-                                                        }),
-                                                        '&:hover': {
-                                                            backgroundColor: alpha(accentMain, 0.10),
-                                                            boxShadow: theme.shadows[3],
-                                                            transform: "translateY(-2px)",
-                                                        },
-                                                        '&:focus-visible': {
-                                                            outline: `3px solid ${alpha(accentMain, 0.35)}`,
-                                                            outlineOffset: 2,
-                                                        },
-                                                    };
-                                                }}
-                                            >
-                                                <CardContent>
-                                                    <Stack direction="row" spacing={1.5} alignItems="flex-start">
-                                                        {(() => {
-                                                            const Icon = featureIcons[idx % featureIcons.length] || DescriptionIcon;
-                                                            return (
-                                                                <Avatar
-                                                                    variant="rounded"
-                                                                    sx={(theme) => {
-                                                                        const accentKey = featureAccents[idx % featureAccents.length];
-                                                                        const accentMain = theme.palette[accentKey]?.main || theme.palette.primary.main;
-                                                                        return {
-                                                                            bgcolor: alpha(accentMain, 0.14),
-                                                                            color: accentMain,
-                                                                            width: 44,
-                                                                            height: 44,
-                                                                            borderRadius: 2,
-                                                                        };
-                                                                    }}
-                                                                >
-                                                                    <Icon fontSize="small" />
-                                                                </Avatar>
-                                                            );
-                                                        })()}
-
-                                                        <Box sx={{ minWidth: 0 }}>
-                                                            <Typography variant="subtitle1" sx={{ fontWeight: 700, lineHeight: 1.25 }}>
-                                                                {claim}
-                                                            </Typography>
-                                                            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-                                                                {t("hero.uniqueClaim")}
-                                                            </Typography>
-                                                        </Box>
-                                                    </Stack>
-                                                </CardContent>
-                                            </CardActionArea>
-                                        </Card>
-                                    </Grid>
-                                ))}
-                            </Grid>
-                        </Box>
-                    ) : (
-                        <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-                            {t("hero.uniqueClaim")}
-                        </Typography>
-                    )}
-
-                    <Divider sx={{ my: { xs: 3, md: 4 } }} />
+                    <Divider sx={{ my: { xs: 2.5, md: 3.5 } }} />
 
                     <Box component="section" aria-labelledby="why-title" sx={{ scrollMarginTop: 96 }}>
                         <Paper
@@ -945,7 +972,7 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                                             >
                                                 <LightbulbOutlinedIcon fontSize="small" />
                                             </Avatar>
-                                            <Typography id="why-title" variant="h4" sx={{ fontWeight: 900, letterSpacing: -0.25, lineHeight: 1.15 }}>
+                                            <Typography id="why-title" variant="h3" sx={{ fontWeight: 900, letterSpacing: -0.25, lineHeight: 1.15, fontSize: { xs: "1.75rem", md: "2rem" } }}>
                                                 {t("why.title")}
                                             </Typography>
                                         </Stack>
@@ -1027,7 +1054,7 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                             })}
                         >
                             <Box sx={{ p: { xs: 2.5, md: 3 } }}>
-                                <Typography id="use-cases-title" variant="h4" sx={{ fontWeight: 900, letterSpacing: -0.25 }}>
+                                <Typography id="use-cases-title" variant="h3" sx={{ fontWeight: 900, letterSpacing: -0.25, fontSize: { xs: "1.75rem", md: "2rem" } }}>
                                     {t("useCases.title")}
                                 </Typography>
                                 <Typography color="text.secondary" sx={{ mt: 1, maxWidth: 980 }}>
@@ -1121,7 +1148,7 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                             <Box sx={{ p: { xs: 2.5, md: 3 } }}>
                                 <Grid container spacing={3} alignItems="center">
                                     <Grid item xs={12} md={8}>
-                                        <Typography id="pricing-teaser" variant="h4" sx={{ fontWeight: 900, letterSpacing: -0.25 }}>
+                                        <Typography id="pricing-teaser" variant="h3" sx={{ fontWeight: 900, letterSpacing: -0.25, fontSize: { xs: "1.75rem", md: "2rem" } }}>
                                             {isPt ? "Preços simples, prontos para produção" : "Simple pricing, production-ready"}
                                         </Typography>
                                         <Typography color="text.secondary" sx={{ mt: 1, maxWidth: 980 }}>
@@ -1170,7 +1197,7 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                     </Box>
 
                     <Box component="section" aria-labelledby="testimonials" sx={{ mt: { xs: 3, md: 4 }, scrollMarginTop: 96 }}>
-                        <Typography id="testimonials" variant="h4" sx={{ fontWeight: 900, letterSpacing: -0.25 }}>
+                        <Typography id="testimonials" variant="h3" sx={{ fontWeight: 900, letterSpacing: -0.25, fontSize: { xs: "1.75rem", md: "2rem" } }}>
                             {isPt ? "Feito para times que lidam com PDFs no mundo real" : "Built for teams dealing with real-world PDFs"}
                         </Typography>
                         <Typography color="text.secondary" sx={{ mt: 1, maxWidth: 980 }}>
@@ -1225,7 +1252,7 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                     </Box>
 
                     <Box component="section" aria-labelledby="faq" sx={{ mt: { xs: 3, md: 4 }, scrollMarginTop: 96 }}>
-                        <Typography id="faq" variant="h4" sx={{ fontWeight: 900, letterSpacing: -0.25 }}>
+                        <Typography id="faq" variant="h3" sx={{ fontWeight: 900, letterSpacing: -0.25, fontSize: { xs: "1.75rem", md: "2rem" } }}>
                             {isPt ? "Perguntas frequentes" : "FAQ"}
                         </Typography>
                         <Typography color="text.secondary" sx={{ mt: 1, maxWidth: 980 }}>

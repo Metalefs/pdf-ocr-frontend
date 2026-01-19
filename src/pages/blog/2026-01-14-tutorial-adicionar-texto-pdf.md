@@ -9,7 +9,7 @@ excerpt: "Tutorial prático para transformar PDFs escaneados em documentos pesqu
 featured: false
 readTime: 12
 seo:
-    description: "Como adicionar camada de texto em PDFs escaneados com OCR — com foco em preservar estrutura e formulários. Guia prático com TextLayer e alternativas locais."
+    description: "Como adicionar camada de texto em PDFs escaneados com OCR  com foco em preservar estrutura e formulários. Guia prático com TextLayer e alternativas locais."
     keywords: "adicionar camada de texto pdf, ocr pdf, textlayer ocr, preservar acroform, pdf pesquisável, ocrmypdf"
 ---
 

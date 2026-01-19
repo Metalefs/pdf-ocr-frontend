@@ -184,13 +184,13 @@ export default function BlogPostPage() {
     const baseUrl = "https://pdf-ocr-frontend.onrender.com";
 
     if (!post) {
-      document.title = `${t('blog.notFoundTitle')} — ${t('blog.title')}`;
+      document.title = `${t('blog.notFoundTitle')}  ${t('blog.title')}`;
       setMeta('description', String(t('blog.notFoundBody') || ''));
       setCanonical(`${baseUrl}/${language}/blog`);
       return;
     }
 
-    const pageTitle = `${post.title} — ${t('blog.title')}`;
+    const pageTitle = `${post.title}  ${t('blog.title')}`;
     const canonical = `${baseUrl}/${language}/blog/${post.slug || slug}`;
 
     document.title = pageTitle;

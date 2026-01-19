@@ -77,8 +77,8 @@ export default function DocsPage() {
 
   useEffect(() => {
     document.title = isPt
-      ? "Docs — TextLayer OCR (Plataforma e API)"
-      : "Docs — TextLayer OCR (Platform & API)";
+      ? "Docs  TextLayer OCR (Plataforma e API)"
+      : "Docs  TextLayer OCR (Platform & API)";
 
     setMetaDescription(
       isPt

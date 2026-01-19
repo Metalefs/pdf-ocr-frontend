@@ -5,7 +5,7 @@ date: 2026-01-12
 author: TextLayer Team
 category: Business Case
 tags: [ocr, formularios, b2b, automacao, casos-uso, empresarial]
-excerpt: "5 casos de uso comuns de OCR em formulários empresariais — com foco em automação, revisão e integração com sistemas."
+excerpt: "5 casos de uso comuns de OCR em formulários empresariais  com foco em automação, revisão e integração com sistemas."
 featured: true
 readTime: 15
 seo:

@@ -5,7 +5,7 @@ date: 2026-01-09
 author: TextLayer Team
 category: Case Study
 tags: [batch-processing, migration, digitization, automation]
-excerpt: "A practical project model for migrating large document archives with scanning, OCR, QA, and indexing — with illustrative sizing guidance."
+excerpt: "A practical project model for migrating large document archives with scanning, OCR, QA, and indexing  with illustrative sizing guidance."
 featured: true
 readTime: 12
 seo:
@@ -22,7 +22,7 @@ Migrating thousands of documents quickly is less about “one magic tool” and 
 3. QA only what needs QA
 4. Index for retrieval
 
-Note: numbers and timelines here are **illustrative** — actual throughput depends on your scanners, staffing, and document quality.
+Note: numbers and timelines here are **illustrative**  actual throughput depends on your scanners, staffing, and document quality.
 
 ## A simple pipeline
 

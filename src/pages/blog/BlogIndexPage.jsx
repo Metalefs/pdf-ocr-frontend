@@ -84,7 +84,7 @@ export default function BlogIndexPage() {
   }, [language, locale, setLocale]);
 
   useEffect(() => {
-    const title = `${t('blog.title')} — TextLayer OCR`;
+    const title = `${t('blog.title')}  TextLayer OCR`;
     const description = String(t('blog.subtitle') || '').trim();
     const baseUrl = "https://pdf-ocr-frontend.onrender.com";
     const canonical = `${baseUrl}/${language}/blog`;

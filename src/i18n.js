@@ -8,7 +8,7 @@ const translations = {
       nav: { features: "Features", docs: "Docs", textTest: "Text Test", apiKeys: "API Keys", blog: "Blog", cta: "Get Started" },
     },
     hero: {
-      title: "Fix broken PDF text — without losing forms.",
+      title: "Fix broken PDF text without losing forms.",
       subtitle:
         "OCR + font/toUnicode repair for consistent rendering and searchable text. Use the UI or integrate via API.",
       uniqueClaim:
@@ -30,7 +30,7 @@ const translations = {
       body1:
         "Corrupted or incomplete PDF fonts can produce unreadable characters and inconsistent rendering across viewers.",
       body2:
-        "Most ‘fix’ approaches rebuild the PDF and can break forms and metadata. This API repairs font resources while keeping the original document structure intact — improving rendering without a destructive rebuild.",
+        "Most ‘fix’ approaches rebuild the PDF and can break forms and metadata. This API repairs font resources while keeping the original document structure intact  improving rendering without a destructive rebuild.",
       bullets: [
         "Fixes missing/invalid font resources and Unicode maps (toUnicode)",
         "Avoids flattening/rebuilding the PDF",
@@ -68,7 +68,7 @@ const translations = {
     },
     upload: {
       promptTitle: "Drop or click to upload your PDF",
-      promptSubtitle: "Max 10MB — keeps layout intact; if digitally signed, we attach the original",
+      promptSubtitle: "Max 10MB  keeps layout intact; if digitally signed, we attach the original",
       chooseAnother: "Choose another file",
       multilangNote: "Supports multiple languages in the same file | detects languages automatically and supports multi-language OCR (PT, EN, AR, ZH, JP, KO, CHI, RUS).",
     },
@@ -193,7 +193,7 @@ const translations = {
       nav: { features: "Recursos", docs: "Docs", textTest: "Teste (Texto)", apiKeys: "Chaves de API", blog: "Blog", cta: "Começar" },
     },
     hero: {
-      title: "Corrija texto quebrado em PDFs — sem perder formulários.",
+      title: "Corrija texto quebrado em PDFs sem perder formulários.",
       subtitle: "OCR + correção de fontes/toUnicode para renderização consistente e texto pesquisável. Use pela UI ou via API.",
       uniqueClaim:
         "Corrija toUnicode/fontes sem achatar (flatten) ou reconstruir o PDF.",
@@ -214,7 +214,7 @@ const translations = {
       body1:
         "Fontes corrompidas em PDFs causam caracteres ilegíveis e incompatibilidade entre visualizadores. Soluções tradicionais destroem formulários e metadados ao tentar corrigir o problema.",
       body2:
-        "Esta API corrige recursos de fonte mantendo a estrutura do documento original — sem reconstruções destrutivas que quebram formulários e metadados.",
+        "Esta API corrige recursos de fonte mantendo a estrutura do documento original  sem reconstruções destrutivas que quebram formulários e metadados.",
       bullets: [
         "Regenera recursos de fontes e mapeamentos Unicode (toUnicode)",
         "Evita achatar (flatten) ou reconstruir o PDF",
@@ -252,33 +252,33 @@ const translations = {
     },
     upload: {
       promptTitle: "Clique ou arraste seu PDF",
-      promptSubtitle: "Máx 10MB — mantemos o layout; se for assinado, anexamos o original",
+      promptSubtitle: "Máx 10MB  mantemos o layout; se for assinado, anexamos o original",
       chooseAnother: "Escolher outro arquivo",
       multilangNote: "Aceita múltiplos idiomas no mesmo arquivo | detecta idiomas automaticamente e suporta OCR multilíngue (PT, EN, AR, ZH, JP, KO, CHI, RUS)",
     },
     ar: {
       upload: {
-        multilangNote: "يدعم عدة لغات في نفس الملف — يكتشف اللغات تلقائيًا ويدعم OCR متعدد اللغات (PT, EN, AR, ZH, JP, KO, CHI).",
+        multilangNote: "يدعم عدة لغات في نفس الملف  يكتشف اللغات تلقائيًا ويدعم OCR متعدد اللغات (PT, EN, AR, ZH, JP, KO, CHI).",
       },
     },
     zh: {
       upload: {
-        multilangNote: "支持在同一文件中包含多种语言 — 自动检测语言并支持多语言 OCR（PT、EN、AR、ZH、JP、KO、CHI）。",
+        multilangNote: "支持在同一文件中包含多种语言  自动检测语言并支持多语言 OCR（PT、EN、AR、ZH、JP、KO、CHI）。",
       },
     },
     ja: {
       upload: {
-        multilangNote: "同一ファイル内の複数言語に対応 — 言語を自動検出し、多言語 OCR をサポートします（PT、EN、AR、ZH、JP、KO、CHI）。",
+        multilangNote: "同一ファイル内の複数言語に対応  言語を自動検出し、多言語 OCR をサポートします（PT、EN、AR、ZH、JP、KO、CHI）。",
       },
     },
     ko: {
       upload: {
-        multilangNote: "하나의 파일에 여러 언어 허용 — 언어를 자동으로 감지하며 다국어 OCR을 지원합니다 (PT, EN, AR, ZH, JP, KO, CHI).",
+        multilangNote: "하나의 파일에 여러 언어 허용  언어를 자동으로 감지하며 다국어 OCR을 지원합니다 (PT, EN, AR, ZH, JP, KO, CHI).",
       },
     },
     chi: {
       upload: {
-        multilangNote: "支持在同一文件中包含多种语言 — 自动检测语言并支持多语言 OCR（PT、EN、AR、ZH、JP、KO、CHI）。",
+        multilangNote: "支持在同一文件中包含多种语言  自动检测语言并支持多语言 OCR（PT、EN、AR、ZH、JP、KO、CHI）。",
       },
     },
     process: {

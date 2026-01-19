@@ -5,7 +5,7 @@ date: 2026-01-14
 author: TextLayer Team
 category: Tutorial
 tags: [ocr, pdf, tutorial, text-layer, acroform]
-excerpt: "A practical guide to make scanned PDFs searchable with OCR — with a focus on preserving structure and avoiding fragile DIY pipelines."
+excerpt: "A practical guide to make scanned PDFs searchable with OCR  with a focus on preserving structure and avoiding fragile DIY pipelines."
 featured: false
 readTime: 10
 seo:
