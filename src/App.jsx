@@ -518,7 +518,7 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                         border: 1,
                         borderColor: "divider",
                         background: `radial-gradient(1200px 420px at 15% 0%, ${alpha(theme.palette.primary.main, 0.18)} 0%, transparent 60%),\n                            radial-gradient(900px 400px at 90% 8%, ${alpha(theme.palette.secondary.main, 0.16)} 0%, transparent 55%),\n                            linear-gradient(180deg, ${alpha(theme.palette.background.paper, 0.95)} 0%, ${alpha(theme.palette.background.paper, 0.9)} 100%)`,
-                        borderRadius: 4,
+                        borderRadius: {xs: 0, md: 4},
                     })}
                 >
                     {/* Z-LAYOUT: START OF Z - Top-left: Hero section */}
