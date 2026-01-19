@@ -595,7 +595,7 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                                                     key={b.label}
                                                     size="small"
                                                     variant="outlined"
-                                                    icon={<Icon fontSize="small" />}
+                                                    icon={<Icon color="success" fontSize="small" />}
                                                     label={b.label}
                                                     sx={{ fontWeight: 700, fontSize: "0.8rem" }}
                                                 />
