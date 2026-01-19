@@ -25,6 +25,15 @@
          - Falls back to the current browser origin in dev
     -->
     <meta name="google-site-verification" content="w7Lg9tyGGRfU5XYbk5ChAUmR25o5tXvfrPnxU_3lG5M" />
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XQDW6FR4VY"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-XQDW6FR4VY');
+    </script>
     <script type="module">
       try {
         const configured = (import.meta.env && import.meta.env.VITE_PUBLIC_SITE_URL)
