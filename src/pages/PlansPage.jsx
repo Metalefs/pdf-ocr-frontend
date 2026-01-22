@@ -71,6 +71,12 @@ export default function PlansPage() {
     }
   };
 
+  const formatCredits = (credits) => {
+    const numericCredits = Number(credits);
+    if (!Number.isFinite(numericCredits)) return '0';
+    return new Intl.NumberFormat(locale === 'pt' ? 'pt-BR' : 'en-US').format(numericCredits);
+  };
+
   const getFeatureLabels = (features) => {
     if (Array.isArray(features)) return features.filter(Boolean);
     if (!features || typeof features !== 'object') return [];
@@ -158,7 +164,7 @@ export default function PlansPage() {
                 <Chip
                   color="primary"
                   variant="filled"
-                  label={`${credits.credits} credits`}
+                  label={`${formatCredits(credits.credits)} credits`}
                 />
               ) : null}
             </Stack>
@@ -246,7 +252,7 @@ export default function PlansPage() {
                           Credits
                         </Typography>
                         <Typography variant="h5" sx={{ fontWeight: 800, lineHeight: 1.1 }}>
-                          {Number.isFinite(planCredits) ? planCredits : 0}
+                          {formatCredits(planCredits)}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
                           {t('plans.credits.label', { count: Number.isFinite(planCredits) ? planCredits : 0 })}

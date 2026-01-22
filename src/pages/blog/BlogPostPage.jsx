@@ -181,7 +181,7 @@ export default function BlogPostPage() {
   }, [post, language]);
 
   useEffect(() => {
-    const baseUrl = "https://pdf-ocr-frontend.onrender.com";
+    const baseUrl = "https://textlayerocr.com";
 
     if (!post) {
       document.title = `${t('blog.notFoundTitle')}  ${t('blog.title')}`;
@@ -211,7 +211,7 @@ export default function BlogPostPage() {
   useEffect(() => {
     if (!slug) return;
 
-    const baseUrl = "https://pdf-ocr-frontend.onrender.com";
+    const baseUrl = "https://textlayerocr.com";
     const hasPt = Boolean(getBlogPostBySlug(slug, 'pt'));
     const hasEn = Boolean(getBlogPostBySlug(slug, 'en'));
 
@@ -321,6 +321,7 @@ export default function BlogPostPage() {
       tocTitle={t('blog.onThisPage')}
       toc={toc}
       aside={aside}
+      url={`https://textlayerocr.com/${language}/blog/${post.slug || slug}`}
     >
       {renderMarkdownWithEmbeds(content)}
     </BlogPostLayout>

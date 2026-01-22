@@ -9,6 +9,8 @@ import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
+import ShareBlogPost from "./ShareBlogPost";
+
 export default function BlogPostLayout({
   title,
   subtitle,
@@ -19,6 +21,7 @@ export default function BlogPostLayout({
   tocTitle,
   children,
   aside,
+  url,
 }) {
   const hasToc = Array.isArray(toc) && toc.length > 0;
   const hasTags = Array.isArray(tags) && tags.length > 0;
@@ -57,6 +60,12 @@ export default function BlogPostLayout({
                 <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 700 }}>
                   {meta}
                 </Typography>
+              ) : null}
+
+              {url && title ? (
+                <Box sx={{ mt: 1 }}>
+                  <ShareBlogPost title={title} url={url} />
+                </Box>
               ) : null}
 
               {hasTags ? (

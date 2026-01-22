@@ -86,7 +86,7 @@ export default function BlogIndexPage() {
   useEffect(() => {
     const title = `${t('blog.title')}  TextLayer OCR`;
     const description = String(t('blog.subtitle') || '').trim();
-    const baseUrl = "https://pdf-ocr-frontend.onrender.com";
+    const baseUrl = "https://textlayerocr.com";
     const canonical = `${baseUrl}/${language}/blog`;
 
     document.title = title;
@@ -100,7 +100,7 @@ export default function BlogIndexPage() {
   }, [t, locale, language]);
 
   useEffect(() => {
-    const baseUrl = "https://pdf-ocr-frontend.onrender.com";
+    const baseUrl = "https://textlayerocr.com";
     const alternates = [
       { hreflang: 'pt-BR', href: `${baseUrl}/pt/blog` },
       { hreflang: 'en', href: `${baseUrl}/en/blog` },

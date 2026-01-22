@@ -32,7 +32,7 @@ export default function DocsPage() {
   const { locale } = useI18n();
   const isPt = String(locale).toLowerCase().startsWith("pt");
 
-  const publicSiteUrl = (import.meta?.env?.VITE_PUBLIC_SITE_URL || (typeof window !== "undefined" ? window.location.origin : "https://textlayerocr.up.railway.app"));
+  const publicSiteUrl = (import.meta?.env?.VITE_PUBLIC_SITE_URL || (typeof window !== "undefined" ? window.location.origin : "https://textlayerocr.com"));
 
   const baseUrl = (import.meta?.env?.VITE_API_BASE || import.meta?.env?.VITE_API_URL || "https://pdf-ocr-api-production.up.railway.app").replace(/\/$/, "");
 
