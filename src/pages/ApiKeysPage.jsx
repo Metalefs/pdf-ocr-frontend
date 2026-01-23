@@ -181,6 +181,17 @@ export default function ApiKeysPage() {
     );
   }
 
+  // Check if user is on free plan
+  if (user.plan.toLowerCase() === 'free') {
+    return (
+      <Box sx={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', p: 2 }}>
+        <Alert severity="warning" sx={{ maxWidth: 500 }}>
+          {t('apiKeys.freePlanMessage')}
+        </Alert>
+      </Box>
+    );
+  }
+
   return (
     <Box sx={{ bgcolor: 'background.default', py: { xs: 3, md: 4 } }}>
       <Container maxWidth="md">
