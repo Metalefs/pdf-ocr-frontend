@@ -5,7 +5,7 @@ const translations = {
     header: {
       brand: "TextLayer OCR",
       subtitle: "Fix broken PDF text • Searchable PDF • API-ready",
-      nav: { features: "Features", docs: "Docs", textTest: "Text Test", apiKeys: "API Keys", blog: "Blog", cta: "Get Started" },
+      nav: { features: "Features", docs: "Docs", textTest: "Extract Text", apiKeys: "API Keys", blog: "Blog", cta: "Get Started" },
     },
     hero: {
       title: "Fix broken PDF text without losing forms.",

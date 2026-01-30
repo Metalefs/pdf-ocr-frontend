@@ -82,7 +82,7 @@ export default function UploadZone({ file, onSelect }) {
                         <Button
                             variant="outlined"
                             size="small"
-                            sx={{ mt: 1.5, textTransform: "none" }}
+                            sx={{ textTransform: "none" }}
                             onClick={(e) => {
                                 e.stopPropagation();
                                 document.getElementById("fileInput")?.click();
@@ -105,7 +105,7 @@ export default function UploadZone({ file, onSelect }) {
                         <Button
                             variant="text"
                             size="small"
-                            sx={{ mt: 1, textTransform: "none" }}
+                            sx={{ textTransform: "none" }}
                             onClick={(e) => {
                                 e.stopPropagation();
                                 document.getElementById("fileInput")?.click();

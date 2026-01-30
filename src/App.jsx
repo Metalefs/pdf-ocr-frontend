@@ -522,9 +522,9 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                     })}
                 >
                     {/* Z-LAYOUT: START OF Z - Top-left: Hero section */}
-                    <Grid container spacing={{ xs: 2.5, md: 4 }} alignItems="flex-start">
+                    <Grid container spacing={{ xs: 2.5, md: 4 }} alignItems="flex-start" justifyContent="center">
                         {/* TOP-LEFT: Hero Title + Tagline + Primary CTA */}
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={12}>
                             <Stack spacing={2.5}>
                                 <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
                                     <Chip
@@ -554,19 +554,126 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                                     </Typography>
                                 </Box>
 
+                                {/* Upload Zone moved above the CTA buttons */}
+                                <Card
+                                    variant="outlined"
+                                    id="upload-zone-anchor"
+                                    sx={(theme) => ({
+                                        width: "100%",
+                                        borderRadius: 3,
+                                        borderColor: alpha(theme.palette.primary.main, 0.18),
+                                        boxShadow: `0 18px 45px ${alpha(theme.palette.primary.main, 0.12)}`,
+                                    })}
+                                >
+                                    <CardContent>
+                                        {file && (loading || resultUrl) ? (
+                                            <Box>
+                                                <Typography variant="overline" color="text.secondary">
+                                                    {isPt ? "Prévia" : "Preview"}
+                                                </Typography>
+
+                                                <Tabs
+                                                    value={previewTab}
+                                                    onChange={(_, v) => setPreviewTab(v)}
+                                                    sx={{ mt: 0.5, borderBottom: 1, borderColor: "divider" }}
+                                                >
+                                                    <Tab value="before" label={isPt ? "Antes" : "Before"} sx={{ flex: 1, maxWidth: "50%" }} />
+                                                    <Tab value="after" label={resultUrl ? (isPt ? "Depois" : "After") : (isPt ? "Depois (processando...)" : "After (processing...) ")} sx={{ flex: 1, maxWidth: "50%" }} />
+                                                </Tabs>
+
+                                                <Box sx={{ mt: 2 }}>
+                                                    {/* Keep the BEFORE iframe mounted to prevent flicker/reload while polling updates state */}
+                                                    <Box hidden={previewTab !== "before"}>
+                                                        {inputPreviewUrl ? (
+                                                            <Box
+                                                                component="iframe"
+                                                                title="Before processing PDF preview"
+                                                                src={inputPreviewUrl}
+                                                                sx={{ width: "100%", height: { xs: 320, md: 400 }, border: 1, borderColor: "divider", borderRadius: 2 }}
+                                                            />
+                                                        ) : (
+                                                            <Box
+                                                                sx={{ height: { xs: 520, md: 640 }, display: "flex", alignItems: "center", justifyContent: "center", color: "text.secondary", border: 1, borderColor: "divider", borderRadius: 2 }}
+                                                            >
+                                                                {isPt ? "Sem prévia disponível" : "No preview available"}
+                                                            </Box>
+                                                        )}
+                                                    </Box>
+
+                                                    <Box hidden={previewTab !== "after"}>
+                                                        {resultUrl ? (
+                                                            <Box
+                                                                component="iframe"
+                                                                title="After processing PDF preview"
+                                                                src={resultUrl}
+                                                                sx={{ width: "100%", height: { xs: 320, md: 400 }, border: 1, borderColor: "divider", borderRadius: 2 }}
+                                                            />
+                                                        ) : (
+                                                            <Box
+                                                                sx={{ height: { xs: 520, md: 540 }, display: "flex", alignItems: "center", justifyContent: "center", color: "text.secondary", border: 1, borderColor: "divider", borderRadius: 2 }}
+                                                            >
+                                                                {isPt ? "Processando..." : "Processing..."}
+                                                            </Box>
+                                                        )}
+                                                    </Box>
+                                                </Box>
+                                            </Box>
+                                        ) : (
+                                            <UploadZone file={file} onSelect={setFile} />
+                                        )}
+
+                                        {loading && <Progress text={progressText} percent={progressPercent} logs={logs} showLogs={false} />}
+                                        {resultUrl && <Result url={resultUrl} fileName={file?.name} onReset={resetAll} />}
+
+                                        <Tooltip
+                                            title={processButtonHint}
+                                            arrow
+                                            disableHoverListener={!processButtonHint}
+                                            disableFocusListener={!processButtonHint}
+                                            disableTouchListener={!processButtonHint}
+                                        >
+                                            <span>
+                                                <Button
+                                                    onClick={handlePrimaryAction}
+                                                    disabled={isProcessDisabled}
+                                                    variant={isAuthGated ? "outlined" : "contained"}
+                                                    size="large"
+                                                    fullWidth
+                                                    sx={{ }}
+                                                    aria-busy={loading ? "true" : undefined}
+                                                    startIcon={loading ? <CircularProgress size={18} color="inherit" /> : undefined}
+                                                >
+                                                    <span id="btnText">{processButtonLabel}</span>
+                                                </Button>
+                                            </span>
+                                        </Tooltip>
+
+                                        {processButtonHint ? (
+                                            <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: "block" }}>
+                                                {processButtonHint}
+                                            </Typography>
+                                        ) : null}
+                                    </CardContent>
+                                </Card>
+
                                 <Stack direction={{ xs: "column", sm: "row" }} spacing={1.25} sx={{ pt: 0.5 }}>
                                     <Button
                                         variant="contained"
                                         size="large"
                                         endIcon={<ArrowForwardIcon />}
                                         onClick={() => {
-                                            document.getElementById("upload-zone-anchor")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                                            // Trigger file selection by clicking the file input in the upload zone
+                                            const uploadZone = document.getElementById("upload-zone-anchor");
+                                            const fileInput = uploadZone?.querySelector('input[type="file"]');
+                                            if (fileInput) {
+                                                fileInput.click();
+                                            }
                                         }}
                                         sx={{ fontWeight: 700 }}
                                     >
                                         {isPt ? "Testar agora" : "Try it now"}
                                     </Button>
-                                    <Button
+                                    {/* <Button
                                         component={RouterLink}
                                         to="/plans"
                                         variant="outlined"
@@ -574,212 +681,78 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
                                         sx={{ fontWeight: 700 }}
                                     >
                                         {isPt ? "Ver preços" : "View pricing"}
-                                    </Button>
+                                    </Button> */}
                                 </Stack>
                             </Stack>
                         </Grid>
 
-                        {/* TOP-RIGHT: Trust badges + features grid - Z-layout's top-right diagonal */}
-                        <Grid item xs={12} md={6}>
-                            <Stack spacing={2.5} sx={{ height: "100%" }}>
-                                {/* Trust Badges - compact, scannable */}
-                                <Box>
-                                    <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 900, textTransform: "uppercase", letterSpacing: 0.8, display: "block", mb: 1 }}>
-                                        {isPt ? "Segurança e confiança" : "Security & Trust"}
-                                    </Typography>
-                                    <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ gap: 1, alignItems: "flex-start" }}>
-                                        {trustBadges.map((b) => {
-                                            const Icon = b.icon;
-                                            return (
-                                                <Chip
-                                                    key={b.label}
-                                                    size="small"
-                                                    variant="outlined"
-                                                    icon={<Icon color="success" fontSize="small" />}
-                                                    label={b.label}
-                                                    sx={{ fontWeight: 700, fontSize: "0.8rem" }}
-                                                />
-                                            );
-                                        })}
-                                    </Stack>
-                                </Box>
-
-                                {/* How it works - 3 step flow, visually prominent */}
-                                <Card
-                                    variant="outlined"
-                                    sx={(theme) => ({
-                                        borderRadius: 3,
-                                        borderColor: alpha(theme.palette.primary.main, 0.18),
-                                        bgcolor: alpha(theme.palette.primary.main, 0.03),
-                                        flexGrow: 1,
+                        {/* Trust Badges - compact, scannable - Full width */}
+                        <Grid item xs={12}>
+                            <Box>
+                                <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 900, textTransform: "uppercase", letterSpacing: 0.8, display: "block", mb: 1 }}>
+                                    {isPt ? "Segurança e confiança" : "Security & Trust"}
+                                </Typography>
+                                <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ gap: 1, alignItems: "flex-start" }}>
+                                    {trustBadges.map((b) => {
+                                        const Icon = b.icon;
+                                        return (
+                                            <Chip
+                                                key={b.label}
+                                                size="small"
+                                                variant="outlined"
+                                                icon={<Icon color="success" fontSize="small" />}
+                                                label={b.label}
+                                                sx={{ fontWeight: 700, fontSize: "0.8rem" }}
+                                            />
+                                        );
                                     })}
-                                >
-                                    <CardContent>
-                                        <Typography variant="subtitle2" sx={{ fontWeight: 900, letterSpacing: -0.15, mb: 1.5, fontSize: "0.95rem" }}>
-                                            {isPt ? "Como funciona" : "How it works"}
-                                        </Typography>
-                                        <Stack spacing={1.25}>
-                                            {howItWorksSteps.map((step, idx) => (
-                                                <Stack key={step.title} direction="row" spacing={1.25} alignItems="flex-start">
-                                                    <Avatar
-                                                        variant="rounded"
-                                                        sx={(theme) => ({
-                                                            width: 32,
-                                                            height: 32,
-                                                            borderRadius: 2,
-                                                            bgcolor: alpha(theme.palette.primary.main, 0.12),
-                                                            color: theme.palette.primary.main,
-                                                            fontWeight: 900,
-                                                            flexShrink: 0,
-                                                            fontSize: "0.85rem",
-                                                        })}
-                                                    >
-                                                        {idx + 1}
-                                                    </Avatar>
-                                                    <Box sx={{ minWidth: 0, pt: 0.25 }}>
-                                                        <Typography variant="subtitle2" sx={{ fontWeight: 800, fontSize: "0.9rem", lineHeight: 1.2 }}>
-                                                            {step.title}
-                                                        </Typography>
-                                                        <Typography variant="caption" color="text.secondary" sx={{ lineHeight: 1.35, display: "block", mt: 0.25 }}>
-                                                            {step.desc}
-                                                        </Typography>
-                                                    </Box>
-                                                </Stack>
-                                            ))}
-                                        </Stack>
-                                    </CardContent>
-                                </Card>
-                            </Stack>
+                                </Stack>
+                            </Box>
                         </Grid>
-                    </Grid>
 
-                    {/* DIVIDER: Visual break between hero and CTA zone */}
-                    <Divider sx={{ my: { xs: 2.5, md: 3.5 } }} />
-
-                    {/* CENTER: Upload Zone - Main CTA, prominent placement */}
-                    <Grid container spacing={{ xs: 2.5, md: 4 }} alignItems="stretch">
-                        <Grid item xs={12} width={ status.progress > 30 ? status.progress+"%" :'100%'}>
+                        {/* How it works - 3 step flow, visually prominent - Full width */}
+                        <Grid item xs={12}>
                             <Card
                                 variant="outlined"
-                                id="upload-zone-anchor"
                                 sx={(theme) => ({
-                                    height: "100%",
                                     borderRadius: 3,
                                     borderColor: alpha(theme.palette.primary.main, 0.18),
-                                    boxShadow: `0 18px 45px ${alpha(theme.palette.primary.main, 0.12)}`,
+                                    bgcolor: alpha(theme.palette.primary.main, 0.03),
                                 })}
                             >
                                 <CardContent>
-                                    <Stack direction="row" spacing={1.25} alignItems="center" sx={{ mb: 1.5 }}>
-                                        <Avatar
-                                            variant="rounded"
-                                            sx={(theme) => ({
-                                                bgcolor: alpha(theme.palette.primary.main, 0.14),
-                                                color: theme.palette.primary.main,
-                                                width: 42,
-                                                height: 42,
-                                                borderRadius: 2.25,
-                                            })}
-                                        >
-                                            <BoltIcon fontSize="small" />
-                                        </Avatar>
-                                        <Box sx={{ minWidth: 0 }}>
-                                            <Typography variant="subtitle1" sx={{ fontWeight: 900, letterSpacing: -0.15 }}>
-                                                {isPt ? "Experimente com um PDF" : "Try it with a PDF"}
-                                            </Typography>
-                                            <Typography variant="caption" color="text.secondary">
-                                                {isPt ? "Sem achatar o PDF. Sem perder campos." : "No flattening. No lost fields."}
-                                            </Typography>
-                                        </Box>
+                                    <Typography variant="subtitle2" sx={{ fontWeight: 900, letterSpacing: -0.15, mb: 1.5, fontSize: "0.95rem" }}>
+                                        {isPt ? "Como funciona" : "How it works"}
+                                    </Typography>
+                                    <Stack spacing={1.25}>
+                                        {howItWorksSteps.map((step, idx) => (
+                                            <Stack key={step.title} direction="row" spacing={1.25} alignItems="flex-start">
+                                                <Avatar
+                                                    variant="rounded"
+                                                    sx={(theme) => ({
+                                                        width: 32,
+                                                        height: 32,
+                                                        borderRadius: 2,
+                                                        bgcolor: alpha(theme.palette.primary.main, 0.12),
+                                                        color: theme.palette.primary.main,
+                                                        fontWeight: 900,
+                                                        flexShrink: 0,
+                                                        fontSize: "0.85rem",
+                                                    })}
+                                                >
+                                                    {idx + 1}
+                                                </Avatar>
+                                                <Box sx={{ minWidth: 0, pt: 0.25 }}>
+                                                    <Typography variant="subtitle2" sx={{ fontWeight: 800, fontSize: "0.9rem", lineHeight: 1.2 }}>
+                                                        {step.title}
+                                                    </Typography>
+                                                    <Typography variant="caption" color="text.secondary" sx={{ lineHeight: 1.35, display: "block", mt: 0.25 }}>
+                                                        {step.desc}
+                                                    </Typography>
+                                                </Box>
+                                            </Stack>
+                                        ))}
                                     </Stack>
-
-                                    {file && (loading || resultUrl) ? (
-                                        <Box>
-                                            <Typography variant="overline" color="text.secondary">
-                                                {isPt ? "Prévia" : "Preview"}
-                                            </Typography>
-
-                                            <Tabs
-                                                value={previewTab}
-                                                onChange={(_, v) => setPreviewTab(v)}
-                                                sx={{ mt: 0.5, borderBottom: 1, borderColor: "divider" }}
-                                            >
-                                                <Tab value="before" label={isPt ? "Antes" : "Before"} sx={{ flex: 1, maxWidth: "50%" }} />
-                                                <Tab value="after" label={resultUrl ? (isPt ? "Depois" : "After") : (isPt ? "Depois (processando...)" : "After (processing...) ")} sx={{ flex: 1, maxWidth: "50%" }} />
-                                            </Tabs>
-
-                                            <Box sx={{ mt: 2 }}>
-                                                {/* Keep the BEFORE iframe mounted to prevent flicker/reload while polling updates state */}
-                                                <Box hidden={previewTab !== "before"}>
-                                                    {inputPreviewUrl ? (
-                                                        <Box
-                                                            component="iframe"
-                                                            title="Before processing PDF preview"
-                                                            src={inputPreviewUrl}
-                                                            sx={{ width: "100%", height: { xs: 320, md: 400 }, border: 1, borderColor: "divider", borderRadius: 2 }}
-                                                        />
-                                                    ) : (
-                                                        <Box
-                                                            sx={{ height: { xs: 520, md: 640 }, display: "flex", alignItems: "center", justifyContent: "center", color: "text.secondary", border: 1, borderColor: "divider", borderRadius: 2 }}
-                                                        >
-                                                            {isPt ? "Sem prévia disponível" : "No preview available"}
-                                                        </Box>
-                                                    )}
-                                                </Box>
-
-                                                <Box hidden={previewTab !== "after"}>
-                                                    {resultUrl ? (
-                                                        <Box
-                                                            component="iframe"
-                                                            title="After processing PDF preview"
-                                                            src={resultUrl}
-                                                            sx={{ width: "100%", height: { xs: 320, md: 400 }, border: 1, borderColor: "divider", borderRadius: 2 }}
-                                                        />
-                                                    ) : (
-                                                        <Box
-                                                            sx={{ height: { xs: 520, md: 540 }, display: "flex", alignItems: "center", justifyContent: "center", color: "text.secondary", border: 1, borderColor: "divider", borderRadius: 2 }}
-                                                        >
-                                                            {isPt ? "Processando..." : "Processing..."}
-                                                        </Box>
-                                                    )}
-                                                </Box>
-                                            </Box>
-                                        </Box>
-                                    ) : (
-                                        <UploadZone file={file} onSelect={setFile} />
-                                    )}
-
-                                    {loading && <Progress text={progressText} percent={progressPercent} logs={logs} showLogs={false} />}
-                                    {resultUrl && <Result url={resultUrl} fileName={file?.name} onReset={resetAll} />}
-
-                                    <Tooltip
-                                        title={processButtonHint}
-                                        arrow
-                                        disableHoverListener={!processButtonHint}
-                                        disableFocusListener={!processButtonHint}
-                                        disableTouchListener={!processButtonHint}
-                                    >
-                                        <span>
-                                            <Button
-                                                onClick={handlePrimaryAction}
-                                                disabled={isProcessDisabled}
-                                                variant={isAuthGated ? "outlined" : "contained"}
-                                                size="large"
-                                                fullWidth
-                                                sx={{ mt: 2 }}
-                                                aria-busy={loading ? "true" : undefined}
-                                                startIcon={loading ? <CircularProgress size={18} color="inherit" /> : undefined}
-                                            >
-                                                <span id="btnText">{processButtonLabel}</span>
-                                            </Button>
-                                        </span>
-                                    </Tooltip>
-
-                                    {processButtonHint ? (
-                                        <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: "block" }}>
-                                            {processButtonHint}
-                                        </Typography>
-                                    ) : null}
                                 </CardContent>
                             </Card>
                         </Grid>

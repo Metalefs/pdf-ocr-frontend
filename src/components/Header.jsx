@@ -63,7 +63,7 @@ export default function Header({ onNavigate }) {
       },
       {
         key: "text-test",
-        label: (t('header.nav.textTest') || (String(locale).toLowerCase().startsWith('pt') ? 'Teste (Texto)' : 'Text Test')),
+        label: (t('header.nav.textTest') || (String(locale).toLowerCase().startsWith('pt') ? 'Teste (Texto)' : 'Extract Text')),
         path: "/tools/ocr-text",
         active: currentPath === "/tools/ocr-text",
       },
@@ -84,12 +84,6 @@ export default function Header({ onNavigate }) {
         label: String(locale).toLowerCase().startsWith('pt') ? 'Guia' : 'Guide',
         path: "/guides/pdfjs-font-encoding",
         active: currentPath === "/guides/pdfjs-font-encoding",
-      },
-      {
-        key: "plans",
-        label: (t('header.nav.features') === 'Features' ? 'Plans' : t('plans.header')),
-        path: "/plans",
-        active: currentPath === "/plans",
       },
     ];
 
