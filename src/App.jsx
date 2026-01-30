@@ -325,7 +325,7 @@ function HomeContent({ currentPage, onNavigate, onRequireAuth }) {
 
     function handlePrimaryAction() {
         if (isAuthGated) {
-            onRequireAuth?.(t('authDialog.message') || 'You have reached the demo limit. Create a free account to continue processing PDFs.');
+            onRequireAuth?.(t('authDialog.message') || 'Create a free account to continue processing PDFs.');
             return;
         }
 

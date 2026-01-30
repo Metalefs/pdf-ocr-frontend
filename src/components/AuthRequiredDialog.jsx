@@ -27,7 +27,7 @@ export default function AuthRequiredDialog({ isOpen, onClose, onSignIn, message 
       <DialogContent>
         <Stack spacing={2} sx={{ mt: 0.5 }}>
           <Typography color="text.secondary">
-            {message || (t('authDialog.message') || 'You have reached the demo limit. Create a free account to continue processing PDFs or upgrade to a paid plan for unlimited access.')}
+            {message || (t('authDialog.message') || 'Create a free account to continue processing PDFs.')}
           </Typography>
 
           <Alert severity="info">

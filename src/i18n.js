@@ -213,7 +213,7 @@ const translations = {
     },
     authDialog: {
       title: 'Sign In Required',
-      message: 'You have reached the demo limit. Create a free account to continue processing PDFs or upgrade to a paid plan for unlimited access.',
+      message: 'Create a free account to continue processing PDFs.',
       signIn: 'Sign In / Create Account',
       viewPlans: 'View Plans & Pricing',
       cancel: 'Cancel',
@@ -487,7 +487,7 @@ const translations = {
     },
     authDialog: {
       title: 'Login Necessário',
-      message: 'Você atingiu o limite de demonstração. Crie uma conta gratuita para continuar processando PDFs ou faça upgrade para um plano pago com acesso ilimitado.',
+      message: 'Crie uma conta gratuita para continuar processando PDFs.',
       signIn: 'Entrar / Criar Conta',
       viewPlans: 'Ver Planos e Preços',
       cancel: 'Cancelar',
