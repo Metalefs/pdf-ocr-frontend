@@ -4,7 +4,7 @@ const translations = {
   en: {
     header: {
       brand: "TextLayer OCR",
-      subtitle: "Fix broken PDF text • Searchable OCR • API-ready",
+      subtitle: "Fix broken PDF text • Searchable PDF • API-ready",
       nav: { features: "Features", docs: "Docs", textTest: "Text Test", apiKeys: "API Keys", blog: "Blog", cta: "Get Started" },
     },
     hero: {
@@ -254,7 +254,7 @@ const translations = {
   pt: {
     header: {
       brand: "TextLayer OCR",
-      subtitle: "Corrige texto do PDF • OCR pesquisável • API pronta",
+      subtitle: "Corrige texto do PDF • PDF pesquisável • API pronta",
       nav: { features: "Recursos", docs: "Docs", textTest: "Teste (Texto)", apiKeys: "Chaves de API", blog: "Blog", cta: "Começar" },
     },
     hero: {
