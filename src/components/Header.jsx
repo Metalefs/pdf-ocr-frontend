@@ -136,6 +136,7 @@ export default function Header({ onNavigate }) {
 
         <Box
           onClick={() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             if (onNavigate) onNavigate("home");
             navigate("/");
             setMobileOpen(false);
@@ -166,6 +167,7 @@ export default function Header({ onNavigate }) {
               color={item.active ? "primary" : "inherit"}
               variant={item.active ? "contained" : "text"}
               onClick={() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
                 if (onNavigate) onNavigate(item.key);
                 navigate(item.path);
                 setMobileOpen(false);
@@ -234,6 +236,7 @@ export default function Header({ onNavigate }) {
                 <Divider />
                 <MenuItem
                   onClick={() => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                     setUserMenuAnchor(null);
                     navigate("/account");
                     if (onNavigate) onNavigate("account");
@@ -244,6 +247,7 @@ export default function Header({ onNavigate }) {
                 </MenuItem>
                 <MenuItem
                   onClick={() => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                     setUserMenuAnchor(null);
                     navigate("/api-keys");
                     if (onNavigate) onNavigate("api-keys");
@@ -254,6 +258,7 @@ export default function Header({ onNavigate }) {
                 </MenuItem>
                 <MenuItem
                   onClick={() => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                     setUserMenuAnchor(null);
                     navigate("/plans");
                     if (onNavigate) onNavigate("plans");
@@ -341,6 +346,7 @@ export default function Header({ onNavigate }) {
                 <ListItemButton
                   selected={item.active}
                   onClick={() => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                     if (onNavigate) onNavigate(item.key);
                     navigate(item.path);
                     setMobileOpen(false);

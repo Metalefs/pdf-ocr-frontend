@@ -71,16 +71,16 @@ const Footer = () => {
                             {isPt ? "Produto" : "Product"}
                         </Typography>
                         <Stack spacing={0.75}>
-                            <Link component={RouterLink} to="/" underline="hover" sx={linkSx}>
+                            <Link component={RouterLink} to="/" underline="hover" sx={linkSx} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                                 {isPt ? "Upload" : "Upload"}
                             </Link>
-                            <Link component={RouterLink} to="/plans" underline="hover" sx={linkSx}>
+                            <Link component={RouterLink} to="/plans" underline="hover" sx={linkSx} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                                 {isPt ? "Planos" : "Pricing"}
                             </Link>
-                            <Link component={RouterLink} to="/api-keys" underline="hover" sx={linkSx}>
+                            <Link component={RouterLink} to="/api-keys" underline="hover" sx={linkSx} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                                 {t("header.nav.apiKeys") || (isPt ? "Chaves de API" : "API Keys")}
                             </Link>
-                            <Link component={RouterLink} to="/account" underline="hover" sx={linkSx}>
+                            <Link component={RouterLink} to="/account" underline="hover" sx={linkSx} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                                 {isPt ? "Conta" : "Account"}
                             </Link>
                         </Stack>
@@ -91,19 +91,19 @@ const Footer = () => {
                             {isPt ? "Recursos" : "Resources"}
                         </Typography>
                         <Stack spacing={0.75}>
-                            <Link component={RouterLink} to={isPt ? "/pt/blog" : "/en/blog"} underline="hover" sx={linkSx}>
+                            <Link component={RouterLink} to={isPt ? "/pt/blog" : "/en/blog"} underline="hover" sx={linkSx} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                                 Blog
                             </Link>
-                            <Link component={RouterLink} to="/docs" underline="hover" sx={linkSx}>
+                            <Link component={RouterLink} to="/docs" underline="hover" sx={linkSx} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                                 {t("header.nav.docs") || "Docs"}
                             </Link>
-                            <Link component={RouterLink} to="/docs/api" underline="hover" sx={linkSx}>
+                            <Link component={RouterLink} to="/docs/api" underline="hover" sx={linkSx} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                                 {isPt ? "Referência da API" : "API Reference"}
                             </Link>
-                            <Link component={RouterLink} to="/guides/pdfjs-font-encoding" underline="hover" sx={linkSx}>
+                            <Link component={RouterLink} to="/guides/pdfjs-font-encoding" underline="hover" sx={linkSx} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                                 {isPt ? "Guia (pdf.js)" : "Guide (pdf.js)"}
                             </Link>
-                            <Link component={RouterLink} to="/contact" underline="hover" sx={linkSx}>
+                            <Link component={RouterLink} to="/contact" underline="hover" sx={linkSx} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                                 {isPt ? "Contato" : "Contact"}
                             </Link>
                         </Stack>
@@ -119,7 +119,7 @@ const Footer = () => {
                                 : "Zero storage. Everything is processed in-memory and discarded immediately."}
                         </Typography>
                         <Stack spacing={0.75} sx={{ pt: 0.25 }}>
-                            <Link component={RouterLink} to="/privacy" underline="hover" sx={linkSx}>
+                            <Link component={RouterLink} to="/privacy" underline="hover" sx={linkSx} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                                 {isPt ? "Política de privacidade" : "Privacy policy"}
                             </Link>
                         </Stack>
@@ -142,10 +142,10 @@ const Footer = () => {
                     </Typography>
 
                     <Stack direction="row" spacing={2} sx={{ flexWrap: "wrap" }}>
-                        <Link component={RouterLink} to="/docs" underline="hover" sx={linkSx}>
+                        <Link component={RouterLink} to="/docs" underline="hover" sx={linkSx} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                             Docs
                         </Link>
-                        <Link component={RouterLink} to="/contact" underline="hover" sx={linkSx}>
+                        <Link component={RouterLink} to="/contact" underline="hover" sx={linkSx} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                             {isPt ? "Suporte" : "Support"}
                         </Link>
                     </Stack>
